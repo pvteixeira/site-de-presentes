@@ -4,19 +4,10 @@ import { useState } from 'react';
 import { Gift } from '../types';
 import { Plus, Edit, Trash2, CheckCircle, Save, X } from 'lucide-react';
 
-const MOCK_GIFTS: Gift[] = [
-  {
-    id: '1',
-    name: 'Passagens para a Lua de Mel',
-    description: 'Ajude-nos a chegar ao nosso destino dos sonhos nas Maldivas!',
-    totalAmount: 5000,
-    currentAmount: 1500,
-    imageUrl: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?q=80&w=1000&auto=format&fit=crop',
-  }
-];
+import { GIFTS_DATA } from '../utils/giftsData';
 
 export default function AdminPage() {
-  const [gifts, setGifts] = useState<Gift[]>(MOCK_GIFTS);
+  const [gifts, setGifts] = useState<Gift[]>(GIFTS_DATA);
   const [editingGift, setEditingGift] = useState<Gift | null>(null);
   const [isAdding, setIsAdding] = useState(false);
 
@@ -146,6 +137,7 @@ export default function AdminPage() {
                   id: editingGift?.id || '',
                   name: formData.get('name') as string,
                   description: formData.get('description') as string,
+                  category: formData.get('category') as string || 'Geral',
                   totalAmount: Number(formData.get('totalAmount')),
                   currentAmount: Number(formData.get('currentAmount')),
                   imageUrl: formData.get('imageUrl') as string,
@@ -160,6 +152,10 @@ export default function AdminPage() {
               <div>
                 <label className="block text-sm font-medium mb-1">Descrição</label>
                 <textarea required name="description" defaultValue={editingGift?.description} className="w-full p-2 rounded border border-gray-200 dark:border-zinc-700 bg-transparent" rows={3} />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Categoria</label>
+                <input required name="category" defaultValue={editingGift?.category} className="w-full p-2 rounded border border-gray-200 dark:border-zinc-700 bg-transparent" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>

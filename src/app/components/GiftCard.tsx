@@ -17,7 +17,7 @@ export default function GiftCard({ gift, onContribute }: GiftCardProps) {
 
   return (
     <motion.div 
-      className="glass-card overflow-hidden flex flex-col h-full bg-white dark:bg-[var(--background)] group relative"
+      className="glass-card overflow-hidden flex flex-col h-full bg-white dark:bg-[var(--background)] group relative rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
@@ -34,24 +34,24 @@ export default function GiftCard({ gift, onContribute }: GiftCardProps) {
           alt={gift.name} 
           className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 ${isCompleted ? 'grayscale opacity-70' : ''}`}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-60"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-30"></div>
       </div>
 
-      <div className="p-5 flex flex-col flex-grow">
+      <div className="p-5 flex flex-col flex-grow bg-white dark:bg-[#1a1a1a]">
         <h3 className="text-xl font-serif text-[var(--foreground)] mb-2 line-clamp-1">{gift.name}</h3>
-        <p className="text-sm text-[var(--foreground)]/70 font-sans mb-4 line-clamp-2 flex-grow">
+        <p className="text-sm text-[var(--foreground)]/70 font-sans mb-6 line-clamp-2 flex-grow">
           {gift.description}
         </p>
 
-        <div className="space-y-3 mt-auto">
-          <div className="flex justify-between text-sm font-medium font-sans">
-            <span className="text-[var(--foreground)]">{formatCurrency(gift.totalAmount)}</span>
-            <span className="text-[var(--color-wedding-gold)]">{progress.toFixed(0)}%</span>
+        <div className="mt-auto">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[var(--foreground)] font-semibold">{formatCurrency(gift.totalAmount)}</span>
+            <span className="text-sm font-bold text-[var(--color-wedding-gold)]">{progress.toFixed(0)}%</span>
           </div>
           
-          <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2.5 overflow-hidden">
+          <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2 overflow-hidden mb-5">
             <motion.div 
-              className="bg-[var(--color-wedding-gold)] h-2.5 rounded-full"
+              className="bg-[var(--color-wedding-gold)] h-full rounded-full"
               initial={{ width: 0 }}
               whileInView={{ width: `${progress}%` }}
               transition={{ duration: 1, ease: "easeOut" }}
@@ -63,7 +63,7 @@ export default function GiftCard({ gift, onContribute }: GiftCardProps) {
             disabled={isCompleted}
             className={`w-full py-3 rounded-xl font-sans font-medium transition-all duration-300 ${
               isCompleted 
-                ? 'bg-gray-100 text-gray-400 cursor-not-allowed dark:bg-gray-800 dark:text-gray-500' 
+                ? 'bg-gray-200 text-gray-500 cursor-not-allowed dark:bg-gray-800 dark:text-gray-400' 
                 : 'bg-[var(--foreground)] text-[var(--background)] hover:bg-[var(--foreground)]/90 hover:shadow-lg'
             }`}
           >
