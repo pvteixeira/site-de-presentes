@@ -1,6 +1,8 @@
 import Hero from "./components/Hero";
 import Countdown from "./components/Countdown";
 import GiftList from "./components/GiftList";
+import WeddingDetails from "./components/WeddingDetails";
+import CoupleCards from "./components/CoupleCards";
 
 export default function Home() {
   return (
@@ -20,11 +22,14 @@ export default function Home() {
         </p>
       </div>
 
+      <WeddingDetails />
+      <CoupleCards />
+
       <GiftList />
       
       <footer className="bg-[var(--foreground)] text-[var(--background)] py-12 text-center">
-        <p className="font-serif text-2xl mb-4 text-[var(--color-wedding-gold)]">Aline & Klecio</p>
-        <p className="text-sm opacity-60 font-sans tracking-widest uppercase">Com amor, 2026</p>
+        <p className="font-serif text-2xl mb-4 text-[var(--color-wedding-gold)]">Aline & Klécio</p>
+        <p className="text-sm opacity-60 font-sans tracking-widest uppercase">Com amor, 2027</p>
       </footer>
     </main>
   );

@@ -13,7 +13,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Aline & Klecio - Lista de Presentes",
+  title: "Aline & Klécio - Lista de Presentes",
   description: "Agradecemos por fazer parte do nosso sonho. Contribua com nossa lista de presentes.",
 };
 

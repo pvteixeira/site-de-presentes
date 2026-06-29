@@ -28,13 +28,23 @@ export default function Hero() {
         </motion.div>
 
         <motion.h1 
-          className="text-5xl md:text-7xl lg:text-8xl text-white mb-6 font-serif"
+          className="text-5xl md:text-7xl lg:text-8xl text-white mb-4 font-serif"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, delay: 0.4 }}
         >
-          Aline <span className="text-[var(--color-wedding-gold)]">&</span> Klecio
+          Aline <span className="text-[var(--color-wedding-gold)]">&</span> Klécio
         </motion.h1>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.6 }}
+        >
+          <p className="text-white/90 uppercase tracking-[0.2em] text-base md:text-lg mb-8 font-sans">
+            09 de janeiro de 2027
+          </p>
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}

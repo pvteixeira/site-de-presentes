@@ -12,9 +12,8 @@ export default function Countdown() {
   });
 
   useEffect(() => {
-    // Set wedding date to 6 months from now for demonstration
-    const weddingDate = new Date();
-    weddingDate.setMonth(weddingDate.getMonth() + 6);
+    // Target date: Jan 9, 2027 at 19:30:00 UTC-3 (Brasilia Time)
+    const weddingDate = new Date('2027-01-09T19:30:00-03:00');
     
     const interval = setInterval(() => {
       const now = new Date();
