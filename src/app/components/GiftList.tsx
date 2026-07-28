@@ -53,10 +53,10 @@ export default function GiftList() {
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
-              className={`px-6 py-2 rounded-full font-sans text-sm transition-all duration-300 ${
+              className={`px-6 py-2 rounded-full font-sans text-xs font-semibold tracking-wider uppercase transition-all duration-300 cursor-pointer ${
                 selectedCategory === category
-                  ? 'bg-[var(--color-wedding-gold)] text-white shadow-md'
-                  : 'bg-white/50 dark:bg-gray-800/50 text-[var(--foreground)] hover:bg-[var(--color-wedding-gold)]/20'
+                  ? 'bg-black dark:bg-white text-white dark:text-black shadow-md'
+                  : 'bg-gray-100 dark:bg-zinc-800 text-[var(--foreground)]/80 hover:bg-gray-200 dark:hover:bg-zinc-700'
               }`}
             >
               {category}

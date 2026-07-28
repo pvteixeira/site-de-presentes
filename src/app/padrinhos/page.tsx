@@ -35,8 +35,8 @@ export default function PadrinhosPortal() {
   const [activeTab, setActiveTab] = useState<'vestimentas' | 'mensagens' | 'cronograma'>('vestimentas');
   
   // Interactive Tie Color Harmonizer state
-  const [selectedDressColor, setSelectedDressColor] = useState('#D1A3A4');
-  const [customTieColorName, setCustomTieColorName] = useState('Rosê Elegante');
+  const [selectedDressColor, setSelectedDressColor] = useState('#4B5563');
+  const [customTieColorName, setCustomTieColorName] = useState('Cinza Grafite');
 
   // Messages state
   const [announcements, setAnnouncements] = useState<PadrinhoMessage[]>(INITIAL_ANNOUNCEMENTS);
@@ -116,27 +116,30 @@ export default function PadrinhosPortal() {
     return (
       <div className="min-h-screen bg-[var(--background)] flex flex-col justify-between p-4 md:p-8 relative overflow-hidden">
         {/* Background Subtle Elements */}
-        <div className="absolute -top-32 -left-32 w-96 h-96 bg-[var(--color-wedding-gold)]/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-[var(--color-wedding-rose)]/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute -top-32 -left-32 w-96 h-96 bg-black/5 dark:bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-black/5 dark:bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
 
         <header className="max-w-6xl w-full mx-auto flex items-center justify-between z-10 py-2">
-          <Link href="/" className="flex items-center gap-2 text-sm text-[var(--foreground)]/70 hover:text-[var(--color-wedding-gold)] transition-colors">
+          <Link href="/" className="flex items-center gap-2 text-sm text-[var(--foreground)]/70 hover:text-[var(--foreground)] transition-colors">
             <ArrowLeft size={16} /> Voltar ao site principal
           </Link>
-          <span className="font-serif text-lg text-[var(--color-wedding-gold)]">Aline & Klécio</span>
+          <div className="flex items-center gap-2">
+            <img src="/LOGO_MARCA.jpg" alt="Logo" className="w-8 h-8 rounded-full border border-gray-300 dark:border-zinc-700 object-cover" />
+            <span className="font-serif text-lg text-[var(--foreground)] font-semibold">Aline & Klécio</span>
+          </div>
         </header>
 
         <div className="flex-1 flex items-center justify-center my-8 z-10">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white/80 dark:bg-zinc-900/90 backdrop-blur-xl w-full max-w-md rounded-3xl p-8 shadow-2xl border border-[var(--color-wedding-gold)]/20"
+            className="bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl w-full max-w-md rounded-3xl p-8 shadow-2xl border border-gray-200 dark:border-zinc-800"
           >
-            <div className="w-16 h-16 bg-gradient-to-tr from-[var(--color-wedding-gold)] to-[var(--color-wedding-rose)] text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-[var(--color-wedding-gold)]/20">
-              <Sparkles size={32} />
+            <div className="w-20 h-20 bg-black dark:bg-white text-white dark:text-black rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl p-1 border-2 border-gray-200 dark:border-zinc-700 overflow-hidden">
+              <img src="/LOGO_MARCA.jpg" alt="Logo Marca" className="w-full h-full object-cover rounded-full" />
             </div>
 
-            <h1 className="text-3xl font-serif text-center text-[var(--foreground)] mb-2">
+            <h1 className="text-3xl font-serif text-center text-[var(--foreground)] mb-2 font-medium">
               Área dos Padrinhos
             </h1>
             <p className="text-sm text-center text-gray-500 mb-8 font-sans">
@@ -167,7 +170,7 @@ export default function PadrinhosPortal() {
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="Ex: debora.carlos ou Débora"
                     required
-                    className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 dark:border-zinc-700 bg-white/50 dark:bg-zinc-800/50 text-[var(--foreground)] focus:outline-none focus:border-[var(--color-wedding-gold)] focus:ring-2 focus:ring-[var(--color-wedding-gold)]/20 transition-all font-sans"
+                    className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 dark:border-zinc-700 bg-white/50 dark:bg-zinc-800/50 text-[var(--foreground)] focus:outline-none focus:border-black dark:focus:border-white focus:ring-2 focus:ring-black/10 transition-all font-sans"
                   />
                 </div>
               </div>
@@ -184,16 +187,16 @@ export default function PadrinhosPortal() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Digite sua senha"
                     required
-                    className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 dark:border-zinc-700 bg-white/50 dark:bg-zinc-800/50 text-[var(--foreground)] focus:outline-none focus:border-[var(--color-wedding-gold)] focus:ring-2 focus:ring-[var(--color-wedding-gold)]/20 transition-all font-sans"
+                    className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 dark:border-zinc-700 bg-white/50 dark:bg-zinc-800/50 text-[var(--foreground)] focus:outline-none focus:border-black dark:focus:border-white focus:ring-2 focus:ring-black/10 transition-all font-sans"
                   />
                 </div>
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-[var(--color-wedding-gold)] to-[#b08b45] text-white py-3.5 rounded-xl font-medium tracking-wide shadow-lg shadow-[var(--color-wedding-gold)]/20 hover:opacity-95 hover:scale-[1.01] transition-all flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full bg-black dark:bg-white text-white dark:text-black py-3.5 rounded-xl font-semibold uppercase tracking-wider text-xs shadow-lg hover:opacity-90 transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
-                <Lock size={18} /> Entrar na Área de Padrinhos
+                <Lock size={16} /> Entrar na Área de Padrinhos
               </button>
             </form>
 
@@ -216,15 +219,18 @@ export default function PadrinhosPortal() {
   return (
     <div className="min-h-screen bg-[var(--background)] flex flex-col">
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md border-b border-gray-100 dark:border-zinc-800">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <header className="sticky top-0 z-40 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border-b border-gray-200 dark:border-zinc-800">
+        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link href="/" className="text-gray-400 hover:text-[var(--color-wedding-gold)] transition-colors p-1" title="Ir para home">
+            <Link href="/" className="text-gray-400 hover:text-[var(--foreground)] transition-colors p-1" title="Ir para home">
               <ArrowLeft size={20} />
             </Link>
-            <div>
-              <span className="font-serif font-bold text-lg text-[var(--foreground)]">Padrinhos VIP</span>
-              <p className="text-xs text-[var(--color-wedding-gold)] font-medium">Aline & Klécio 2027</p>
+            <div className="flex items-center gap-2">
+              <img src="/LOGO_MARCA.jpg" alt="Logo" className="w-8 h-8 rounded-full border border-gray-300 dark:border-zinc-700 object-cover" />
+              <div>
+                <span className="font-serif font-bold text-base md:text-lg text-[var(--foreground)] block leading-tight">Padrinhos VIP</span>
+                <p className="text-[10px] text-gray-500 font-medium">Aline & Klécio 2027</p>
+              </div>
             </div>
           </div>
 
@@ -250,13 +256,13 @@ export default function PadrinhosPortal() {
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative rounded-3xl p-6 md:p-10 overflow-hidden bg-gradient-to-r from-[var(--color-wedding-gold)] via-[#b08b45] to-[var(--color-wedding-rose)] text-white shadow-xl"
+          className="relative rounded-3xl p-6 md:p-10 overflow-hidden bg-gradient-to-r from-zinc-950 via-zinc-900 to-black text-white shadow-xl border border-zinc-800"
         >
           {/* Decorative Pattern Overlay */}
-          <div className="absolute inset-0 bg-black/10 backdrop-blur-[1px]"></div>
+          <div className="absolute inset-0 bg-white/5 backdrop-blur-[1px]"></div>
           
           <div className="relative z-10 max-w-3xl">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-xs font-medium uppercase tracking-widest backdrop-blur-md mb-4">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-xs font-medium uppercase tracking-widest backdrop-blur-md mb-4 border border-white/20">
               <Sparkles size={14} /> 
               {loggedUser.role === 'casal' && 'Casal de Padrinhos'}
               {loggedUser.role === 'madrinha' && 'Madrinha de Honra'}
@@ -273,8 +279,8 @@ export default function PadrinhosPortal() {
             </p>
 
             <div className="flex flex-wrap gap-4 text-xs font-medium text-white/90">
-              <span className="bg-black/20 px-3 py-1.5 rounded-lg backdrop-blur-sm">📅 09 de Janeiro de 2027</span>
-              <span className="bg-black/20 px-3 py-1.5 rounded-lg backdrop-blur-sm">📍 Cerimônia & Recepção Clássica</span>
+              <span className="bg-white/10 border border-white/10 px-3 py-1.5 rounded-lg backdrop-blur-sm">📅 09 de Janeiro de 2027</span>
+              <span className="bg-white/10 border border-white/10 px-3 py-1.5 rounded-lg backdrop-blur-sm">📍 Cerimônia & Recepção Clássica</span>
             </div>
           </div>
         </motion.div>
@@ -340,16 +346,16 @@ export default function PadrinhosPortal() {
                 <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 dark:border-zinc-800 flex flex-col justify-between">
                   <div>
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="w-10 h-10 rounded-2xl bg-[var(--color-wedding-rose)]/20 text-[var(--color-wedding-rose)] flex items-center justify-center font-bold font-serif">
+                      <div className="w-10 h-10 rounded-2xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center font-bold font-serif shadow-md">
                         M
                       </div>
                       <div>
                         <h3 className="text-2xl font-serif text-[var(--foreground)]">{DRESS_CODE_INFO.madrinhas.title}</h3>
-                        <p className="text-xs text-[var(--color-wedding-rose)] font-semibold uppercase tracking-wider">Paleta Livre • Vestidos Longos</p>
+                        <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Paleta Livre • Vestidos Longos</p>
                       </div>
                     </div>
 
-                    <div className="bg-[var(--color-wedding-beige)]/50 dark:bg-zinc-800/50 p-5 rounded-2xl mb-6 border border-gray-100 dark:border-zinc-700/50">
+                    <div className="bg-gray-100 dark:bg-zinc-800/60 p-5 rounded-2xl mb-6 border border-gray-200 dark:border-zinc-700/50">
                       <p className="text-gray-700 dark:text-gray-200 font-sans italic text-sm md:text-base leading-relaxed">
                         "{DRESS_CODE_INFO.madrinhas.description} A paleta de cores será livre, para que possam escolher a cor e o estilo que mais combinem com vocês. No entanto, pedimos apenas que optem por vestidos longos, elegantes, que harmonizem com o horário e a proposta clássica da celebração."
                       </p>
@@ -361,11 +367,11 @@ export default function PadrinhosPortal() {
                       </h4>
                       <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300 font-sans pl-2">
                         <li className="flex items-start gap-2">
-                          <span className="text-[var(--color-wedding-gold)] mt-1">•</span>
+                          <span className="text-black dark:text-white mt-1">•</span>
                           <span><strong>Comprimento:</strong> Vestidos estritamente LONGOS e elegantes.</span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <span className="text-[var(--color-wedding-gold)] mt-1">•</span>
+                          <span className="text-black dark:text-white mt-1">•</span>
                           <span><strong>Cores:</strong> Paleta livre (liberdade total para escolher o tom que preferir!).</span>
                         </li>
                       </ul>
@@ -381,23 +387,20 @@ export default function PadrinhosPortal() {
                       </p>
                     </div>
 
-                    {/* Palette Suggestions */}
-                    <div>
-                      <span className="text-xs uppercase font-semibold text-gray-400 tracking-wider block mb-3">Exemplos de Tons Elegantes Liberados:</span>
-                      <div className="grid grid-cols-3 gap-2">
-                        {DRESS_CODE_INFO.madrinhas.suggestedPalettes.map((pal, idx) => (
-                          <div 
-                            key={idx}
-                            onClick={() => {
-                              setSelectedDressColor(pal.hex);
-                              setCustomTieColorName(pal.name);
-                            }}
-                            className="p-2.5 rounded-xl border border-gray-100 dark:border-zinc-800 flex flex-col items-center gap-1.5 cursor-pointer hover:scale-105 transition-transform"
-                          >
-                            <div className="w-8 h-8 rounded-full shadow-inner border border-white/40" style={{ backgroundColor: pal.hex }}></div>
-                            <span className="text-[10px] text-center font-sans text-gray-600 dark:text-gray-300 line-clamp-1">{pal.name}</span>
-                          </div>
-                        ))}
+                    {/* Single Photo Example for Madrinhas */}
+                    <div className="mt-4">
+                      <span className="text-xs uppercase font-semibold text-gray-400 tracking-wider block mb-3">Exemplo de Referência (Vestido Longo):</span>
+                      <div className="overflow-hidden rounded-2xl border border-gray-200 dark:border-zinc-700 shadow-md group relative">
+                        <img 
+                          src="https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=1000&auto=format&fit=crop" 
+                          alt="Exemplo de mulher com vestido longo elegante" 
+                          className="w-full h-80 object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 text-center">
+                          <span className="text-xs font-semibold text-white font-sans tracking-wide">
+                            Exemplo de Vestido Longo Elegante
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -407,16 +410,16 @@ export default function PadrinhosPortal() {
                 <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 dark:border-zinc-800 flex flex-col justify-between">
                   <div>
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="w-10 h-10 rounded-2xl bg-[var(--color-wedding-gold)]/20 text-[var(--color-wedding-gold)] flex items-center justify-center font-bold font-serif">
+                      <div className="w-10 h-10 rounded-2xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center font-bold font-serif shadow-md">
                         P
                       </div>
                       <div>
                         <h3 className="text-2xl font-serif text-[var(--foreground)]">{DRESS_CODE_INFO.padrinhos.title}</h3>
-                        <p className="text-xs text-[var(--color-wedding-gold)] font-semibold uppercase tracking-wider">Terno Preto Clássico • Gravata Harmonizada</p>
+                        <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Terno Preto Clássico • Gravata Harmonizada</p>
                       </div>
                     </div>
 
-                    <div className="bg-[var(--color-wedding-beige)]/50 dark:bg-zinc-800/50 p-5 rounded-2xl mb-6 border border-gray-100 dark:border-zinc-700/50">
+                    <div className="bg-gray-100 dark:bg-zinc-800/60 p-5 rounded-2xl mb-6 border border-gray-200 dark:border-zinc-700/50">
                       <p className="text-gray-700 dark:text-gray-200 font-sans italic text-sm md:text-base leading-relaxed">
                         "{DRESS_CODE_INFO.padrinhos.description} A gravata deverá harmonizar com a cor do vestido do seu par, preservando a harmonia visual da celebração."
                       </p>
@@ -428,19 +431,19 @@ export default function PadrinhosPortal() {
                       </h4>
                       <ul className="space-y-3 text-sm text-gray-600 dark:text-gray-300 font-sans pl-2">
                         <li className="flex items-start gap-2">
-                          <span className="text-[var(--color-wedding-gold)] mt-1">•</span>
-                          <span><strong>Terno:</strong> Terno completo PRETO clássico (paletó e calça prestes).</span>
+                          <span className="text-black dark:text-white mt-1">•</span>
+                          <span><strong>Terno:</strong> Terno completo PRETO clássico (paletó e calça pretos).</span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <span className="text-[var(--color-wedding-gold)] mt-1">•</span>
+                          <span className="text-black dark:text-white mt-1">•</span>
                           <span><strong>Camisa:</strong> Camisa social BRANCA clássica.</span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <span className="text-[var(--color-wedding-gold)] mt-1">•</span>
+                          <span className="text-black dark:text-white mt-1">•</span>
                           <span><strong>Gravata:</strong> Na mesma cor ou tom harmonizado com o vestido da sua madrinha/par.</span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <span className="text-[var(--color-wedding-gold)] mt-1">•</span>
+                          <span className="text-black dark:text-white mt-1">•</span>
                           <span><strong>Sapatos:</strong> Sapato social preto.</span>
                         </li>
                       </ul>
@@ -449,7 +452,7 @@ export default function PadrinhosPortal() {
                     {/* Interactive Harmonizer Widget */}
                     <div className="bg-gradient-to-br from-zinc-900 to-black text-white p-5 rounded-2xl shadow-lg border border-zinc-800">
                       <div className="flex items-center justify-between mb-3">
-                        <span className="text-xs font-serif text-[var(--color-wedding-gold)] uppercase tracking-wider flex items-center gap-1">
+                        <span className="text-xs font-serif text-gray-300 uppercase tracking-wider flex items-center gap-1">
                           <Sparkles size={12} /> Harmonizador de Trajes do Casal
                         </span>
                         <span className="text-[10px] bg-white/10 px-2 py-0.5 rounded text-gray-300 font-sans">Simulador Interativo</span>
@@ -470,7 +473,7 @@ export default function PadrinhosPortal() {
                           <span className="text-[11px] text-gray-300 font-sans block mt-2">Terno Preto & Gravata</span>
                         </div>
 
-                        <div className="text-2xl text-[var(--color-wedding-gold)] font-serif">+</div>
+                        <div className="text-2xl text-white font-serif">+</div>
 
                         {/* Dress Color */}
                         <div className="text-center">
@@ -486,7 +489,7 @@ export default function PadrinhosPortal() {
 
                       <div className="mt-2 pt-3 border-t border-zinc-800 text-center">
                         <p className="text-xs text-gray-400 font-sans">
-                          Cor selecionada: <strong className="text-[var(--color-wedding-gold)]">{customTieColorName}</strong>
+                          Harmonização visual elegante para o casal
                         </p>
                       </div>
                     </div>
@@ -497,12 +500,12 @@ export default function PadrinhosPortal() {
               {/* Daminhas Card */}
               <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 dark:border-zinc-800">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-2xl bg-pink-500/20 text-pink-500 flex items-center justify-center font-bold font-serif">
+                  <div className="w-10 h-10 rounded-2xl bg-zinc-200 dark:bg-zinc-800 text-[var(--foreground)] flex items-center justify-center font-bold font-serif">
                     D
                   </div>
                   <div>
                     <h3 className="text-2xl font-serif text-[var(--foreground)]">{DRESS_CODE_INFO.daminhas.title}</h3>
-                    <p className="text-xs text-pink-500 font-semibold uppercase tracking-wider">Entrada Festiva • Luna & Julia</p>
+                    <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Entrada Festiva • Luna & Julia</p>
                   </div>
                 </div>
 
@@ -512,8 +515,8 @@ export default function PadrinhosPortal() {
 
                 <ul className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {DRESS_CODE_INFO.daminhas.rules.map((rule, i) => (
-                    <li key={i} className="bg-[var(--color-wedding-beige)]/40 dark:bg-zinc-800/40 p-4 rounded-2xl border border-gray-100 dark:border-zinc-700/40 text-xs md:text-sm font-sans text-gray-700 dark:text-gray-300 flex items-start gap-2">
-                      <Heart size={16} className="text-pink-400 shrink-0 mt-0.5" />
+                    <li key={i} className="bg-gray-50 dark:bg-zinc-800/40 p-4 rounded-2xl border border-gray-100 dark:border-zinc-700/40 text-xs md:text-sm font-sans text-gray-700 dark:text-gray-300 flex items-start gap-2">
+                      <Heart size={16} className="text-gray-400 shrink-0 mt-0.5" />
                       <span>{rule}</span>
                     </li>
                   ))}
@@ -534,7 +537,7 @@ export default function PadrinhosPortal() {
               {/* Announcements List */}
               <div>
                 <h2 className="text-2xl font-serif text-[var(--foreground)] mb-6 flex items-center gap-2">
-                  <Sparkles size={24} className="text-[var(--color-wedding-gold)]" /> Recados dos Noivos
+                  <Sparkles size={24} className="text-[var(--foreground)]" /> Recados dos Noivos
                 </h2>
 
                 <div className="space-y-4">
@@ -543,12 +546,12 @@ export default function PadrinhosPortal() {
                       key={ann.id}
                       className={`p-6 rounded-3xl border transition-all ${
                         ann.isImportant
-                          ? 'bg-gradient-to-r from-[var(--color-wedding-gold)]/10 to-[var(--color-wedding-rose)]/10 border-[var(--color-wedding-gold)]/40'
+                          ? 'bg-zinc-100 dark:bg-zinc-800/80 border-zinc-300 dark:border-zinc-700'
                           : 'bg-white dark:bg-zinc-900 border-gray-100 dark:border-zinc-800'
                       }`}
                     >
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-semibold uppercase tracking-wider text-[var(--color-wedding-gold)]">
+                        <span className="text-xs font-semibold uppercase tracking-wider text-[var(--foreground)]">
                           {ann.author}
                         </span>
                         <span className="text-xs text-gray-400 font-sans">{ann.date}</span>
@@ -565,7 +568,7 @@ export default function PadrinhosPortal() {
               {/* Reply Section */}
               <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 dark:border-zinc-800">
                 <h3 className="text-xl font-serif text-[var(--foreground)] mb-2 flex items-center gap-2">
-                  <MessageSquare size={20} className="text-[var(--color-wedding-gold)]" /> Deixar Recado para Aline & Klécio
+                  <MessageSquare size={20} className="text-[var(--foreground)]" /> Deixar Recado para Aline & Klécio
                 </h3>
                 <p className="text-xs text-gray-500 font-sans mb-6">
                   Escreva um recado especial, tire dúvidas ou envie um carinho para os noivos.
@@ -584,13 +587,13 @@ export default function PadrinhosPortal() {
                     placeholder="Digite sua mensagem aqui..."
                     rows={4}
                     required
-                    className="w-full p-4 rounded-2xl border border-gray-200 dark:border-zinc-700 bg-transparent text-[var(--foreground)] focus:outline-none focus:border-[var(--color-wedding-gold)] font-sans"
+                    className="w-full p-4 rounded-2xl border border-gray-200 dark:border-zinc-700 bg-transparent text-[var(--foreground)] focus:outline-none focus:border-black dark:focus:border-white font-sans"
                   />
                   <button
                     type="submit"
-                    className="flex items-center gap-2 bg-[var(--color-wedding-gold)] text-white px-6 py-3 rounded-xl font-medium hover:bg-[var(--color-wedding-gold)]/90 transition-colors shadow-md shadow-[var(--color-wedding-gold)]/20 cursor-pointer"
+                    className="flex items-center gap-2 bg-black dark:bg-white text-white dark:text-black px-6 py-3 rounded-xl font-semibold uppercase tracking-wider text-xs hover:opacity-90 transition-colors shadow-md cursor-pointer"
                   >
-                    <Send size={18} /> Enviar Mensagem
+                    <Send size={16} /> Enviar Mensagem
                   </button>
                 </form>
 
@@ -600,7 +603,7 @@ export default function PadrinhosPortal() {
                     <h4 className="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">Seus Recados Enviados:</h4>
                     <div className="space-y-3">
                       {padrinhoReplies.map((r) => (
-                        <div key={r.id} className="bg-[var(--color-wedding-beige)]/40 dark:bg-zinc-800/40 p-4 rounded-xl text-sm font-sans">
+                        <div key={r.id} className="bg-gray-50 dark:bg-zinc-800/40 p-4 rounded-xl text-sm font-sans">
                           <div className="flex justify-between text-xs text-gray-400 mb-1">
                             <span className="font-bold text-[var(--foreground)]">{r.author}</span>
                             <span>{r.date}</span>
@@ -624,17 +627,17 @@ export default function PadrinhosPortal() {
               className="bg-white dark:bg-zinc-900 rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 dark:border-zinc-800"
             >
               <h2 className="text-2xl font-serif text-[var(--foreground)] mb-2 flex items-center gap-2">
-                <Calendar size={24} className="text-[var(--color-wedding-gold)]" /> Cronograma do Grande Dia
+                <Calendar size={24} className="text-[var(--foreground)]" /> Cronograma do Grande Dia
               </h2>
               <p className="text-sm text-gray-500 font-sans mb-8">
                 Horários orientativos planejados com carinho para os padrinhos aproveitarem cada instante!
               </p>
 
-              <div className="relative border-l-2 border-[var(--color-wedding-gold)]/30 pl-6 space-y-8 ml-2">
+              <div className="relative border-l-2 border-zinc-300 dark:border-zinc-700 pl-6 space-y-8 ml-2">
                 
                 <div className="relative">
-                  <div className="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-[var(--color-wedding-gold)] border-4 border-white dark:border-zinc-900"></div>
-                  <span className="text-xs font-bold text-[var(--color-wedding-gold)] uppercase tracking-wider block">18:00</span>
+                  <div className="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-black dark:bg-white border-4 border-white dark:border-zinc-900"></div>
+                  <span className="text-xs font-bold text-gray-500 uppercase tracking-wider block">18:00</span>
                   <h3 className="text-lg font-serif text-[var(--foreground)] font-semibold">Chegada dos Padrinhos & Posição no Altar</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400 font-sans mt-1">
                     Chegada antecedente ao local da celebração para organização de cortejo e alinhamento com a cerimonialista.
@@ -642,8 +645,8 @@ export default function PadrinhosPortal() {
                 </div>
 
                 <div className="relative">
-                  <div className="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-[var(--color-wedding-gold)] border-4 border-white dark:border-zinc-900"></div>
-                  <span className="text-xs font-bold text-[var(--color-wedding-gold)] uppercase tracking-wider block">18:30</span>
+                  <div className="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-black dark:bg-white border-4 border-white dark:border-zinc-900"></div>
+                  <span className="text-xs font-bold text-gray-500 uppercase tracking-wider block">18:30</span>
                   <h3 className="text-lg font-serif text-[var(--foreground)] font-semibold">Início Especial da Cerimônia</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400 font-sans mt-1">
                     Entrada dos padrinhos, daminhas Luna e Julia e noivos para o momento solene do SIM.
@@ -651,8 +654,8 @@ export default function PadrinhosPortal() {
                 </div>
 
                 <div className="relative">
-                  <div className="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-[var(--color-wedding-gold)] border-4 border-white dark:border-zinc-900"></div>
-                  <span className="text-xs font-bold text-[var(--color-wedding-gold)] uppercase tracking-wider block">19:45</span>
+                  <div className="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-black dark:bg-white border-4 border-white dark:border-zinc-900"></div>
+                  <span className="text-xs font-bold text-gray-500 uppercase tracking-wider block">19:45</span>
                   <h3 className="text-lg font-serif text-[var(--foreground)] font-semibold">Sessão de Fotos Oficiais com os Noivos</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400 font-sans mt-1">
                     Fotos clássicas e divertidas de cada casal e grupo no altar/backdrop com Aline & Klécio.
@@ -660,8 +663,8 @@ export default function PadrinhosPortal() {
                 </div>
 
                 <div className="relative">
-                  <div className="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-[var(--color-wedding-gold)] border-4 border-white dark:border-zinc-900"></div>
-                  <span className="text-xs font-bold text-[var(--color-wedding-gold)] uppercase tracking-wider block">20:30 em diante</span>
+                  <div className="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-black dark:bg-white border-4 border-white dark:border-zinc-900"></div>
+                  <span className="text-xs font-bold text-gray-500 uppercase tracking-wider block">20:30 em diante</span>
                   <h3 className="text-lg font-serif text-[var(--foreground)] font-semibold">Recepção, Brinde & Festa</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400 font-sans mt-1">
                     Abertura da pista de dança, coquetel, jantar e celebração inesquecível a noite toda!

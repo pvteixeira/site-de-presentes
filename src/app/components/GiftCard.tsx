@@ -19,11 +19,11 @@ export default function GiftCard({ gift, onContribute }: GiftCardProps) {
     <motion.div 
       className="glass-card overflow-hidden flex flex-col h-full bg-white dark:bg-[var(--background)] group relative rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800"
       initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
     >
       {isCompleted && (
-        <div className="absolute top-4 right-4 z-10 bg-[var(--color-wedding-gold)] text-white text-xs font-bold px-3 py-1 rounded-full shadow-md uppercase tracking-wider">
+        <div className="absolute top-4 right-4 z-10 bg-black dark:bg-white text-white dark:text-black text-xs font-bold px-3 py-1 rounded-full shadow-md uppercase tracking-wider">
           Completo
         </div>
       )}
@@ -46,14 +46,14 @@ export default function GiftCard({ gift, onContribute }: GiftCardProps) {
         <div className="mt-auto">
           <div className="flex items-center justify-between mb-2">
             <span className="text-[var(--foreground)] font-semibold">{formatCurrency(gift.totalAmount)}</span>
-            <span className="text-sm font-bold text-[var(--color-wedding-gold)]">{progress.toFixed(0)}%</span>
+            <span className="text-sm font-bold text-black dark:text-white">{progress.toFixed(0)}%</span>
           </div>
           
           <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2 overflow-hidden mb-5">
             <motion.div 
-              className="bg-[var(--color-wedding-gold)] h-full rounded-full"
+              className="bg-black dark:bg-white h-full rounded-full"
               initial={{ width: 0 }}
-              whileInView={{ width: `${progress}%` }}
+              animate={{ width: `${progress}%` }}
               transition={{ duration: 1, ease: "easeOut" }}
             ></motion.div>
           </div>

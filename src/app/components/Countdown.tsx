@@ -42,12 +42,11 @@ export default function Countdown() {
   ];
 
   return (
-    <section id="historia" className="py-20 bg-white dark:bg-[var(--background)]">
+    <section id="countdown" className="py-20 bg-white dark:bg-[var(--background)]">
       <div className="container mx-auto px-4 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
           <h2 className="text-3xl md:text-5xl font-serif text-[var(--foreground)] mb-4">
@@ -61,12 +60,12 @@ export default function Countdown() {
             {timeUnits.map((unit, index) => (
               <div 
                 key={unit.label}
-                className="flex flex-col items-center justify-center w-24 h-24 md:w-32 md:h-32 rounded-full border border-[var(--color-wedding-gold)]/30 bg-[var(--color-wedding-beige)] dark:bg-[var(--color-wedding-beige)]/10 shadow-sm"
+                className="flex flex-col items-center justify-center w-24 h-24 md:w-32 md:h-32 rounded-full border border-gray-300 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800/80 shadow-md"
               >
-                <span className="text-3xl md:text-5xl font-serif text-[var(--color-wedding-gold)] mb-1">
+                <span className="text-3xl md:text-5xl font-serif text-[var(--foreground)] font-semibold mb-1">
                   {unit.value.toString().padStart(2, '0')}
                 </span>
-                <span className="text-xs md:text-sm font-sans uppercase tracking-widest text-[var(--foreground)]/60">
+                <span className="text-xs md:text-sm font-sans uppercase tracking-widest text-[var(--foreground)]/60 font-medium">
                   {unit.label}
                 </span>
               </div>

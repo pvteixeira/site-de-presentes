@@ -102,8 +102,8 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
                       onClick={() => setAmount(gift.totalAmount)}
                       className={`flex-1 py-3 px-4 rounded-xl border transition-all ${
                         amount === gift.totalAmount 
-                          ? 'border-[var(--color-wedding-gold)] bg-[var(--color-wedding-gold)]/10 text-[var(--color-wedding-gold)]' 
-                          : 'border-gray-200 hover:border-[var(--color-wedding-gold)]/50'
+                          ? 'border-black dark:border-white bg-black/10 dark:bg-white/10 text-[var(--foreground)] font-semibold' 
+                          : 'border-gray-200 hover:border-black/50'
                       }`}
                     >
                       Valor Total
@@ -115,7 +115,7 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
                         placeholder="Outro valor"
                         value={amount}
                         onChange={(e) => setAmount(Number(e.target.value))}
-                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[var(--color-wedding-gold)] focus:ring-1 focus:ring-[var(--color-wedding-gold)] transition-all bg-transparent"
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-black dark:focus:border-white focus:ring-1 focus:ring-black transition-all bg-transparent"
                       />
                     </div>
                   </div>
@@ -124,7 +124,7 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
                 <button
                   onClick={handleGeneratePix}
                   disabled={!amount && amount !== 0}
-                  className="w-full py-4 mt-4 bg-[var(--foreground)] text-[var(--background)] rounded-xl font-medium hover:bg-[var(--foreground)]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full py-4 mt-4 bg-black dark:bg-white text-white dark:text-black rounded-xl font-semibold uppercase tracking-wider text-xs hover:opacity-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Gerar PIX
                 </button>
@@ -144,7 +144,7 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
                 <div className="w-full">
                   <button
                     onClick={handleCopy}
-                    className="w-full flex items-center justify-center gap-2 py-3 px-4 border border-[var(--color-wedding-gold)] rounded-xl text-[var(--color-wedding-gold)] hover:bg-[var(--color-wedding-gold)]/5 transition-colors"
+                    className="w-full flex items-center justify-center gap-2 py-3 px-4 border border-black dark:border-white rounded-xl text-[var(--foreground)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
                   >
                     {copied ? <CheckCircle2 size={18} /> : <Copy size={18} />}
                     {copied ? 'Código copiado!' : 'Copiar código PIX'}
@@ -153,7 +153,7 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
 
                 <button
                   onClick={handleGoToForm}
-                  className="w-full py-4 bg-[var(--color-wedding-gold)] text-white rounded-xl font-medium hover:bg-[var(--color-wedding-gold)]/90 transition-all transform hover:-translate-y-0.5 shadow-md shadow-[var(--color-wedding-gold)]/20"
+                  className="w-full py-4 bg-black dark:bg-white text-white dark:text-black rounded-xl font-semibold uppercase tracking-wider text-xs hover:opacity-90 transition-all shadow-md"
                 >
                   Já realizei o pagamento
                 </button>
@@ -182,7 +182,7 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
                     placeholder="Como devemos lhe agradecer?"
                     value={guestName}
                     onChange={(e) => setGuestName(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[var(--color-wedding-gold)] focus:ring-1 focus:ring-[var(--color-wedding-gold)] transition-all bg-transparent"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-black dark:focus:border-white focus:ring-1 focus:ring-black transition-all bg-transparent"
                   />
                 </div>
 
@@ -207,7 +207,7 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
                     />
                   </label>
                   {receiptFile && (
-                    <p className="mt-2 text-sm text-[var(--color-wedding-gold)] truncate">
+                    <p className="mt-2 text-sm text-black dark:text-white font-medium truncate">
                       Arquivo selecionado: {receiptFile.name}
                     </p>
                   )}
@@ -215,7 +215,7 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
 
                 <button
                   type="submit"
-                  className="w-full py-4 mt-4 bg-[var(--foreground)] text-[var(--background)] rounded-xl font-medium hover:bg-[var(--foreground)]/90 transition-colors"
+                  className="w-full py-4 mt-4 bg-black dark:bg-white text-white dark:text-black rounded-xl font-semibold uppercase tracking-wider text-xs hover:opacity-90 transition-colors"
                 >
                   Enviar Comprovante
                 </button>
@@ -237,7 +237,7 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
                 </p>
                 <button
                   onClick={handleComplete}
-                  className="w-full py-4 bg-[var(--color-wedding-gold)] text-white rounded-xl font-medium hover:bg-[var(--color-wedding-gold)]/90 transition-all"
+                  className="w-full py-4 bg-black dark:bg-white text-white dark:text-black rounded-xl font-semibold uppercase tracking-wider text-xs hover:opacity-90 transition-all"
                 >
                   Voltar para os presentes
                 </button>

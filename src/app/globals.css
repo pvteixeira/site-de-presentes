@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --background: #FCFBF9; /* Soft off-white beige */
-  --foreground: #2C2A29; /* Soft dark */
+  --background: #FFFFFF; /* Pure crisp white background */
+  --foreground: #111111; /* Deep black text */
   
-  --color-wedding-gold: #C5A059;
-  --color-wedding-rose: #D1A3A4;
-  --color-wedding-beige: #F4EFEA;
+  --color-wedding-gold: #18181B; /* Primary accent: Charcoal Black */
+  --color-wedding-rose: #52525B; /* Secondary accent: Medium Slate Gray */
+  --color-wedding-beige: #F4F4F5; /* Background highlight: Soft Crisp Gray */
   
   --radius-xl: 1rem;
   --radius-2xl: 1.5rem;
@@ -25,9 +25,11 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #1A1818;
-    --foreground: #F4EFEA;
-    --color-wedding-beige: #2A2626;
+    --background: #09090B;
+    --foreground: #FAFAFA;
+    --color-wedding-beige: #18181B;
+    --color-wedding-gold: #FFFFFF;
+    --color-wedding-rose: #A1A1AA;
   }
 }
 
@@ -41,26 +43,26 @@ body {
 
 /* Glassmorphism utility classes */
 .glass {
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 @media (prefers-color-scheme: dark) {
   .glass {
-    background: rgba(30, 28, 28, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(24, 24, 27, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: var(--radius-2xl);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 300ms;
@@ -68,13 +70,13 @@ body {
 
 @media (prefers-color-scheme: dark) {
   .glass-card {
-    background: rgba(30, 28, 28, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(24, 24, 27, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.08);
   }
 }
 
 .glass-card:hover {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   transform: translateY(-0.25rem);
 }
 

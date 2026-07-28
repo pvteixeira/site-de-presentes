@@ -195,15 +195,7 @@ export const DRESS_CODE_INFO = {
       'Optem por vestidos LONGOS e elegantes, harmonizando com a proposta clássica da celebração.',
       'Atenção: Cores Brancas e Off-White NÃO serão permitidas.'
     ],
-    prohibitedColors: ['#FFFFFF', '#F5F5DC', '#FAF0E6', '#FFFDD0'],
-    suggestedPalettes: [
-      { name: 'Rose Gold / Terracota', hex: '#D1A3A4' },
-      { name: 'Azul Serenity / Marinho', hex: '#4A6B82' },
-      { name: 'Verde Esmeralda / Olivas', hex: '#3B6047' },
-      { name: 'Vinho / Marsala', hex: '#800020' },
-      { name: 'Lavanda / Lilás', hex: '#967BB6' },
-      { name: 'Champagne / Dourado Soft', hex: '#C5A059' }
-    ]
+    prohibitedColors: ['#FFFFFF', '#F5F5DC', '#FAF0E6', '#FFFDD0']
   },
   padrinhos: {
     title: 'Para os Padrinhos',

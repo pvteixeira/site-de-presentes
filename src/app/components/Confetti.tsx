@@ -24,12 +24,12 @@ export const triggerConfetti = () => {
     confetti(Object.assign({}, defaults, { 
       particleCount,
       origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
-      colors: ['#C5A059', '#D1A3A4', '#ffffff']
+      colors: ['#111111', '#888888', '#ffffff', '#cccccc']
     }));
     confetti(Object.assign({}, defaults, { 
       particleCount,
       origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
-      colors: ['#C5A059', '#D1A3A4', '#ffffff']
+      colors: ['#111111', '#888888', '#ffffff', '#cccccc']
     }));
   }, 250);
 };

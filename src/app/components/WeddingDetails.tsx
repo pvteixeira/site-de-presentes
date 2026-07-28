@@ -9,19 +9,18 @@ export default function WeddingDetails() {
       <div className="container mx-auto px-4 max-w-5xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           className="text-center mb-16 flex flex-col items-center"
         >
-          <h2 className="text-4xl md:text-5xl font-serif text-[var(--foreground)] mb-4">
+          <h2 className="text-4xl md:text-5xl font-serif text-[var(--foreground)] mb-4 font-medium">
             O Grande Dia
           </h2>
           
           <div className="flex items-center justify-center gap-3 mb-6">
-            <div className="w-12 h-[1px] bg-[var(--color-wedding-gold)]/40"></div>
-            <Heart className="w-3.5 h-3.5 fill-[var(--color-wedding-gold)] text-[var(--color-wedding-gold)]" />
-            <div className="w-12 h-[1px] bg-[var(--color-wedding-gold)]/40"></div>
+            <div className="w-12 h-[1px] bg-black dark:bg-white opacity-30"></div>
+            <Heart className="w-3.5 h-3.5 fill-[var(--foreground)] text-[var(--foreground)]" />
+            <div className="w-12 h-[1px] bg-black dark:bg-white opacity-30"></div>
           </div>
 
           <p className="text-lg text-[var(--foreground)]/70 font-sans max-w-2xl mx-auto">
@@ -33,13 +32,12 @@ export default function WeddingDetails() {
           {/* Card Cerimônia */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="glass-card bg-white dark:bg-[var(--background)] p-8 md:p-10 flex flex-col justify-between h-full border border-gray-100 dark:border-gray-800"
+            className="glass-card bg-white dark:bg-[var(--background)] p-8 md:p-10 flex flex-col justify-between h-full border border-gray-200 dark:border-gray-800 shadow-sm"
           >
             <div>
-              <h3 className="text-2xl font-serif text-[var(--color-wedding-gold)] mb-6 pb-2 border-b border-[var(--color-wedding-gold)]/20">
+              <h3 className="text-2xl font-serif text-[var(--foreground)] mb-6 pb-2 border-b border-gray-200 dark:border-zinc-800 font-semibold">
                 Cerimônia
               </h3>
               <h4 className="text-xl font-sans font-semibold text-[var(--foreground)] mb-6">
@@ -48,13 +46,13 @@ export default function WeddingDetails() {
               
               <ul className="space-y-4 font-sans text-base text-[var(--foreground)]/80 mb-8">
                 <li className="flex items-center gap-3">
-                  <Clock className="w-5 h-5 text-[var(--color-wedding-gold)] shrink-0" />
+                  <Clock className="w-5 h-5 text-gray-500 shrink-0" />
                   <div>
                     <span className="font-medium text-[var(--foreground)]">19h30</span>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-[var(--color-wedding-gold)] shrink-0 mt-0.5" />
+                  <MapPin className="w-5 h-5 text-gray-500 shrink-0 mt-0.5" />
                   <div>
                     <span>R. Bonfim/Tv do Bonfim, Carmo, Olinda – PE</span>
                   </div>
@@ -66,7 +64,7 @@ export default function WeddingDetails() {
               href="https://www.google.com/maps/search/?api=1&query=Igreja+do+Bom+Jesus+do+Bonfim+Olinda+PE"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 w-full py-4 px-6 font-sans font-medium tracking-wide text-white transition-all duration-300 bg-[var(--color-wedding-gold)] rounded-xl hover:bg-[var(--color-wedding-gold)]/90 hover:scale-[1.02] hover:shadow-lg hover:shadow-[var(--color-wedding-gold)]/20"
+              className="inline-flex items-center justify-center gap-2 w-full py-4 px-6 font-sans font-semibold tracking-wide text-white dark:text-black uppercase text-xs transition-all duration-300 bg-black dark:bg-white rounded-xl hover:opacity-90 hover:scale-[1.02] shadow-md"
             >
               <MapPin className="w-4 h-4 shrink-0" />
               <span>Ver localização</span>
@@ -76,13 +74,12 @@ export default function WeddingDetails() {
           {/* Card Recepção */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="glass-card bg-white dark:bg-[var(--background)] p-8 md:p-10 flex flex-col justify-between h-full border border-gray-100 dark:border-gray-800"
+            className="glass-card bg-white dark:bg-[var(--background)] p-8 md:p-10 flex flex-col justify-between h-full border border-gray-200 dark:border-gray-800 shadow-sm"
           >
             <div>
-              <h3 className="text-2xl font-serif text-[var(--color-wedding-gold)] mb-6 pb-2 border-b border-[var(--color-wedding-gold)]/20">
+              <h3 className="text-2xl font-serif text-[var(--foreground)] mb-6 pb-2 border-b border-gray-200 dark:border-zinc-800 font-semibold">
                 Recepção
               </h3>
               <h4 className="text-xl font-sans font-semibold text-[var(--foreground)] mb-6">
@@ -91,13 +88,13 @@ export default function WeddingDetails() {
               
               <ul className="space-y-4 font-sans text-base text-[var(--foreground)]/80 mb-8">
                 <li className="flex items-center gap-3">
-                  <Clock className="w-5 h-5 text-[var(--color-wedding-gold)] shrink-0" />
+                  <Clock className="w-5 h-5 text-gray-500 shrink-0" />
                   <div>
                     <span className="font-medium text-[var(--foreground)]">22h00</span>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-[var(--color-wedding-gold)] shrink-0 mt-0.5" />
+                  <MapPin className="w-5 h-5 text-gray-500 shrink-0 mt-0.5" />
                   <div>
                     <span>Av. Carlos de Lima Cavalcante, 2499</span>
                     <br />
@@ -111,7 +108,7 @@ export default function WeddingDetails() {
               href="https://www.google.com/maps/search/?api=1&query=Dayse+Nogueira+Recepcoes+Av+Carlos+de+Lima+Cavalcante+2499+Olinda"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 w-full py-4 px-6 font-sans font-medium tracking-wide text-white transition-all duration-300 bg-[var(--color-wedding-gold)] rounded-xl hover:bg-[var(--color-wedding-gold)]/90 hover:scale-[1.02] hover:shadow-lg hover:shadow-[var(--color-wedding-gold)]/20"
+              className="inline-flex items-center justify-center gap-2 w-full py-4 px-6 font-sans font-semibold tracking-wide text-white dark:text-black uppercase text-xs transition-all duration-300 bg-black dark:bg-white rounded-xl hover:opacity-90 hover:scale-[1.02] shadow-md"
             >
               <MapPin className="w-4 h-4 shrink-0" />
               <span>Ver localização</span>
