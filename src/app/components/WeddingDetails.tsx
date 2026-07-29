@@ -16,16 +16,12 @@ export default function WeddingDetails() {
           <h2 className="text-4xl md:text-5xl font-serif text-[var(--foreground)] mb-4 font-medium">
             O Grande Dia
           </h2>
-          
+
           <div className="flex items-center justify-center gap-3 mb-6">
             <div className="w-12 h-[1px] bg-black dark:bg-white opacity-30"></div>
             <Heart className="w-3.5 h-3.5 fill-[var(--foreground)] text-[var(--foreground)]" />
             <div className="w-12 h-[1px] bg-black dark:bg-white opacity-30"></div>
           </div>
-
-          <p className="text-lg text-[var(--foreground)]/70 font-sans max-w-2xl mx-auto">
-            Preparamos cada detalhe para que nosso dia seja inesquecível. Confira abaixo os horários e locais da nossa celebração.
-          </p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
@@ -43,12 +39,12 @@ export default function WeddingDetails() {
               <h4 className="text-xl font-sans font-semibold text-[var(--foreground)] mb-6">
                 Igreja do Bom Jesus do Bonfim
               </h4>
-              
+
               <ul className="space-y-4 font-sans text-base text-[var(--foreground)]/80 mb-8">
                 <li className="flex items-center gap-3">
                   <Clock className="w-5 h-5 text-gray-500 shrink-0" />
                   <div>
-                    <span className="font-medium text-[var(--foreground)]">19h30</span>
+                    <span className="font-medium text-[var(--foreground)]">19h00</span>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
@@ -85,7 +81,7 @@ export default function WeddingDetails() {
               <h4 className="text-xl font-sans font-semibold text-[var(--foreground)] mb-6">
                 Dayse Nogueira Recepções
               </h4>
-              
+
               <ul className="space-y-4 font-sans text-base text-[var(--foreground)]/80 mb-8">
                 <li className="flex items-center gap-3">
                   <Clock className="w-5 h-5 text-gray-500 shrink-0" />

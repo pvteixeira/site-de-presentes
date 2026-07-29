@@ -14,7 +14,7 @@ export default function Countdown() {
   useEffect(() => {
     // Target date: Jan 9, 2027 at 19:30:00 UTC-3 (Brasilia Time)
     const weddingDate = new Date('2027-01-09T19:30:00-03:00');
-    
+
     const interval = setInterval(() => {
       const now = new Date();
       const difference = weddingDate.getTime() - now.getTime();
@@ -52,13 +52,9 @@ export default function Countdown() {
           <h2 className="text-3xl md:text-5xl font-serif text-[var(--foreground)] mb-4">
             Contagem Regressiva
           </h2>
-          <p className="text-lg text-[var(--foreground)]/70 font-sans max-w-2xl mx-auto mb-12">
-            Estamos preparando tudo com muito carinho para celebrar nosso amor com as pessoas que mais amamos.
-          </p>
-          
           <div className="flex flex-wrap justify-center gap-4 md:gap-8">
             {timeUnits.map((unit, index) => (
-              <div 
+              <div
                 key={unit.label}
                 className="flex flex-col items-center justify-center w-24 h-24 md:w-32 md:h-32 rounded-full border border-gray-300 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800/80 shadow-md"
               >
