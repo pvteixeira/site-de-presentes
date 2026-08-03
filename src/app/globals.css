@@ -1,12 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --background: #FFFFFF; /* Pure crisp white background */
-  --foreground: #111111; /* Deep black text */
+  --background: #FFFFFF; /* Crisp white background */
+  --foreground: #09090B; /* Deep crisp black text */
   
-  --color-wedding-gold: #18181B; /* Primary accent: Charcoal Black */
-  --color-wedding-rose: #52525B; /* Secondary accent: Medium Slate Gray */
-  --color-wedding-beige: #F4F4F5; /* Background highlight: Soft Crisp Gray */
+  /* Silver & Metallic Palette Accents */
+  --color-wedding-silver: #D1D5DB; /* Main silver border & divider accent */
+  --color-wedding-silver-light: #F3F4F6; /* Soft silver highlight background */
+  --color-wedding-silver-dark: #6B7280; /* Subtle silver icon & subtext tone */
   
   --radius-xl: 1rem;
   --radius-2xl: 1.5rem;
@@ -15,9 +16,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-gold: var(--color-wedding-gold);
-  --color-rose: var(--color-wedding-rose);
-  --color-beige: var(--color-wedding-beige);
+  --color-silver: var(--color-wedding-silver);
+  --color-silver-light: var(--color-wedding-silver-light);
+  --color-silver-dark: var(--color-wedding-silver-dark);
   
   --font-sans: var(--font-inter), sans-serif;
   --font-serif: var(--font-playfair), serif;
@@ -27,9 +28,9 @@
   :root {
     --background: #09090B;
     --foreground: #FAFAFA;
-    --color-wedding-beige: #18181B;
-    --color-wedding-gold: #FFFFFF;
-    --color-wedding-rose: #A1A1AA;
+    --color-wedding-silver-light: #18181B;
+    --color-wedding-silver: #3F3F46;
+    --color-wedding-silver-dark: #A1A1AA;
   }
 }
 
@@ -41,43 +42,49 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Glassmorphism utility classes */
+/* Text justification utility for elegant reading */
+.text-justified-elegant {
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+}
+
+/* Glassmorphic elements with subtle silver borders */
 .glass {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(209, 213, 219, 0.6);
 }
 
 @media (prefers-color-scheme: dark) {
   .glass {
-    background: rgba(24, 24, 27, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(24, 24, 27, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.12);
   }
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(229, 231, 235, 0.8);
   border-radius: var(--radius-2xl);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 300ms;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.03);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @media (prefers-color-scheme: dark) {
   .glass-card {
-    background: rgba(24, 24, 27, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(24, 24, 27, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 }
 
 .glass-card:hover {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  transform: translateY(-0.25rem);
+  border-color: rgba(156, 163, 175, 0.5);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+  transform: translateY(-0.2rem);
 }
 
 /* Hide scrollbar for clean horizontal scrolling */

@@ -21,7 +21,7 @@ export interface PadrinhoMessage {
 export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
   {
     id: 'debora-carlos',
-    name: 'Débora & Carlos',
+    name: 'Débora e Carlos',
     username: 'debora.carlos',
     alternateUsernames: ['debora', 'carlos'],
     password: 'debora&carlos2027',
@@ -31,7 +31,7 @@ export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
   },
   {
     id: 'graci-junior',
-    name: 'Graci & Junior',
+    name: 'Graci e Junior',
     username: 'graci.junior',
     alternateUsernames: ['graci', 'junior'],
     password: 'graci&junior2027',
@@ -41,7 +41,7 @@ export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
   },
   {
     id: 'luciene-kassio',
-    name: 'Luciene & Kássio',
+    name: 'Luciene e Kássio',
     username: 'luciene.kassio',
     alternateUsernames: ['luciene', 'kassio'],
     password: 'luciene&kassio2027',
@@ -51,7 +51,7 @@ export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
   },
   {
     id: 'marina-ayrton',
-    name: 'Marina & Ayrton',
+    name: 'Marina e Ayrton',
     username: 'marina.ayrton',
     alternateUsernames: ['marina', 'ayrton'],
     password: 'marina&ayrton2027',
@@ -61,7 +61,7 @@ export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
   },
   {
     id: 'stephany-junior',
-    name: 'Stephany & Júnior',
+    name: 'Stephany e Júnior',
     username: 'stephany.junior',
     alternateUsernames: ['stephany', 'junior2'],
     password: 'stephany&junior2027',
@@ -71,7 +71,7 @@ export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
   },
   {
     id: 'thalita-thiago',
-    name: 'Thalita & Thiago',
+    name: 'Thalita e Thiago',
     username: 'thalita.thiago',
     alternateUsernames: ['thalita', 'thiago'],
     password: 'thalita&thiago2027',
@@ -81,7 +81,7 @@ export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
   },
   {
     id: 'ilka-rodrigo',
-    name: 'Ilka & Rodrigo',
+    name: 'Ilka e Rodrigo',
     username: 'ilka.rodrigo',
     alternateUsernames: ['ilka', 'rodrigo'],
     password: 'ilka&rodrigo2027',
@@ -91,7 +91,7 @@ export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
   },
   {
     id: 'aline-rodrigo',
-    name: 'Aline & Rodrigo',
+    name: 'Aline e Rodrigo',
     username: 'aline.rodrigo',
     alternateUsernames: ['alinenoiva', 'rodrigo2'],
     password: 'aline&rodrigo2027',
@@ -101,7 +101,7 @@ export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
   },
   {
     id: 'iris-mauri',
-    name: 'Iris & Mauri',
+    name: 'Iris e Mauri',
     username: 'iris.mauri',
     alternateUsernames: ['iris', 'mauri'],
     password: 'iris&mauri2027',
@@ -111,7 +111,7 @@ export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
   },
   {
     id: 'luciana-geisse',
-    name: 'Luciana & Geisse',
+    name: 'Luciana e Geisse',
     username: 'luciana.geisse',
     alternateUsernames: ['luciana', 'geisse'],
     password: 'luciana&geisse2027',
@@ -121,7 +121,7 @@ export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
   },
   {
     id: 'tialulu-pedrovictor',
-    name: 'Tia Lulu & Pedro Victor',
+    name: 'Tia Lulu e Pedro Victor',
     username: 'tialulu.pedrovictor',
     alternateUsernames: ['tialulu', 'pedrovictor', 'lulu'],
     password: 'tialulu&pedro2027',
@@ -171,17 +171,17 @@ export const INITIAL_ANNOUNCEMENTS: PadrinhoMessage[] = [
   {
     id: 'msg-welcome',
     date: '2026-07-23',
-    title: 'Bem-vindos à Área Exclusiva dos Padrinhos!',
-    content: 'Queridos padrinhos, madrinhas e daminhas! Preparamos este espaço exclusivo para compartilharmos todas as orientações sobre o nosso grande dia, detalhes das vestimentas e comunicados importantes ao longo dos preparativos.',
-    author: 'Aline & Klécio',
+    title: 'Bem-vindos à Área Exclusiva do Nosso Cortejo!',
+    content: 'Queridos padrinhos, madrinhas, pajens e daminhas! Preparamos este espaço exclusivo para compartilharmos todas as orientações sobre o nosso grande dia, detalhes das vestimentas e comunicados importantes ao longo dos preparativos.',
+    author: 'Aline e Klécio',
     isImportant: true,
   },
   {
     id: 'msg-dresscode',
     date: '2026-07-23',
-    title: 'Orientações das Vestimentas & Harmonização',
+    title: 'Orientações das Vestimentas e Harmonização',
     content: 'Confiram na aba "Guia de Vestimentas" todas as orientações de trajes. Para as madrinhas, a paleta é livre (com vestidos longos e elegantes; exceto branco/off-white). Para os padrinhos, terno preto clássico e gravata harmonizando com a cor do vestido do seu par!',
-    author: 'Aline & Klécio',
+    author: 'Aline e Klécio',
     isImportant: false,
   }
 ];
@@ -208,10 +208,10 @@ export const DRESS_CODE_INFO = {
     ]
   },
   daminhas: {
-    title: 'Para as Daminhas (Luna & Julia)',
-    description: 'Nossas daminhas estarão radiantes encabeçando o início do nosso sonho!',
+    title: 'Para as Daminhas e Pajens (Luna e Julia)',
+    description: 'Nossas daminhas e pajens estarão radiantes encabeçando o início do nosso sonho!',
     rules: [
-      'Vestido infantil clássico de daminha (tons claros / off-white com detalhes delicados).',
+      'Traje infantil clássico de daminha e pajem (tons claros / off-white com detalhes delicados).',
       'Acessório de cabelo delicado (tiara ou flores soltas).',
       'Calçado confortável para caminhada graciosa até o altar.'
     ]

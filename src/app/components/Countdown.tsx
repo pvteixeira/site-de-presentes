@@ -42,26 +42,26 @@ export default function Countdown() {
   ];
 
   return (
-    <section id="countdown" className="py-20 bg-white dark:bg-[var(--background)]">
+    <section id="countdown" className="py-20 bg-[var(--background)]">
       <div className="container mx-auto px-4 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-3xl md:text-5xl font-serif text-[var(--foreground)] mb-4">
+          <h2 className="text-3xl md:text-5xl font-serif text-[var(--foreground)] mb-8 font-medium">
             Contagem Regressiva
           </h2>
           <div className="flex flex-wrap justify-center gap-4 md:gap-8">
-            {timeUnits.map((unit, index) => (
+            {timeUnits.map((unit) => (
               <div
                 key={unit.label}
-                className="flex flex-col items-center justify-center w-24 h-24 md:w-32 md:h-32 rounded-full border border-gray-300 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800/80 shadow-md"
+                className="flex flex-col items-center justify-center w-24 h-24 md:w-32 md:h-32 rounded-full border border-gray-300 dark:border-zinc-700 bg-gray-50/80 dark:bg-zinc-900/80 shadow-sm"
               >
-                <span className="text-3xl md:text-5xl font-serif text-[var(--foreground)] font-semibold mb-1">
+                <span className="text-3xl md:text-5xl font-serif text-[var(--foreground)] font-medium mb-1">
                   {unit.value.toString().padStart(2, '0')}
                 </span>
-                <span className="text-xs md:text-sm font-sans uppercase tracking-widest text-[var(--foreground)]/60 font-medium">
+                <span className="text-[10px] md:text-xs font-sans uppercase tracking-widest text-gray-500 font-medium">
                   {unit.label}
                 </span>
               </div>

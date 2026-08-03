@@ -19,14 +19,14 @@ export default function AdminLogin() {
 
   return (
     <div className="min-h-screen bg-[var(--background)] flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-zinc-900 w-full max-w-md rounded-2xl p-8 shadow-xl border border-gray-100 dark:border-zinc-800 text-center">
-        <div className="w-16 h-16 bg-[var(--color-wedding-gold)]/10 text-[var(--color-wedding-gold)] rounded-full flex items-center justify-center mx-auto mb-6">
-          <Lock size={32} />
+      <div className="bg-white dark:bg-zinc-900 w-full max-w-md rounded-2xl p-8 shadow-xl border border-gray-200 dark:border-zinc-800 text-center">
+        <div className="w-16 h-16 bg-zinc-100 dark:bg-zinc-800 text-[var(--foreground)] border border-gray-300 dark:border-zinc-700 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+          <Lock size={28} />
         </div>
         
-        <h1 className="text-2xl font-serif text-[var(--foreground)] mb-2">Acesso Restrito</h1>
-        <p className="text-sm text-gray-500 mb-8 font-sans">
-          Área administrativa exclusiva para os noivos.
+        <h1 className="text-2xl font-serif text-[var(--foreground)] mb-2 font-medium">Acesso Restrito</h1>
+        <p className="text-xs text-gray-500 mb-8 font-sans">
+          Área administrativa exclusiva para Aline e Klécio.
         </p>
 
         <form onSubmit={handleLogin} className="space-y-6">
@@ -36,13 +36,13 @@ export default function AdminLogin() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Digite a senha" 
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-zinc-700 bg-transparent text-center text-xl tracking-widest focus:outline-none focus:border-[var(--color-wedding-gold)] focus:ring-1 focus:ring-[var(--color-wedding-gold)] transition-all"
+              className="w-full px-4 py-3.5 rounded-xl border border-gray-200 dark:border-zinc-700 bg-transparent text-center text-xl tracking-widest focus:outline-none focus:border-black dark:focus:border-white transition-all"
             />
           </div>
           
           <button 
             type="submit" 
-            className="w-full bg-[var(--color-wedding-gold)] text-white py-3 rounded-xl font-medium hover:bg-[var(--color-wedding-gold)]/90 transition-colors"
+            className="w-full bg-black dark:bg-white text-white dark:text-black py-3.5 rounded-xl font-semibold uppercase tracking-wider text-xs border border-gray-800 dark:border-gray-200 hover:opacity-90 transition-colors shadow-sm cursor-pointer"
           >
             Acessar Painel
           </button>

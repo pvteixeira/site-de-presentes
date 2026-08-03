@@ -29,7 +29,7 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
     const finalAmount = amount || gift.totalAmount;
     // USING MOCK PIX KEY FOR DEMO
     const pixKey = 'alineeklecio@casamento.com';
-    const payload = generatePixPayload(pixKey, 'Aline e Klecio', 'SAO PAULO', Number(finalAmount), `GIFT${gift.id}`);
+    const payload = generatePixPayload(pixKey, 'Aline e Klécio', 'SAO PAULO', Number(finalAmount), `GIFT${gift.id}`);
     
     setPixString(payload);
     setStep('pix');
@@ -47,7 +47,6 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
 
   const handleSubmitForm = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, you would upload the file to a server or Firebase here
     setStep('success');
   };
 
@@ -63,16 +62,16 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="bg-[var(--background)] rounded-2xl w-full max-w-md shadow-2xl overflow-hidden relative max-h-[90vh] overflow-y-auto"
+          className="bg-[var(--background)] rounded-2xl w-full max-w-md shadow-xl border border-gray-200 dark:border-zinc-800 overflow-hidden relative max-h-[90vh] overflow-y-auto"
         >
           <button 
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 text-[var(--foreground)]/50 hover:text-[var(--foreground)] bg-white/50 rounded-full transition-colors z-10"
+            className="absolute top-4 right-4 p-2 text-[var(--foreground)]/60 hover:text-[var(--foreground)] bg-white/70 dark:bg-zinc-800/70 rounded-full transition-colors z-10 border border-gray-200 dark:border-zinc-700"
           >
-            <X size={20} />
+            <X size={18} />
           </button>
 
-          <div className="h-32 bg-gray-200 relative">
+          <div className="h-32 bg-gray-100 dark:bg-zinc-800 relative">
             <img 
               src={gift.imageUrl} 
               alt={gift.name} 
@@ -82,9 +81,9 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
           </div>
 
           <div className="p-6 pt-2">
-            <h3 className="text-2xl font-serif text-[var(--foreground)] mb-1">{gift.name}</h3>
-            <p className="text-sm text-[var(--foreground)]/60 mb-6 font-sans">
-              Valor do presente: {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(gift.totalAmount)}
+            <h3 className="text-2xl font-serif text-[var(--foreground)] mb-1 font-medium">{gift.name}</h3>
+            <p className="text-xs text-gray-500 mb-6 font-sans">
+              Valor de referência: <span className="font-semibold text-[var(--foreground)]">{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(gift.totalAmount)}</span>
             </p>
 
             {step === 'amount' && (
@@ -94,28 +93,28 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
                 className="space-y-4"
               >
                 <div>
-                  <label className="block text-sm font-medium text-[var(--foreground)]/80 mb-2">
+                  <label className="block text-xs uppercase tracking-wider text-gray-500 font-semibold mb-2">
                     Qual valor deseja contribuir?
                   </label>
                   <div className="flex gap-2">
                     <button
                       onClick={() => setAmount(gift.totalAmount)}
-                      className={`flex-1 py-3 px-4 rounded-xl border transition-all ${
+                      className={`flex-1 py-3 px-4 rounded-xl border text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
                         amount === gift.totalAmount 
-                          ? 'border-black dark:border-white bg-black/10 dark:bg-white/10 text-[var(--foreground)] font-semibold' 
-                          : 'border-gray-200 hover:border-black/50'
+                          ? 'border-black dark:border-white bg-black/5 dark:bg-white/10 text-[var(--foreground)]' 
+                          : 'border-gray-200 dark:border-zinc-700 hover:border-gray-400 dark:hover:border-zinc-500 text-gray-700 dark:text-gray-300'
                       }`}
                     >
                       Valor Total
                     </button>
                     <div className="flex-1 relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">R$</span>
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">R$</span>
                       <input
                         type="number"
                         placeholder="Outro valor"
                         value={amount}
                         onChange={(e) => setAmount(Number(e.target.value))}
-                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-black dark:focus:border-white focus:ring-1 focus:ring-black transition-all bg-transparent"
+                        className="w-full pl-9 pr-3 py-3 rounded-xl border border-gray-200 dark:border-zinc-700 focus:outline-none focus:border-black dark:focus:border-white text-sm transition-all bg-transparent font-sans"
                       />
                     </div>
                   </div>
@@ -124,9 +123,9 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
                 <button
                   onClick={handleGeneratePix}
                   disabled={!amount && amount !== 0}
-                  className="w-full py-4 mt-4 bg-black dark:bg-white text-white dark:text-black rounded-xl font-semibold uppercase tracking-wider text-xs hover:opacity-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full py-3.5 mt-4 bg-black dark:bg-white text-white dark:text-black rounded-xl font-semibold uppercase tracking-wider text-xs hover:opacity-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm border border-gray-800 dark:border-gray-200 cursor-pointer"
                 >
-                  Gerar PIX
+                  Gerar QR Code PIX
                 </button>
               </motion.div>
             )}
@@ -137,23 +136,23 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
                 animate={{ opacity: 1 }}
                 className="flex flex-col items-center space-y-6"
               >
-                <div className="p-4 bg-white rounded-2xl shadow-inner">
-                  <QRCodeSVG value={pixString} size={200} />
+                <div className="p-4 bg-white rounded-2xl shadow-inner border border-gray-200">
+                  <QRCodeSVG value={pixString} size={180} />
                 </div>
                 
                 <div className="w-full">
                   <button
                     onClick={handleCopy}
-                    className="w-full flex items-center justify-center gap-2 py-3 px-4 border border-black dark:border-white rounded-xl text-[var(--foreground)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                    className="w-full flex items-center justify-center gap-2 py-3 px-4 border border-gray-300 dark:border-zinc-700 rounded-xl text-[var(--foreground)] font-medium text-xs uppercase tracking-wider hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
                   >
-                    {copied ? <CheckCircle2 size={18} /> : <Copy size={18} />}
-                    {copied ? 'Código copiado!' : 'Copiar código PIX'}
+                    {copied ? <CheckCircle2 size={16} className="text-green-500" /> : <Copy size={16} className="text-gray-400" />}
+                    {copied ? 'Código copiado!' : 'Copiar chave PIX (Copia e Cola)'}
                   </button>
                 </div>
 
                 <button
                   onClick={handleGoToForm}
-                  className="w-full py-4 bg-black dark:bg-white text-white dark:text-black rounded-xl font-semibold uppercase tracking-wider text-xs hover:opacity-90 transition-all shadow-md"
+                  className="w-full py-3.5 bg-black dark:bg-white text-white dark:text-black rounded-xl font-semibold uppercase tracking-wider text-xs hover:opacity-90 transition-all shadow-sm border border-gray-800 dark:border-gray-200 cursor-pointer"
                 >
                   Já realizei o pagamento
                 </button>
@@ -168,12 +167,12 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
                 className="space-y-4"
               >
                 <div className="text-center mb-6">
-                  <h4 className="text-lg font-medium text-[var(--foreground)]">Confirmação de Pagamento</h4>
-                  <p className="text-sm text-[var(--foreground)]/60">Por favor, envie o comprovante para identificarmos o seu presente.</p>
+                  <h4 className="text-lg font-serif font-medium text-[var(--foreground)]">Confirmação de Pagamento</h4>
+                  <p className="text-xs text-gray-500 font-sans mt-1">Envie os dados para podermos agradecer pelo seu presente.</p>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-[var(--foreground)]/80 mb-2">
+                  <label className="block text-xs uppercase tracking-wider text-gray-500 font-semibold mb-2">
                     Seu Nome Completo
                   </label>
                   <input
@@ -182,21 +181,21 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
                     placeholder="Como devemos lhe agradecer?"
                     value={guestName}
                     onChange={(e) => setGuestName(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-black dark:focus:border-white focus:ring-1 focus:ring-black transition-all bg-transparent"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-zinc-700 focus:outline-none focus:border-black dark:focus:border-white text-sm transition-all bg-transparent font-sans"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-[var(--foreground)]/80 mb-2">
+                  <label className="block text-xs uppercase tracking-wider text-gray-500 font-semibold mb-2">
                     Comprovante do PIX
                   </label>
-                  <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                      <UploadCloud className="w-8 h-8 mb-2 text-gray-400" />
-                      <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
-                        <span className="font-semibold">Clique para anexar</span> ou arraste a imagem
+                  <label className="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-gray-300 dark:border-zinc-700 rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-colors">
+                    <div className="flex flex-col items-center justify-center py-4">
+                      <UploadCloud className="w-6 h-6 mb-1 text-gray-400" />
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        <span className="font-semibold text-[var(--foreground)]">Clique para anexar</span> o comprovante
                       </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">PNG, JPG ou PDF</p>
+                      <p className="text-[10px] text-gray-400 mt-1">PNG, JPG ou PDF</p>
                     </div>
                     <input 
                       type="file" 
@@ -207,15 +206,15 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
                     />
                   </label>
                   {receiptFile && (
-                    <p className="mt-2 text-sm text-black dark:text-white font-medium truncate">
-                      Arquivo selecionado: {receiptFile.name}
+                    <p className="mt-2 text-xs text-green-600 dark:text-green-400 font-medium truncate">
+                      ✓ Selecionado: {receiptFile.name}
                     </p>
                   )}
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full py-4 mt-4 bg-black dark:bg-white text-white dark:text-black rounded-xl font-semibold uppercase tracking-wider text-xs hover:opacity-90 transition-colors"
+                  className="w-full py-3.5 mt-4 bg-black dark:bg-white text-white dark:text-black rounded-xl font-semibold uppercase tracking-wider text-xs hover:opacity-90 transition-colors border border-gray-800 dark:border-gray-200 cursor-pointer"
                 >
                   Enviar Comprovante
                 </button>
@@ -226,18 +225,18 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
               <motion.div 
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="flex flex-col items-center justify-center py-8 text-center"
+                className="flex flex-col items-center justify-center py-6 text-center"
               >
-                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6">
-                  <CheckCircle2 className="w-10 h-10 text-green-500" />
+                <div className="w-16 h-16 bg-zinc-100 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-full flex items-center justify-center mb-5">
+                  <CheckCircle2 className="w-8 h-8 text-black dark:text-white" />
                 </div>
-                <h4 className="text-2xl font-serif text-[var(--foreground)] mb-2">Muito Obrigado!</h4>
-                <p className="text-[var(--foreground)]/70 mb-8 px-4">
-                  Recebemos seu comprovante, {guestName}. Seu carinho é muito importante para nós!
+                <h4 className="text-2xl font-serif text-[var(--foreground)] mb-2 font-medium">Muito Obrigado!</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-300 mb-8 px-4 font-sans leading-relaxed text-justified-elegant text-center">
+                  Recebemos seu comprovante, {guestName}. Seu carinho e sua presença tornam nosso sonho ainda mais completo!
                 </p>
                 <button
                   onClick={handleComplete}
-                  className="w-full py-4 bg-black dark:bg-white text-white dark:text-black rounded-xl font-semibold uppercase tracking-wider text-xs hover:opacity-90 transition-all"
+                  className="w-full py-3.5 bg-black dark:bg-white text-white dark:text-black rounded-xl font-semibold uppercase tracking-wider text-xs hover:opacity-90 transition-all cursor-pointer"
                 >
                   Voltar para os presentes
                 </button>
