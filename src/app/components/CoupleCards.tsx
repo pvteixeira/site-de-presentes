@@ -12,9 +12,12 @@ export default function CoupleCards() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-serif text-[var(--foreground)] mb-6 font-medium">
+          <h2 className="text-4xl md:text-5xl font-serif text-[var(--foreground)] mb-4 font-medium">
             Os Noivos
           </h2>
+          <p className="text-base md:text-lg text-[var(--foreground)]/80 font-sans max-w-xl mx-auto leading-relaxed text-justified-elegant text-center">
+            Duas vidas, dois corações e uma só história que começa a ser escrita para sempre.
+          </p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 max-w-4xl mx-auto">
@@ -49,6 +52,7 @@ export default function CoupleCards() {
             className="glass-card bg-white dark:bg-zinc-900 p-8 md:p-10 flex flex-col items-center text-center border border-gray-200 dark:border-zinc-800 shadow-sm rounded-2xl"
           >
 
+
             <h3 className="text-2xl md:text-3xl font-serif text-[var(--foreground)] mb-6 font-medium">
               Klécio Rodolfo Felix de Lima
             </h3>
@@ -60,7 +64,7 @@ export default function CoupleCards() {
             </p>
 
             <div className="space-y-1 text-base text-[var(--foreground)]/80 font-sans leading-relaxed">
-              <p>Lenildo Felix de Lima</p>
+              <p>Lenildo Felix de Lima (in memoriam)</p>
               <p>Lucidalva Correia de Lima</p>
             </div>
           </motion.div>

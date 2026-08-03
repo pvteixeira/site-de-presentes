@@ -138,7 +138,7 @@ export default function PadrinhosPortal() {
             <ArrowLeft size={16} /> Voltar ao site principal
           </Link>
           <div className="flex items-center gap-2">
-            <img src="/img/aline_e_klecio.jpg" alt="Logo Marca Aline e Klécio" className="w-8 h-8 rounded-full border border-gray-300 dark:border-zinc-700 object-cover" />
+            <img src="/img/aline_e_klecio.jpg" alt="Logo Marca Aline e Klécio" className="w-8 h-8 rounded-full border border-gray-300 dark:border-zinc-700 object-contain" />
             <span className="font-serif text-lg text-[var(--foreground)] font-semibold">Aline e Klécio</span>
           </div>
         </header>
@@ -150,7 +150,7 @@ export default function PadrinhosPortal() {
             className="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl w-full max-w-md rounded-2xl p-8 shadow-xl border border-gray-200 dark:border-zinc-800"
           >
             <div className="w-20 h-20 bg-black dark:bg-white text-white dark:text-black rounded-full flex items-center justify-center mx-auto mb-6 shadow-md p-1 border-2 border-gray-300 dark:border-zinc-700 overflow-hidden">
-              <img src="/img/aline_e_klecio.jpg" alt="Logo Marca Aline e Klécio" className="w-full h-full object-cover rounded-full" />
+              <img src="/img/aline_e_klecio.jpg" alt="Logo Marca Aline e Klécio" className="w-full h-full object-contain rounded-full" />
             </div>
 
             <h1 className="text-2xl md:text-3xl font-serif text-center text-[var(--foreground)] mb-2 font-medium">
@@ -241,7 +241,7 @@ export default function PadrinhosPortal() {
               <ArrowLeft size={20} />
             </Link>
             <div className="flex items-center gap-2">
-              <img src="/img/aline_e_klecio.jpg" alt="Logo" className="w-8 h-8 rounded-full border border-gray-300 dark:border-zinc-700 object-cover" />
+              <img src="/img/aline_e_klecio.jpg" alt="Logo" className="w-8 h-8 rounded-full border border-gray-300 dark:border-zinc-700 object-contain" />
               <div>
                 <span className="font-serif font-semibold text-base md:text-lg text-[var(--foreground)] block leading-tight">
                   {isDaminha ? 'Área Exclusiva das Daminhas' : 'Área Restrita dos Padrinhos e Madrinhas'}

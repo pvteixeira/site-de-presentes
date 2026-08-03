@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Lock, Users, Flower2 } from "lucide-react";
 import Hero from "./components/Hero";
 import Countdown from "./components/Countdown";
 import CoupleCards from "./components/CoupleCards";
@@ -12,17 +12,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-[var(--background)] relative">
       {/* Top Navbar Header */}
-      <header className="absolute top-0 left-0 right-0 z-30 p-4 max-w-7xl mx-auto flex justify-between items-center">
-        <Link href="/" className="flex items-center gap-3 group">
-          <img 
-            src="/img/LOGO_MARCA.png"
-            className="w-10 h-10 object-cover rounded-full border border-gray-300 dark:border-zinc-700 shadow-sm group-hover:scale-105 transition-transform" 
-          />
-          <span className="font-serif text-zinc-900 dark:text-white font-semibold text-lg md:text-xl tracking-wide">
-            Aline e Klécio
-          </span>
-        </Link>
-
+      <header className="absolute top-0 left-0 right-0 z-30 p-4 max-w-7xl mx-auto flex justify-end items-center">
         <div className="flex items-center gap-3">
           <Link
             href="/padrinhos"
@@ -50,7 +40,7 @@ export default function Home() {
             <img 
               src="/img/LOGO_MARCA.png" 
               alt="Monograma Aline e Klécio" 
-              className="w-20 h-20 object-cover rounded-full border border-gray-300 dark:border-zinc-700 shadow-sm mb-2" 
+              className="w-20 h-20 object-contain rounded-full border border-gray-300 dark:border-zinc-700 shadow-sm mb-2" 
             />
             <h2 className="text-3xl md:text-5xl font-serif text-[var(--foreground)] font-medium tracking-tight">
               Nossa História
@@ -111,22 +101,59 @@ export default function Home() {
       {/* 5. Local da Cerimônia e Recepção */}
       <WeddingDetails />
 
-      {/* 6. Mensagens aos Noivos */}
+      {/* 6. Seção Dedicada ao Cortejo (Padrinhos e Daminhas) */}
+      <section id="cortejo" className="py-20 bg-gray-50 dark:bg-zinc-900/60 border-t border-gray-200 dark:border-zinc-800">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <div className="glass-card bg-white dark:bg-zinc-900 p-8 md:p-12 rounded-3xl border border-gray-200 dark:border-zinc-800 shadow-md flex flex-col items-center space-y-6">
+            <div className="w-14 h-14 rounded-2xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center shadow-sm">
+              <Lock size={26} />
+            </div>
+
+            <div className="space-y-3">
+              <h2 className="text-3xl md:text-4xl font-serif text-[var(--foreground)] font-medium">
+                Área Restrita do Cortejo
+              </h2>
+              <p className="text-base text-[var(--foreground)]/80 font-sans max-w-xl mx-auto leading-relaxed text-justified-elegant text-center">
+                Espaço exclusivo reservado para nossos Padrinhos, Madrinhas e Daminhas. Acesse com suas credenciais para visualizar todas as orientações especiais, trajes e comunicados do nosso grande dia.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-3 py-2 text-xs font-semibold text-gray-500 font-sans">
+              <span className="px-3.5 py-1.5 rounded-xl bg-gray-100 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 flex items-center gap-1.5">
+                <Users size={14} /> Padrinhos e Madrinhas
+              </span>
+              <span className="px-3.5 py-1.5 rounded-xl bg-gray-100 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 flex items-center gap-1.5">
+                <Flower2 size={14} /> Daminhas
+              </span>
+            </div>
+
+            <Link
+              href="/padrinhos"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-black dark:bg-white text-white dark:text-black hover:opacity-90 transition-all hover:scale-105 shadow-md text-xs font-semibold uppercase tracking-wider border border-gray-800 dark:border-gray-200 cursor-pointer"
+            >
+              <Lock size={16} />
+              <span>Entrar na Área do Cortejo</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* 7. Mensagens aos Noivos */}
       <GuestbookSection />
 
-      {/* 7. Lista de Presentes */}
+      {/* 8. Lista de Presentes */}
       <GiftList />
 
-      {/* 8. Galeria */}
+      {/* 9. Galeria */}
       <GallerySection />
       
-      {/* 9. Rodapé */}
+      {/* 10. Rodapé */}
       <footer className="bg-zinc-950 text-white py-16 text-center space-y-6 border-t border-zinc-800">
         <div className="flex justify-center items-center gap-3">
           <img 
             src="/img/LOGO_MARCA.png" 
             alt="Logo Marca Aline e Klécio" 
-            className="w-12 h-12 object-cover rounded-full border border-gray-300/40 shadow-sm" 
+            className="w-12 h-12 object-contain rounded-full border border-gray-300/40 shadow-sm" 
           />
           <p className="font-serif text-2xl tracking-wide text-white">Aline e Klécio</p>
         </div>
@@ -135,6 +162,7 @@ export default function Home() {
           <Link href="#os-noivos" className="hover:text-white transition-colors">Os Noivos</Link>
           <Link href="#historia" className="hover:text-white transition-colors">Nossa História</Link>
           <Link href="#o-grande-dia" className="hover:text-white transition-colors">Local</Link>
+          <Link href="#cortejo" className="hover:text-white transition-colors">Área do Cortejo</Link>
           <Link href="#mensagens-noivos" className="hover:text-white transition-colors">Mensagens</Link>
           <Link href="#lista-presentes" className="hover:text-white transition-colors">Lista de Presentes</Link>
           <Link href="#galeria" className="hover:text-white transition-colors">Galeria</Link>

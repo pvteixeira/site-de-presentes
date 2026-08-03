@@ -9,7 +9,7 @@ import type { Gift } from '../types';
 
 import { GIFTS_DATA } from '../utils/giftsData';
 
-const CATEGORIES = ['Todas', 'Cozinha', 'Eletrodomésticos', 'Quarto e Banho', 'Tecnologia', 'Experiências', 'Casa'];
+const CATEGORIES = ['Todas', 'Cozinha', 'Cama e Banho', 'Eletrodomésticos', 'Experiências', 'Outros'];
 
 export default function GiftList() {
   const [gifts, setGifts] = useState<Gift[]>(GIFTS_DATA);

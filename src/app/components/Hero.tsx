@@ -14,22 +14,22 @@ export default function Hero() {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 0.1 }}
-          className="mb-6 p-2 rounded-full border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-md"
+          className="mb-6 p-1.5 rounded-full border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-md flex items-center justify-center overflow-hidden"
         >
           <img
             src="/img/LOGO_MARCA.png"
             alt="Logo Marca Aline e Klécio"
-            className="w-24 h-24 md:w-32 md:h-32 object-cover rounded-full border border-gray-200 dark:border-zinc-700 shadow-sm"
+            className="w-24 h-24 md:w-32 md:h-32 object-contain rounded-full"
           />
         </motion.div>
 
         <motion.h1
-          className="text-5xl md:text-7xl lg:text-8xl text-zinc-900 dark:text-white mb-4 font-serif font-medium tracking-tight"
+          className="text-6xl md:text-8xl lg:text-9xl text-zinc-900 dark:text-white mb-4 font-script tracking-normal font-normal py-2"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, delay: 0.4 }}
         >
-          Aline <span className="text-gray-400 font-serif font-light">e</span> Klécio
+          Aline e Klécio
         </motion.h1>
 
         <motion.div

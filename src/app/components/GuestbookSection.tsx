@@ -132,17 +132,6 @@ export default function GuestbookSection() {
               </div>
 
               <div>
-                <label className="block text-xs uppercase tracking-wider text-gray-500 font-semibold mb-1">Parentesco / Relação (Opcional)</label>
-                <input
-                  type="text"
-                  value={relation}
-                  onChange={(e) => setRelation(e.target.value)}
-                  placeholder="Ex: Amigos de Infância / Primos"
-                  className="w-full p-3 rounded-xl border border-gray-200 dark:border-zinc-700 bg-transparent text-sm focus:outline-none focus:border-black dark:focus:border-white transition-all font-sans"
-                />
-              </div>
-
-              <div>
                 <label className="block text-xs uppercase tracking-wider text-gray-500 font-semibold mb-1">Sua Mensagem de Carinho</label>
                 <textarea
                   value={text}
@@ -175,7 +164,6 @@ export default function GuestbookSection() {
                 <div className="flex items-center justify-between mb-2">
                   <div>
                     <h4 className="font-serif text-lg text-[var(--foreground)] font-medium">{item.author}</h4>
-                    <span className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold block">{item.relation}</span>
                   </div>
                   <span className="text-xs text-gray-400 font-mono">{item.date}</span>
                 </div>
