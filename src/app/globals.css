@@ -21,12 +21,27 @@
   --color-silver-dark: var(--color-wedding-silver-dark);
   
   --font-sans: var(--font-inter), sans-serif;
-  --font-serif: var(--font-playfair), serif;
-  --font-script: var(--font-great-vibes), cursive;
+  --font-serif: var(--font-cormorant), 'Cormorant Garamond', serif;
+  --font-cormorant: var(--font-cormorant), 'Cormorant Garamond', 'Baskerville', serif;
+  --font-script: var(--font-signature), 'Alex Brush', cursive;
+  --font-signature: var(--font-signature), 'Alex Brush', cursive;
+  --font-windsong: var(--font-windsong), cursive;
+}
+
+.font-cormorant {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', 'Baskerville', serif;
+}
+
+.font-signature {
+  font-family: var(--font-signature), 'Alex Brush', cursive;
 }
 
 .font-script {
-  font-family: var(--font-great-vibes), cursive;
+  font-family: var(--font-signature), 'Alex Brush', cursive;
+}
+
+.font-windsong {
+  font-family: var(--font-windsong), cursive;
 }
 
 @media (prefers-color-scheme: dark) {

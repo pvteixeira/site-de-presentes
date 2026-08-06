@@ -19,7 +19,7 @@ export default function Home() {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-black dark:bg-white text-white dark:text-black hover:opacity-90 transition-all hover:scale-105 shadow-sm text-xs md:text-sm font-medium tracking-wide border border-gray-800 dark:border-gray-200"
           >
             <Sparkles size={16} className="text-gray-300 dark:text-gray-700" />
-            <span>Acesso ao Cortejo</span>
+            <span>Área dos Padrinhos</span>
           </Link>
         </div>
       </header>
@@ -89,9 +89,9 @@ export default function Home() {
                 Esperamos que cada abraço, cada sorriso e cada momento vivido nesta celebração fique guardado para sempre em nossos corações, assim como cada um de vocês faz parte da nossa história.
               </p>
               <p className="font-serif text-xl font-medium pt-2">Obrigado!</p>
-              <div className="pt-4 font-serif text-2xl text-[var(--foreground)] italic font-semibold">
-                Com amor e carinho,<br />
-                <span className="text-2xl not-italic tracking-wide block mt-2">Aline e Klécio</span>
+              <div className="pt-4 text-[var(--foreground)]">
+                <span className="font-serif text-xl italic font-medium block">Com amor e carinho,</span>
+                <span className="font-signature text-3xl md:text-4xl block mt-2 font-normal">Aline e Klécio</span>
               </div>
             </div>
           </div>
@@ -101,7 +101,7 @@ export default function Home() {
       {/* 5. Local da Cerimônia e Recepção */}
       <WeddingDetails />
 
-      {/* 6. Seção Dedicada ao Cortejo (Padrinhos e Daminhas) */}
+      {/* 6. Seção Dedicada aos Padrinhos e Madrinhas */}
       <section id="cortejo" className="py-20 bg-gray-50 dark:bg-zinc-900/60 border-t border-gray-200 dark:border-zinc-800">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <div className="glass-card bg-white dark:bg-zinc-900 p-8 md:p-12 rounded-3xl border border-gray-200 dark:border-zinc-800 shadow-md flex flex-col items-center space-y-6">
@@ -111,10 +111,10 @@ export default function Home() {
 
             <div className="space-y-3">
               <h2 className="text-3xl md:text-4xl font-serif text-[var(--foreground)] font-medium">
-                Área Restrita do Cortejo
+                Área dos Padrinhos e Madrinhas
               </h2>
               <p className="text-base text-[var(--foreground)]/80 font-sans max-w-xl mx-auto leading-relaxed text-justified-elegant text-center">
-                Espaço exclusivo reservado para nossos Padrinhos, Madrinhas e Daminhas. Acesse com suas credenciais para visualizar todas as orientações especiais, trajes e comunicados do nosso grande dia.
+                Este é um espaço exclusivo preparado especialmente para nossos padrinhos, madrinhas e daminhas. Aqui vocês encontrarão todas as orientações, informações importantes e comunicados para o grande dia.
               </p>
             </div>
 
@@ -132,7 +132,7 @@ export default function Home() {
               className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-black dark:bg-white text-white dark:text-black hover:opacity-90 transition-all hover:scale-105 shadow-md text-xs font-semibold uppercase tracking-wider border border-gray-800 dark:border-gray-200 cursor-pointer"
             >
               <Lock size={16} />
-              <span>Entrar na Área do Cortejo</span>
+              <span>Entrar na Área dos Padrinhos</span>
             </Link>
           </div>
         </div>
@@ -155,18 +155,18 @@ export default function Home() {
             alt="Logo Marca Aline e Klécio" 
             className="w-12 h-12 object-contain rounded-full border border-gray-300/40 shadow-sm" 
           />
-          <p className="font-serif text-2xl tracking-wide text-white">Aline e Klécio</p>
+          <p className="font-signature text-3xl md:text-4xl text-white font-normal tracking-wide">Aline e Klécio</p>
         </div>
         <div className="flex flex-wrap justify-center gap-6 text-xs text-gray-400 px-4">
           <Link href="/" className="hover:text-white transition-colors">Início</Link>
           <Link href="#os-noivos" className="hover:text-white transition-colors">Os Noivos</Link>
           <Link href="#historia" className="hover:text-white transition-colors">Nossa História</Link>
           <Link href="#o-grande-dia" className="hover:text-white transition-colors">Local</Link>
-          <Link href="#cortejo" className="hover:text-white transition-colors">Área do Cortejo</Link>
+          <Link href="#cortejo" className="hover:text-white transition-colors">Área dos Padrinhos</Link>
           <Link href="#mensagens-noivos" className="hover:text-white transition-colors">Mensagens</Link>
           <Link href="#lista-presentes" className="hover:text-white transition-colors">Lista de Presentes</Link>
           <Link href="#galeria" className="hover:text-white transition-colors">Galeria</Link>
-          <Link href="/padrinhos" className="hover:text-white transition-colors font-semibold text-gray-200">Acesso ao Cortejo</Link>
+          <Link href="/padrinhos" className="hover:text-white transition-colors font-semibold text-gray-200">Área dos Padrinhos</Link>
           <Link href="/admin/login" className="hover:text-white transition-colors">Noivos (Admin)</Link>
         </div>
         <p className="text-xs text-gray-500 font-sans tracking-widest uppercase">Com amor, 2027 • Todos os direitos reservados</p>

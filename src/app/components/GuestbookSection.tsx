@@ -120,12 +120,12 @@ export default function GuestbookSection() {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs uppercase tracking-wider text-gray-500 font-semibold mb-1">Seu Nome / Casal</label>
+                <label className="block text-xs uppercase tracking-wider text-gray-500 font-semibold mb-1">Seu Nome</label>
                 <input
                   type="text"
                   value={author}
                   onChange={(e) => setAuthor(e.target.value)}
-                  placeholder="Ex: Pedro e Mariana"
+                  placeholder="Ex: Antonieta"
                   required
                   className="w-full p-3 rounded-xl border border-gray-200 dark:border-zinc-700 bg-transparent text-sm focus:outline-none focus:border-black dark:focus:border-white transition-all font-sans"
                 />

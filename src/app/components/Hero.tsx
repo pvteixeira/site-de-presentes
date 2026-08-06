@@ -24,7 +24,7 @@ export default function Hero() {
         </motion.div>
 
         <motion.h1
-          className="text-6xl md:text-8xl lg:text-9xl text-zinc-900 dark:text-white mb-4 font-script tracking-normal font-normal py-2"
+          className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-zinc-900 dark:text-white mb-4 font-signature font-normal tracking-normal py-2 leading-tight"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, delay: 0.4 }}

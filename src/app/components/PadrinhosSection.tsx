@@ -181,7 +181,7 @@ export default function PadrinhosSection() {
                 href="/padrinhos"
                 className="w-full inline-flex items-center justify-center gap-2 bg-white text-black py-3 px-4 rounded-xl text-xs font-semibold uppercase tracking-wider hover:bg-gray-100 transition-all shadow-sm cursor-pointer border border-gray-300"
               >
-                <Lock size={14} /> Entrar na Área VIP
+                <Lock size={14} /> Entrar na Área dos Padrinhos
               </Link>
             </div>
           </motion.div>
