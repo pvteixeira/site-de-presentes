@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Search, ArrowUpDown } from 'lucide-react';
+import { Search, ArrowUpDown, Gift as GiftIcon } from 'lucide-react';
 import GiftCard from './GiftCard';
 import ContributionModal from './ContributionModal';
 import { triggerConfetti } from './Confetti';
@@ -51,9 +51,14 @@ export default function GiftList() {
     <section id="lista-presentes" className="py-24 bg-[var(--background)]">
       <div className="container mx-auto px-4 max-w-6xl">
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-serif text-[var(--foreground)] mb-6 font-medium">
+          <h2 className="text-4xl md:text-5xl font-serif text-[var(--foreground)] mb-4 font-medium">
             Lista de Presentes
           </h2>
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
+            <GiftIcon className="w-5 h-5 text-gray-400 dark:text-zinc-500" />
+            <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
+          </div>
           <p className="text-base md:text-lg text-[var(--foreground)]/80 font-sans max-w-xl mx-auto leading-relaxed text-justified-elegant text-center">
             A sua presença e o seu carinho são os nossos maiores presentes! No entanto, caso deseje nos abençoar com um gesto de carinho extra, disponibilizamos opções delicadas de cotas para a nossa lua de mel e montagem do nosso novo lar.
           </p>

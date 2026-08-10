@@ -14,7 +14,6 @@ interface ContributionModalProps {
 }
 
 export default function ContributionModal({ gift, onClose, onSuccess }: ContributionModalProps) {
-  const [amount, setAmount] = useState<number | ''>('');
   const [step, setStep] = useState<'amount' | 'pix' | 'form' | 'success'>('amount');
   const [pixString, setPixString] = useState('');
   const [copied, setCopied] = useState(false);
@@ -26,7 +25,7 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
   if (!gift) return null;
 
   const handleGeneratePix = () => {
-    const finalAmount = amount || gift.totalAmount;
+    const finalAmount = gift.totalAmount;
     // USING MOCK PIX KEY FOR DEMO
     const pixKey = 'alineeklecio@casamento.com';
     const payload = generatePixPayload(pixKey, 'Aline e Klécio', 'SAO PAULO', Number(finalAmount), `GIFT${gift.id}`);
@@ -51,8 +50,7 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
   };
 
   const handleComplete = () => {
-    const finalAmount = amount || gift.totalAmount;
-    onSuccess(Number(finalAmount));
+    onSuccess(gift.totalAmount);
   };
 
   return (
@@ -83,7 +81,7 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
           <div className="p-6 pt-2">
             <h3 className="text-2xl font-serif text-[var(--foreground)] mb-1 font-medium">{gift.name}</h3>
             <p className="text-xs text-gray-500 mb-6 font-sans">
-              Valor de referência: <span className="font-semibold text-[var(--foreground)]">{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(gift.totalAmount)}</span>
+              Valor do presente: <span className="font-semibold text-[var(--foreground)]">{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(gift.totalAmount)}</span>
             </p>
 
             {step === 'amount' && (
@@ -92,38 +90,18 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
                 animate={{ opacity: 1 }}
                 className="space-y-4"
               >
-                <div>
-                  <label className="block text-xs uppercase tracking-wider text-gray-500 font-semibold mb-2">
-                    Qual valor deseja contribuir?
-                  </label>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => setAmount(gift.totalAmount)}
-                      className={`flex-1 py-3 px-4 rounded-xl border text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
-                        amount === gift.totalAmount 
-                          ? 'border-black dark:border-white bg-black/5 dark:bg-white/10 text-[var(--foreground)]' 
-                          : 'border-gray-200 dark:border-zinc-700 hover:border-gray-400 dark:hover:border-zinc-500 text-gray-700 dark:text-gray-300'
-                      }`}
-                    >
-                      Valor Total
-                    </button>
-                    <div className="flex-1 relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">R$</span>
-                      <input
-                        type="number"
-                        placeholder="Outro valor"
-                        value={amount}
-                        onChange={(e) => setAmount(Number(e.target.value))}
-                        className="w-full pl-9 pr-3 py-3 rounded-xl border border-gray-200 dark:border-zinc-700 focus:outline-none focus:border-black dark:focus:border-white text-sm transition-all bg-transparent font-sans"
-                      />
-                    </div>
-                  </div>
+                <div className="p-4 bg-gray-50 dark:bg-zinc-800/60 rounded-xl border border-gray-200 dark:border-zinc-700/60 text-center">
+                  <span className="block text-xs uppercase tracking-wider text-gray-500 font-semibold mb-1">
+                    Valor a ser pago via PIX
+                  </span>
+                  <span className="text-2xl font-serif font-bold text-[var(--foreground)]">
+                    {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(gift.totalAmount)}
+                  </span>
                 </div>
 
                 <button
                   onClick={handleGeneratePix}
-                  disabled={!amount && amount !== 0}
-                  className="w-full py-3.5 mt-4 bg-black dark:bg-white text-white dark:text-black rounded-xl font-semibold uppercase tracking-wider text-xs hover:opacity-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm border border-gray-800 dark:border-gray-200 cursor-pointer"
+                  className="w-full py-3.5 mt-4 bg-black dark:bg-white text-white dark:text-black rounded-xl font-semibold uppercase tracking-wider text-xs hover:opacity-90 transition-colors shadow-sm border border-gray-800 dark:border-gray-200 cursor-pointer"
                 >
                   Gerar QR Code PIX
                 </button>

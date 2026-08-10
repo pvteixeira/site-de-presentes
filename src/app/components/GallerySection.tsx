@@ -35,9 +35,9 @@ export default function GallerySection() {
   return (
     <section id="galeria" className="py-24 bg-gray-50/50 dark:bg-zinc-900/40 border-t border-gray-200 dark:border-zinc-800">
       <div className="max-w-6xl mx-auto px-4">
-        
+
         {/* Header */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -45,12 +45,13 @@ export default function GallerySection() {
           className="text-center max-w-3xl mx-auto mb-16 space-y-4"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-xs uppercase tracking-widest text-[var(--foreground)] font-semibold shadow-sm">
-            <ImageIcon size={14} className="text-gray-400" /> Nossas Memórias
+            <ImageIcon size={14} className="text-gray-400" /> Galeria de Fotos
           </div>
-          <h2 className="text-3xl md:text-5xl font-serif text-[var(--foreground)] font-medium">
-            Galeria de Fotos
-          </h2>
-          <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700 mx-auto"></div>
+          <div className="flex items-center justify-center gap-3">
+            <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
+            <ImageIcon className="w-5 h-5 text-gray-400 dark:text-zinc-500" />
+            <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
+          </div>
           <p className="text-sm md:text-base text-[var(--foreground)]/80 font-sans leading-relaxed text-justified-elegant text-center max-w-2xl mx-auto">
             Registros inesquecíveis da nossa caminhada, amizade e cumplicidade ao longo dos anos.
           </p>

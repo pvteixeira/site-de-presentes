@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { Heart } from 'lucide-react';
 
 export default function CoupleCards() {
   return (
@@ -15,8 +16,13 @@ export default function CoupleCards() {
           <h2 className="text-4xl md:text-5xl font-serif text-[var(--foreground)] mb-4 font-medium">
             Os Noivos
           </h2>
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
+            <Heart className="w-5 h-5 text-gray-400 dark:text-zinc-500" />
+            <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
+          </div>
           <p className="text-base md:text-lg text-[var(--foreground)]/80 font-sans max-w-xl mx-auto leading-relaxed text-justified-elegant text-center">
-            Duas vidas, dois corações e uma só história que começa a ser escrita para sempre.
+            Com a bênção de Deus e de nossos pais, convidamos você para celebrar a cerimônia religiosa do nosso casamento.
           </p>
         </motion.div>
 
@@ -26,9 +32,9 @@ export default function CoupleCards() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="glass-card bg-white dark:bg-zinc-900 p-8 md:p-10 flex flex-col items-center text-center border border-gray-200 dark:border-zinc-800 shadow-sm rounded-2xl"
+            className="glass-card bg-white dark:bg-zinc-900 p-6 sm:p-8 md:p-10 flex flex-col items-center text-center border border-gray-200 dark:border-zinc-800 shadow-sm rounded-2xl"
           >
-            <h3 className="text-2xl md:text-3xl font-serif text-[var(--foreground)] mb-6 font-medium">
+            <h3 className="text-xl sm:text-2xl lg:text-3xl font-serif text-[var(--foreground)] mb-6 font-medium whitespace-nowrap">
               Aline Teixeira Bruno Silva
             </h3>
 
@@ -49,11 +55,9 @@ export default function CoupleCards() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="glass-card bg-white dark:bg-zinc-900 p-8 md:p-10 flex flex-col items-center text-center border border-gray-200 dark:border-zinc-800 shadow-sm rounded-2xl"
+            className="glass-card bg-white dark:bg-zinc-900 p-6 sm:p-8 md:p-10 flex flex-col items-center text-center border border-gray-200 dark:border-zinc-800 shadow-sm rounded-2xl"
           >
-
-
-            <h3 className="text-2xl md:text-3xl font-serif text-[var(--foreground)] mb-6 font-medium">
+            <h3 className="text-xl sm:text-2xl lg:text-3xl font-serif text-[var(--foreground)] mb-6 font-medium whitespace-nowrap">
               Klécio Rodolfo Felix de Lima
             </h3>
 
@@ -64,7 +68,7 @@ export default function CoupleCards() {
             </p>
 
             <div className="space-y-1 text-base text-[var(--foreground)]/80 font-sans leading-relaxed">
-              <p>Lenildo Felix de Lima (in memoriam)</p>
+              <p>Lenildo Felix de Lima <em className="italic font-serif text-sm text-gray-500">(in memoriam)</em></p>
               <p>Lucidalva Correia de Lima</p>
             </div>
           </motion.div>

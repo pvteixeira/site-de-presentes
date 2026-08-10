@@ -80,9 +80,9 @@ export default function GuestbookSection() {
   return (
     <section id="mensagens-noivos" className="py-24 bg-[var(--background)] border-t border-gray-200 dark:border-zinc-800">
       <div className="max-w-6xl mx-auto px-4">
-        
+
         {/* Header */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -90,19 +90,20 @@ export default function GuestbookSection() {
           className="text-center max-w-3xl mx-auto mb-16 space-y-4"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-300 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-900 text-xs uppercase tracking-widest text-[var(--foreground)] font-semibold">
-            <MessageSquare size={14} className="text-gray-400" /> Mural de Carinho
+            <MessageSquare size={14} className="text-gray-400" /> Mensagens aos Noivos
           </div>
-          <h2 className="text-3xl md:text-5xl font-serif text-[var(--foreground)] font-medium">
-            Mensagens aos Noivos
-          </h2>
-          <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700 mx-auto"></div>
+          <div className="flex items-center justify-center gap-3">
+            <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
+            <MessageSquare className="w-5 h-5 text-gray-400 dark:text-zinc-500" />
+            <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
+          </div>
           <p className="text-sm md:text-base text-[var(--foreground)]/80 font-sans leading-relaxed text-justified-elegant text-center max-w-2xl mx-auto">
             Deixe seu recado, desejo de felicidades ou uma lembrança especial para guardar para sempre no coração de Aline e Klécio.
           </p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          
+
           {/* Message Form */}
           <div className="lg:col-span-5 bg-white dark:bg-zinc-900 p-8 rounded-2xl border border-gray-200 dark:border-zinc-800 shadow-sm">
             <h3 className="text-xl font-serif text-[var(--foreground)] font-medium mb-2 flex items-center gap-2">

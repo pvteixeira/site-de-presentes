@@ -5,13 +5,13 @@ import { Clock, MapPin, Heart } from 'lucide-react';
 
 function PaperRoseIcon({ className = "w-5 h-5" }: { className?: string }) {
   return (
-    <svg 
-      className={className} 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      strokeWidth="1.5" 
-      strokeLinecap="round" 
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
       strokeLinejoin="round"
     >
       {/* Geometric minimal paper/origami rose */}
@@ -34,17 +34,17 @@ export default function WeddingDetails() {
           className="text-center mb-16 flex flex-col items-center"
         >
           <h2 className="text-4xl md:text-5xl font-serif text-[var(--foreground)] mb-4 font-medium">
-            Informações da Celebração
+            Cerimônia e Recepção
           </h2>
 
           <div className="flex items-center justify-center gap-3 mb-6">
             <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
-            <PaperRoseIcon className="w-5 h-5 text-gray-400 dark:text-zinc-500 hover:text-[var(--foreground)] transition-colors" />
+            <MapPin className="w-5 h-5 text-gray-400 dark:text-zinc-500" />
             <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
           </div>
 
           <p className="text-base md:text-lg text-[var(--foreground)]/80 font-sans max-w-2xl mx-auto leading-relaxed text-justified-elegant text-center">
-            Preparamos todos os detalhes com muito carinho para que você possa vivenciar conosco cada instante deste dia inesquecível. Confira abaixo os horários e localizações da cerimônia e da recepção.
+            É com muita alegria que compartilhamos com vocês os locais escolhidos para celebrar este momento tão especial.
           </p>
         </motion.div>
 
@@ -84,9 +84,9 @@ export default function WeddingDetails() {
               href="https://www.google.com/maps/search/?api=1&query=Igreja+do+Bom+Jesus+do+Bonfim+Olinda+PE"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 font-sans font-semibold tracking-wider text-white dark:text-black uppercase text-xs transition-all duration-300 bg-black dark:bg-white rounded-xl hover:opacity-90 hover:scale-[1.01] shadow-sm border border-gray-300 dark:border-zinc-700 cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 font-sans font-semibold tracking-wider text-slate-900 dark:text-slate-100 uppercase text-xs transition-all duration-300 bg-slate-200 hover:bg-slate-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl hover:scale-[1.01] shadow-sm border border-slate-300 dark:border-zinc-700 cursor-pointer"
             >
-              <MapPin className="w-4 h-4 shrink-0 text-gray-300 dark:text-gray-700" />
+              <MapPin className="w-4 h-4 shrink-0 text-slate-600 dark:text-slate-300" />
               <span>Ver localização</span>
             </a>
           </motion.div>
@@ -128,9 +128,9 @@ export default function WeddingDetails() {
               href="https://www.google.com/maps/search/?api=1&query=Dayse+Nogueira+Recepcoes+Av+Carlos+de+Lima+Cavalcante+2499+Olinda"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 font-sans font-semibold tracking-wider text-white dark:text-black uppercase text-xs transition-all duration-300 bg-black dark:bg-white rounded-xl hover:opacity-90 hover:scale-[1.01] shadow-sm border border-gray-300 dark:border-zinc-700 cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 font-sans font-semibold tracking-wider text-slate-900 dark:text-slate-100 uppercase text-xs transition-all duration-300 bg-slate-200 hover:bg-slate-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl hover:scale-[1.01] shadow-sm border border-slate-300 dark:border-zinc-700 cursor-pointer"
             >
-              <MapPin className="w-4 h-4 shrink-0 text-gray-300 dark:text-gray-700" />
+              <MapPin className="w-4 h-4 shrink-0 text-slate-600 dark:text-slate-300" />
               <span>Ver localização</span>
             </a>
           </motion.div>

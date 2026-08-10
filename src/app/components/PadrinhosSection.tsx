@@ -2,13 +2,13 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { 
-  Clock, 
-  Shirt, 
-  Sparkles, 
-  Camera, 
-  CheckCircle2, 
-  Lock, 
+import {
+  Clock,
+  Shirt,
+  Sparkles,
+  Camera,
+  CheckCircle2,
+  Lock,
   Heart,
   Users,
   AlertTriangle
@@ -18,9 +18,9 @@ export default function PadrinhosSection() {
   return (
     <section id="padrinhos-madrinhas" className="py-24 bg-[var(--background)] border-t border-gray-200 dark:border-zinc-800">
       <div className="max-w-6xl mx-auto px-4">
-        
+
         {/* Header */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -31,9 +31,13 @@ export default function PadrinhosSection() {
             <Users size={14} className="text-gray-400" /> Nossos Padrinhos e Madrinhas
           </div>
           <h2 className="text-3xl md:text-5xl font-serif text-[var(--foreground)] font-medium">
-            Padrinhos e Madrinhas
+            Área dos Padrinhos
           </h2>
-          <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700 mx-auto"></div>
+          <div className="flex items-center justify-center gap-3">
+            <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
+            <Users className="w-5 h-5 text-gray-400 dark:text-zinc-500" />
+            <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
+          </div>
           <p className="text-sm md:text-base text-[var(--foreground)]/80 font-sans leading-relaxed text-justified-elegant text-center max-w-2xl mx-auto">
             Vocês foram escolhidos a dedo para testemunhar e abençoar nosso amor. Preparamos este guia completo com todas as orientações para o nosso grande dia!
           </p>
@@ -41,7 +45,7 @@ export default function PadrinhosSection() {
 
         {/* Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          
+
           {/* Card 1: Horário de Chegada */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -80,11 +84,11 @@ export default function PadrinhosSection() {
               <span className="text-xs uppercase tracking-wider font-semibold text-gray-400 block mb-1">Traje das Madrinhas</span>
               <h3 className="text-xl font-serif text-[var(--foreground)] font-medium mb-3">Vestidos Longos</h3>
               <p className="text-sm text-gray-600 dark:text-gray-300 font-sans leading-relaxed text-justified-elegant">
-                Vestidos estritamente <strong className="text-[var(--foreground)]">LONGOS</strong> e elegantes. A paleta de cores é totalmente livre para sua escolha. Apenas pedimos que evitem tons brancos ou off-white.
+                Vestidos estritamente <strong className="text-[var(--foreground)]">LONGOS</strong> e elegantes. A paleta de cores é totalmente livre para sua escolha. Apenas pedimos que evitem tons brancos, off-white ou champanhe.
               </p>
             </div>
             <div className="mt-6 pt-4 border-t border-gray-100 dark:border-zinc-800 text-xs text-red-600 dark:text-red-400 font-medium flex items-center gap-1.5">
-              <AlertTriangle size={14} /> Proibido Branco e Off-White
+              <AlertTriangle size={14} /> Proibido Branco, Off-White e Champanhe
             </div>
           </motion.div>
 

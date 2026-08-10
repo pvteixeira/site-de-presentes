@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Clock } from 'lucide-react';
 
 export default function Countdown() {
   const [timeLeft, setTimeLeft] = useState({
@@ -42,21 +43,26 @@ export default function Countdown() {
   ];
 
   return (
-    <section id="countdown" className="py-20 bg-[var(--background)]">
+    <section id="countdown" className="py-20 bg-gradient-to-b from-slate-200/80 via-gray-100 to-slate-200/80 dark:from-zinc-900 dark:via-zinc-900/90 dark:to-zinc-900 border-y border-slate-300 dark:border-zinc-800 shadow-inner">
       <div className="container mx-auto px-4 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-3xl md:text-5xl font-serif text-[var(--foreground)] mb-8 font-medium">
+          <h2 className="text-3xl md:text-5xl font-serif text-[var(--foreground)] mb-4 font-medium">
             Contagem Regressiva
           </h2>
+          <div className="flex items-center justify-center gap-3 mb-8">
+            <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
+            <Clock className="w-5 h-5 text-gray-400 dark:text-zinc-500" />
+            <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
+          </div>
           <div className="flex flex-wrap justify-center gap-4 md:gap-8">
             {timeUnits.map((unit) => (
               <div
                 key={unit.label}
-                className="flex flex-col items-center justify-center w-24 h-24 md:w-32 md:h-32 rounded-full border border-gray-300 dark:border-zinc-700 bg-gray-50/80 dark:bg-zinc-900/80 shadow-sm"
+                className="flex flex-col items-center justify-center w-24 h-24 md:w-32 md:h-32 rounded-full border border-slate-300 dark:border-zinc-700 bg-white/90 dark:bg-zinc-800/90 shadow-md backdrop-blur-sm"
               >
                 <span className="text-3xl md:text-5xl font-serif text-[var(--foreground)] font-medium mb-1">
                   {unit.value.toString().padStart(2, '0')}

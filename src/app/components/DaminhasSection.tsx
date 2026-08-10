@@ -29,7 +29,11 @@ export default function DaminhasSection() {
           <h2 className="text-3xl md:text-5xl font-serif text-[var(--foreground)] font-medium">
             Área das Daminhas
           </h2>
-          <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700 mx-auto"></div>
+          <div className="flex items-center justify-center gap-3">
+            <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
+            <Flower2 className="w-5 h-5 text-gray-400 dark:text-zinc-500" />
+            <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
+          </div>
           <p className="text-sm md:text-base text-[var(--foreground)]/80 font-sans leading-relaxed text-justified-elegant text-center max-w-2xl mx-auto">
             Um cantinho especial preparado com muito carinho para as nossas queridas <strong className="text-[var(--foreground)] font-serif italic text-lg">Luna e Julia</strong>, que encherão nosso altar de doçura, beleza e alegria!
           </p>

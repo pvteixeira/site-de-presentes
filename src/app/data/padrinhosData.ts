@@ -27,7 +27,7 @@ export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
     password: 'debora&carlos2027',
     role: 'casal',
     members: ['Débora', 'Carlos'],
-    customMessage: 'Débora e Carlos, vocês são pessoas muito especiais em nossas vidas e não poderíamos dar esse passo sem vocês ao nosso lado!'
+    customMessage: 'No dia mais importante das nossas vidas, queremos estar cercados por aqueles que amamos e que fazem parte da nossa história. É uma alegria imensa poder dividir com vocês a nossa felicidade. E neste momento tão especial, não poderia ser diferente: desejamos ter vocês ao nosso lado, caminhando conosco, fortalecendo a nossa fé, compartilhando sonhos e construindo memórias inesquecíveis.'
   },
   {
     id: 'graci-junior',
@@ -37,7 +37,7 @@ export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
     password: 'graci&junior2027',
     role: 'casal',
     members: ['Graci', 'Junior'],
-    customMessage: 'Graci e Junior, a presença de vocês no nosso altar torna esse dia ainda mais mágico e inesquecível!'
+    customMessage: 'No dia mais importante das nossas vidas, queremos estar cercados por aqueles que amamos e que fazem parte da nossa história. É uma alegria imensa poder dividir com vocês a nossa felicidade. E neste momento tão especial, não poderia ser diferente: desejamos ter vocês ao nosso lado, caminhando conosco, fortalecendo a nossa fé, compartilhando sonhos e construindo memórias inesquecíveis.'
   },
   {
     id: 'luciene-kassio',
@@ -47,7 +47,7 @@ export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
     password: 'luciene&kassio2027',
     role: 'casal',
     members: ['Luciene', 'Kássio'],
-    customMessage: 'Luciene e Kássio, que grande alegria compartilhar o dia mais feliz das nossas vidas com pessoas tão queridas!'
+    customMessage: 'No dia mais importante das nossas vidas, queremos estar cercados por aqueles que amamos e que fazem parte da nossa história. É uma alegria imensa poder dividir com vocês a nossa felicidade. E neste momento tão especial, não poderia ser diferente: desejamos ter vocês ao nosso lado, caminhando conosco, fortalecendo a nossa fé, compartilhando sonhos e construindo memórias inesquecíveis.'
   },
   {
     id: 'marina-ayrton',
@@ -57,7 +57,7 @@ export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
     password: 'marina&ayrton2027',
     role: 'casal',
     members: ['Marina', 'Ayrton'],
-    customMessage: 'Marina e Ayrton, ter vocês como nossos padrinhos é um presente de Deus. Muito obrigado por estarem ao nosso lado!'
+    customMessage: 'No dia mais importante das nossas vidas, queremos estar cercados por aqueles que amamos e que fazem parte da nossa história. É uma alegria imensa poder dividir com vocês a nossa felicidade. E neste momento tão especial, não poderia ser diferente: desejamos ter vocês ao nosso lado, caminhando conosco, fortalecendo a nossa fé, compartilhando sonhos e construindo memórias inesquecíveis.'
   },
   {
     id: 'stephany-junior',
@@ -67,7 +67,7 @@ export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
     password: 'stephany&junior2027',
     role: 'casal',
     members: ['Stephany', 'Júnior'],
-    customMessage: 'Stephany e Júnior, nossa celebração não estaria completa sem o carinho e o brilho de vocês!'
+    customMessage: 'No dia mais importante das nossas vidas, queremos estar cercados por aqueles que amamos e que fazem parte da nossa história. É uma alegria imensa poder dividir com vocês a nossa felicidade. E neste momento tão especial, não poderia ser diferente: desejamos ter vocês ao nosso lado, caminhando conosco, fortalecendo a nossa fé, compartilhando sonhos e construindo memórias inesquecíveis.'
   },
   {
     id: 'thalita-thiago',
@@ -77,7 +77,7 @@ export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
     password: 'thalita&thiago2027',
     role: 'casal',
     members: ['Thalita', 'Thiago'],
-    customMessage: 'Thalita e Thiago, é uma honra gigante contar com vocês como nossos padrinhos de casamento!'
+    customMessage: 'No dia mais importante das nossas vidas, queremos estar cercados por aqueles que amamos e que fazem parte da nossa história. É uma alegria imensa poder dividir com vocês a nossa felicidade. E neste momento tão especial, não poderia ser diferente: desejamos ter vocês ao nosso lado, caminhando conosco, fortalecendo a nossa fé, compartilhando sonhos e construindo memórias inesquecíveis.'
   },
   {
     id: 'ilka-rodrigo',
@@ -87,7 +87,7 @@ export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
     password: 'ilka&rodrigo2027',
     role: 'casal',
     members: ['Ilka', 'Rodrigo'],
-    customMessage: 'Ilka e Rodrigo, obrigado por acompanharem nossa história e por aceitarem este convite com tanto amor!'
+    customMessage: 'No dia mais importante das nossas vidas, queremos estar cercados por aqueles que amamos e que fazem parte da nossa história. É uma alegria imensa poder dividir com vocês a nossa felicidade. E neste momento tão especial, não poderia ser diferente: desejamos ter vocês ao nosso lado, caminhando conosco, fortalecendo a nossa fé, compartilhando sonhos e construindo memórias inesquecíveis.'
   },
   {
     id: 'aline-rodrigo',
@@ -97,7 +97,7 @@ export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
     password: 'aline&rodrigo2027',
     role: 'casal',
     members: ['Aline', 'Rodrigo'],
-    customMessage: 'Aline e Rodrigo, vocês são fontes de inspiração e amizade verdadeira para nós dois!'
+    customMessage: 'No dia mais importante das nossas vidas, queremos estar cercados por aqueles que amamos e que fazem parte da nossa história. É uma alegria imensa poder dividir com vocês a nossa felicidade. E neste momento tão especial, não poderia ser diferente: desejamos ter vocês ao nosso lado, caminhando conosco, fortalecendo a nossa fé, compartilhando sonhos e construindo memórias inesquecíveis.'
   },
   {
     id: 'iris-mauri',
@@ -107,7 +107,7 @@ export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
     password: 'iris&mauri2027',
     role: 'casal',
     members: ['Iris', 'Mauri'],
-    customMessage: 'Iris e Mauri, que felicidade ver vocês ao nosso lado abençoando a nossa união no altar!'
+    customMessage: 'No dia mais importante das nossas vidas, queremos estar cercados por aqueles que amamos e que fazem parte da nossa história. É uma alegria imensa poder dividir com vocês a nossa felicidade. E neste momento tão especial, não poderia ser diferente: desejamos ter vocês ao nosso lado, caminhando conosco, fortalecendo a nossa fé, compartilhando sonhos e construindo memórias inesquecíveis.'
   },
   {
     id: 'luciana-geisse',
@@ -117,7 +117,7 @@ export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
     password: 'luciana&geisse2027',
     role: 'casal',
     members: ['Luciana', 'Geisse'],
-    customMessage: 'Luciana e Geisse, ter o carinho e a parceria de vocês nesse dia é a certeza de momentos inesquecíveis!'
+    customMessage: 'No dia mais importante das nossas vidas, queremos estar cercados por aqueles que amamos e que fazem parte da nossa história. É uma alegria imensa poder dividir com vocês a nossa felicidade. E neste momento tão especial, não poderia ser diferente: desejamos ter vocês ao nosso lado, caminhando conosco, fortalecendo a nossa fé, compartilhando sonhos e construindo memórias inesquecíveis.'
   },
   {
     id: 'tialulu-pedrovictor',
@@ -127,7 +127,7 @@ export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
     password: 'tialulu&pedro2027',
     role: 'casal',
     members: ['Tia Lulu', 'Pedro Victor'],
-    customMessage: 'Tia Lulu e Pedro Victor, o amor de vocês nos acompanha sempre. É uma bênção imensa tê-los como padrinhos!'
+    customMessage: 'No dia mais importante das nossas vidas, queremos estar cercados por aqueles que amamos e que fazem parte da nossa história. É uma alegria imensa poder dividir com vocês a nossa felicidade. E neste momento tão especial, não poderia ser diferente: desejamos ter vocês ao nosso lado, caminhando conosco, fortalecendo a nossa fé, compartilhando sonhos e construindo memórias inesquecíveis.'
   },
   {
     id: 'cleber',
@@ -136,7 +136,7 @@ export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
     password: 'cleber2027',
     role: 'padrinho',
     members: ['Cleber'],
-    customMessage: 'Cleber, grande amigo! É um orgulho ter você no altar conosco neste momento tão importante.'
+    customMessage: 'No dia mais importante das nossas vidas, queremos estar cercados por aqueles que amamos e que fazem parte da nossa história. É uma alegria imensa poder dividir com vocês a nossa felicidade. E neste momento tão especial, não poderia ser diferente: desejamos ter vocês ao nosso lado, caminhando conosco, fortalecendo a nossa fé, compartilhando sonhos e construindo memórias inesquecíveis.'
   },
   {
     id: 'elaine',
@@ -145,7 +145,7 @@ export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
     password: 'elaine2027',
     role: 'madrinha',
     members: ['Elaine'],
-    customMessage: 'Elaine, sua amizade e energia linda são essenciais para nós. Muito feliz por ter você como nossa madrinha!'
+    customMessage: 'No dia mais importante das nossas vidas, queremos estar cercados por aqueles que amamos e que fazem parte da nossa história. É uma alegria imensa poder dividir com vocês a nossa felicidade. E neste momento tão especial, não poderia ser diferente: desejamos ter vocês ao nosso lado, caminhando conosco, fortalecendo a nossa fé, compartilhando sonhos e construindo memórias inesquecíveis.'
   },
   {
     id: 'luna',
@@ -154,7 +154,7 @@ export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
     password: 'luna2027',
     role: 'daminha',
     members: ['Luna'],
-    customMessage: 'Luna, nossa linda daminha! Você trará toda a graciosidade e alegria para encantar a nossa entrada!'
+    customMessage: 'No dia mais importante das nossas vidas, queremos estar cercados por aqueles que amamos e que fazem parte da nossa história. É uma alegria imensa poder dividir com vocês a nossa felicidade. E neste momento tão especial, não poderia ser diferente: desejamos ter vocês ao nosso lado, caminhando conosco, fortalecendo a nossa fé, compartilhando sonhos e construindo memórias inesquecíveis.'
   },
   {
     id: 'julia',
@@ -163,7 +163,7 @@ export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
     password: 'julia2027',
     role: 'daminha',
     members: ['Julia'],
-    customMessage: 'Julia, nossa querida daminha! Estamos tão ansiosos para ver você brilhando no nosso grande dia!'
+    customMessage: 'No dia mais importante das nossas vidas, queremos estar cercados por aqueles que amamos e que fazem parte da nossa história. É uma alegria imensa poder dividir com vocês a nossa felicidade. E neste momento tão especial, não poderia ser diferente: desejamos ter vocês ao nosso lado, caminhando conosco, fortalecendo a nossa fé, compartilhando sonhos e construindo memórias inesquecíveis.'
   }
 ];
 
