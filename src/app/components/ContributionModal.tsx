@@ -46,7 +46,38 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
 
   const handleSubmitForm = (e: React.FormEvent) => {
     e.preventDefault();
-    setStep('success');
+    if (!guestName.trim()) return;
+
+    const saveContribution = (receiptDataUrl?: string) => {
+      const newContrib = {
+        id: Date.now().toString(),
+        giftId: gift.id,
+        giftName: gift.name,
+        guestName: guestName.trim(),
+        amount: gift.totalAmount,
+        date: new Date().toLocaleString('pt-BR'),
+        receiptUrl: receiptDataUrl || '',
+        receiptName: receiptFile?.name || 'Comprovante_PIX.png'
+      };
+
+      try {
+        const stored = JSON.parse(localStorage.getItem('pix_contributions') || '[]');
+        localStorage.setItem('pix_contributions', JSON.stringify([newContrib, ...stored]));
+      } catch (err) {
+        console.error(err);
+      }
+      setStep('success');
+    };
+
+    if (receiptFile) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        saveContribution(reader.result as string);
+      };
+      reader.readAsDataURL(receiptFile);
+    } else {
+      saveContribution();
+    }
   };
 
   const handleComplete = () => {

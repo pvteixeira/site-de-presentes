@@ -27,7 +27,7 @@ export default function DaminhasSection() {
             <Flower2 size={14} className="text-gray-400" /> Nossas Daminhas de Honra
           </div>
           <h2 className="text-3xl md:text-5xl font-serif text-[var(--foreground)] font-medium">
-            Área das Daminhas
+            Daminhas de Honra
           </h2>
           <div className="flex items-center justify-center gap-3">
             <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>

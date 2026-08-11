@@ -26,7 +26,8 @@ import {
   Check,
   X,
   ZoomIn,
-  MessageCircle
+  MessageCircle,
+  Trash2
 } from 'lucide-react';
 import {
   PADRINHOS_ACCOUNTS,
@@ -138,9 +139,12 @@ export default function PadrinhosPortal() {
   const [newReply, setNewReply] = useState('');
   const [padrinhoReplies, setPadrinhoReplies] = useState<{ id: string; author: string; text: string; date: string }[]>([]);
   const [replySuccess, setReplySuccess] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   // Check stored session on mount
   useEffect(() => {
+    setIsAdmin(localStorage.getItem('admin_logged_in') === 'true');
+
     const savedUser = localStorage.getItem('padrinho_session');
     if (savedUser) {
       try {
@@ -168,6 +172,14 @@ export default function PadrinhosPortal() {
       }
     }
   }, []);
+
+  const handleDeleteReply = (id: string) => {
+    if (confirm('Tem certeza que deseja excluir este recado?')) {
+      const updated = padrinhoReplies.filter(r => r.id !== id);
+      setPadrinhoReplies(updated);
+      localStorage.setItem('padrinho_replies', JSON.stringify(updated));
+    }
+  };
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -247,7 +259,7 @@ export default function PadrinhosPortal() {
             </div>
 
             <h1 className="text-2xl md:text-3xl font-serif text-center text-[var(--foreground)] mb-2 font-medium">
-              Área dos Padrinhos e Madrinhas
+              Padrinhos e Madrinhas
             </h1>
             <p className="text-xs md:text-sm text-center text-gray-500 mb-8 font-sans leading-relaxed text-justified-elegant text-center">
               Acesso exclusivo por perfil. Digite o usuário e senha fornecidos pelos noivos para acessar o seu conteúdo restrito.
@@ -303,7 +315,7 @@ export default function PadrinhosPortal() {
                 type="submit"
                 className="w-full bg-black dark:bg-white text-white dark:text-black py-3.5 rounded-xl font-semibold uppercase tracking-wider text-xs shadow-sm border border-gray-800 dark:border-gray-200 hover:opacity-90 transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
-                <Lock size={16} /> Entrar na Área Restrita
+                <Lock size={16} /> Entrar no Portal
               </button>
             </form>
 
@@ -337,7 +349,7 @@ export default function PadrinhosPortal() {
               <img src="/img/LOGO_MARCA.png" alt="Logo" className="w-8 h-8 rounded-full border border-gray-300 dark:border-zinc-700 object-contain" />
               <div>
                 <span className="font-serif font-semibold text-base md:text-lg text-[var(--foreground)] block leading-tight">
-                  {isDaminha ? 'Área Exclusiva das Daminhas' : 'Área Restrita dos Padrinhos e Madrinhas'}
+                  {isDaminha ? 'Espaço das Daminhas' : 'Padrinhos e Madrinhas'}
                 </span>
               </div>
             </div>
@@ -408,7 +420,7 @@ export default function PadrinhosPortal() {
                 : 'border-transparent text-gray-500 hover:text-[var(--foreground)]'
                 }`}
             >
-              <Flower2 size={18} className="text-gray-400" /> Área das Daminhas
+              <Flower2 size={18} className="text-gray-400" /> Daminhas
             </button>
           )}
 
@@ -826,7 +838,7 @@ export default function PadrinhosPortal() {
                     🌸
                   </div>
                   <div>
-                    <h2 className="text-2xl font-serif text-[var(--foreground)] font-medium">Área Exclusiva das Daminhas</h2>
+                    <h2 className="text-2xl font-serif text-[var(--foreground)] font-medium">Espaço das Daminhas</h2>
                     <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Espaço Especial • {loggedUser.name}</p>
                   </div>
                 </div>
@@ -968,9 +980,20 @@ export default function PadrinhosPortal() {
                     <div className="space-y-3">
                       {padrinhoReplies.map((r) => (
                         <div key={r.id} className="bg-gray-50 dark:bg-zinc-800/40 p-4 rounded-xl text-sm font-sans border border-gray-100 dark:border-zinc-700/50">
-                          <div className="flex justify-between text-xs text-gray-400 mb-1">
+                          <div className="flex justify-between items-center text-xs text-gray-400 mb-1">
                             <span className="font-bold text-[var(--foreground)]">{r.author}</span>
-                            <span>{r.date}</span>
+                            <div className="flex items-center gap-2">
+                              <span>{r.date}</span>
+                              {isAdmin && (
+                                <button
+                                  onClick={() => handleDeleteReply(r.id)}
+                                  className="p-1 text-red-500 hover:bg-red-500/10 rounded transition-colors cursor-pointer"
+                                  title="Excluir recado (ADM)"
+                                >
+                                  <Trash2 size={14} />
+                                </button>
+                              )}
+                            </div>
                           </div>
                           <p className="text-gray-700 dark:text-gray-300 text-justified-elegant">{r.text}</p>
                         </div>

@@ -5,18 +5,42 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Image as ImageIcon, X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const GALLERY_IMAGES = [
-  { id: 1, src: '/img/1.jpg', title: 'Momentos Especiais' },
-  { id: 2, src: '/img/2.jpg', title: 'Sorrisos e Cúmplices' },
-  { id: 3, src: '/img/3.jpg', title: 'Aline e Klécio' },
-  { id: 4, src: '/img/4.jpg', title: 'História de Amor' },
-  { id: 5, src: '/img/5.jpg', title: 'Ensaio Pré-Wedding' },
-  { id: 6, src: '/img/6.jpg', title: 'Caminho até o Altar' },
-  { id: 7, src: '/img/7.jpg', title: 'Gratos a Deus' },
-  { id: 8, src: '/img/8.jpg', title: 'Amor Infinito' },
-  { id: 9, src: '/img/9.jpg', title: 'Nossa Jornada' },
-  { id: 10, src: '/img/10.jpg', title: 'Rumo a 2027' },
-  { id: 11, src: '/img/11.jpg', title: 'Felicidade Compartilhada' },
-  { id: 12, src: '/img/12.jpg', title: 'Sempre Juntos' },
+  {
+    id: 1,
+    src: '/img/Galeria/ALINEEKLECIOBB.jpeg',
+    title: 'Aline e Klécio Pequeninos',
+    subtitle: 'Nossas infâncias e os primeiros passos'
+  },
+  {
+    id: 2,
+    src: '/img/Galeria/ALINEEKLECIOCHUVA.jpeg',
+    title: 'Romance sob a Chuva',
+    subtitle: 'Amor e cumplicidade em todo clima'
+  },
+  {
+    id: 3,
+    src: '/img/Galeria/ALINEEKLECIOFLORESTA.jpeg',
+    title: 'Ensaio na Floresta',
+    subtitle: 'Conexão e leveza em meio à natureza'
+  },
+  {
+    id: 4,
+    src: '/img/Galeria/ALINEEKLECIOFORMAL.jpeg',
+    title: 'Elegância e Celebração',
+    subtitle: 'Par perfeito prontos para comemorar'
+  },
+  {
+    id: 5,
+    src: '/img/Galeria/ALINEEKLECIOTORRE.jpeg',
+    title: 'Registros de Viagem',
+    subtitle: 'Colecionando memórias pelo mundo'
+  },
+  {
+    id: 6,
+    src: '/img/Galeria/KLECIOBB.jpeg',
+    title: 'Klécio Bebê',
+    subtitle: 'Infância inesquecível do noivo'
+  },
 ];
 
 export default function GallerySection() {
@@ -44,9 +68,9 @@ export default function GallerySection() {
           transition={{ duration: 0.8 }}
           className="text-center max-w-3xl mx-auto mb-16 space-y-4"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-xs uppercase tracking-widest text-[var(--foreground)] font-semibold shadow-sm">
-            <ImageIcon size={14} className="text-gray-400" /> Galeria de Fotos
-          </div>
+          <h2 className="text-3xl md:text-5xl font-serif text-[var(--foreground)] font-medium">
+            Galeria de Fotos
+          </h2>
           <div className="flex items-center justify-center gap-3">
             <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
             <ImageIcon className="w-5 h-5 text-gray-400 dark:text-zinc-500" />
@@ -58,24 +82,25 @@ export default function GallerySection() {
         </motion.div>
 
         {/* Gallery Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {GALLERY_IMAGES.map((img, index) => (
             <motion.div
               key={img.id}
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.05 }}
+              transition={{ duration: 0.5, delay: index * 0.08 }}
               onClick={() => setSelectedIndex(index)}
-              className="group relative h-64 rounded-2xl overflow-hidden cursor-pointer border border-gray-200 dark:border-zinc-800 shadow-sm bg-zinc-900"
+              className="group relative h-80 rounded-2xl overflow-hidden cursor-pointer border border-gray-200 dark:border-zinc-800 shadow-md bg-zinc-900"
             >
               <img
                 src={img.src}
                 alt={img.title}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                <span className="text-xs font-serif text-white font-medium">{img.title}</span>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5 text-white">
+                <h3 className="font-serif text-lg font-medium text-white mb-0.5">{img.title}</h3>
+                <p className="text-xs text-gray-300 font-sans">{img.subtitle}</p>
               </div>
             </motion.div>
           ))}
@@ -106,14 +131,17 @@ export default function GallerySection() {
               <ChevronLeft size={28} />
             </button>
 
-            <div className="max-w-4xl max-h-[85vh] flex flex-col items-center">
+            <div className="max-w-4xl max-h-[85vh] flex flex-col items-center text-center">
               <img
                 src={GALLERY_IMAGES[selectedIndex].src}
                 alt={GALLERY_IMAGES[selectedIndex].title}
-                className="max-w-full max-h-[75vh] object-contain rounded-xl shadow-2xl border border-white/10"
+                className="max-w-full max-h-[70vh] object-contain rounded-xl shadow-2xl border border-white/10"
               />
-              <p className="text-white font-serif text-lg mt-4 font-medium">
+              <p className="text-white font-serif text-xl mt-4 font-medium">
                 {GALLERY_IMAGES[selectedIndex].title}
+              </p>
+              <p className="text-gray-300 font-sans text-sm mt-1">
+                {GALLERY_IMAGES[selectedIndex].subtitle}
               </p>
             </div>
 

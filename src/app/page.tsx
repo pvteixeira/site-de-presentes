@@ -16,10 +16,10 @@ export default function Home() {
         <div className="flex items-center gap-3">
           <Link
             href="/padrinhos"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-900 dark:text-slate-100 transition-all hover:scale-105 shadow-sm text-xs md:text-sm font-medium tracking-wide border border-slate-300 dark:border-zinc-700"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-slate-200 via-gray-200 to-slate-300 dark:from-zinc-800 dark:via-zinc-700 dark:to-zinc-800 hover:from-slate-300 hover:to-slate-400 text-slate-900 dark:text-slate-100 transition-all hover:scale-105 shadow-sm text-xs md:text-sm font-medium tracking-wide border border-slate-300 dark:border-zinc-600"
           >
             <Sparkles size={16} className="text-slate-600 dark:text-slate-300" />
-            <span>Área dos Padrinhos e Madrinhas</span>
+            <span>Padrinhos e Madrinhas</span>
           </Link>
         </div>
       </header>
@@ -101,7 +101,7 @@ export default function Home() {
 
             <div className="space-y-3">
               <h2 className="text-3xl md:text-4xl font-serif text-[var(--foreground)] font-medium">
-                Área dos Padrinhos e Madrinhas
+                Padrinhos e Madrinhas
               </h2>
               <p className="text-base text-[var(--foreground)]/80 font-sans max-w-xl mx-auto leading-relaxed text-justified-elegant text-center">
                 Criamos este espaço com muito carinho para reunir todas as informações e detalhes pensados especialmente para vocês.
@@ -114,7 +114,7 @@ export default function Home() {
               className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-slate-200 hover:bg-slate-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-900 dark:text-slate-100 transition-all hover:scale-105 shadow-sm text-xs font-semibold uppercase tracking-wider border border-slate-300 dark:border-zinc-700 cursor-pointer"
             >
               <Lock size={16} className="text-slate-600 dark:text-slate-300" />
-              <span>Entrar na Área dos Padrinhos</span>
+              <span>Padrinhos e Madrinhas</span>
             </Link>
           </div>
         </div>
@@ -132,11 +132,13 @@ export default function Home() {
       {/* 10. Rodapé */}
       <footer className="bg-zinc-950 text-white py-16 text-center space-y-6 border-t border-zinc-800">
         <div className="flex justify-center items-center gap-3">
-          <img
-            src="/img/LOGO_MARCA.png"
-            alt="Logo Marca Aline e Klécio"
-            className="w-12 h-12 object-contain rounded-full border border-gray-300/40 shadow-sm"
-          />
+          <div className="w-14 h-14 p-1 bg-white rounded-full border border-gray-300 shadow-md overflow-hidden flex items-center justify-center">
+            <img
+              src="/img/LOGO_MARCA.png"
+              alt="Logo Marca Aline e Klécio"
+              className="w-full h-full object-contain rounded-full"
+            />
+          </div>
           <p className="font-signature text-3xl md:text-4xl text-white font-normal tracking-wide">Aline e Klécio</p>
         </div>
         <div className="flex flex-wrap justify-center gap-6 text-xs text-gray-400 px-4">
@@ -144,11 +146,11 @@ export default function Home() {
           <Link href="#os-noivos" className="hover:text-white transition-colors">Os Noivos</Link>
           <Link href="#historia" className="hover:text-white transition-colors">Nossa História</Link>
           <Link href="#o-grande-dia" className="hover:text-white transition-colors">Local</Link>
-          <Link href="#cortejo" className="hover:text-white transition-colors">Área dos Padrinhos</Link>
+          <Link href="#cortejo" className="hover:text-white transition-colors">Padrinhos e Madrinhas</Link>
           <Link href="#mensagens-noivos" className="hover:text-white transition-colors">Mensagens</Link>
           <Link href="#lista-presentes" className="hover:text-white transition-colors">Lista de Presentes</Link>
-          <Link href="#galeria" className="hover:text-white transition-colors">Galeria</Link>
-          <Link href="/padrinhos" className="hover:text-white transition-colors font-semibold text-gray-200">Área dos Padrinhos</Link>
+          <Link href="#galeria" className="hover:text-white transition-colors">Galeria de Fotos</Link>
+          <Link href="/padrinhos" className="hover:text-white transition-colors font-semibold text-gray-200">Acesso Padrinhos e Madrinhas</Link>
           <Link href="/admin/login" className="hover:text-white transition-colors">Noivos (Admin)</Link>
         </div>
         <p className="text-xs text-gray-500 font-sans tracking-widest uppercase">Com amor, 2027 • Todos os direitos reservados</p>

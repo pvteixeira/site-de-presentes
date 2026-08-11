@@ -24,7 +24,7 @@ export default function Hero() {
         </motion.div>
 
         <motion.h1
-          className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-zinc-900 dark:text-white mb-4 font-signature font-normal tracking-normal py-2 leading-tight"
+          className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl mb-4 font-signature font-normal tracking-normal py-2 leading-tight bg-gradient-to-r from-slate-700 via-gray-400 to-slate-700 dark:from-slate-100 dark:via-gray-300 dark:to-slate-300 bg-clip-text text-transparent drop-shadow-sm"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, delay: 0.4 }}
@@ -52,7 +52,7 @@ export default function Hero() {
             onClick={() => {
               document.getElementById('lista-presentes')?.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="group relative inline-flex items-center justify-center px-8 py-4 font-sans font-semibold tracking-wider text-white dark:text-black transition-all duration-300 ease-in-out transform bg-black dark:bg-white rounded-xl hover:bg-zinc-800 dark:hover:bg-gray-100 hover:scale-[1.02] border border-zinc-800 dark:border-gray-200 shadow-md overflow-hidden cursor-pointer uppercase text-xs"
+            className="group relative inline-flex items-center justify-center px-8 py-4 font-sans font-semibold tracking-wider transition-all duration-300 ease-in-out transform bg-gradient-to-r from-slate-300 via-gray-100 to-slate-300 hover:from-slate-400 hover:via-gray-200 hover:to-slate-400 dark:from-zinc-700 dark:via-zinc-600 dark:to-zinc-700 dark:hover:from-zinc-600 dark:hover:to-zinc-600 text-slate-900 dark:text-slate-100 rounded-xl hover:scale-[1.02] border border-slate-400/80 dark:border-zinc-500 shadow-md hover:shadow-lg overflow-hidden cursor-pointer uppercase text-xs"
           >
             <span className="relative z-10">Lista de Presentes</span>
           </button>

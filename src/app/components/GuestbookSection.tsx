@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { MessageSquare, Send, Heart, CheckCircle2 } from 'lucide-react';
+import { MessageSquare, Send, Heart, CheckCircle2, Trash2 } from 'lucide-react';
 
 interface MessageItem {
   id: string;
@@ -42,8 +42,11 @@ export default function GuestbookSection() {
   const [relation, setRelation] = useState('');
   const [text, setText] = useState('');
   const [success, setSuccess] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
+    setIsAdmin(localStorage.getItem('admin_logged_in') === 'true');
+
     const stored = localStorage.getItem('guestbook_messages');
     if (stored) {
       try {
@@ -51,8 +54,18 @@ export default function GuestbookSection() {
       } catch (e) {
         console.error(e);
       }
+    } else {
+      localStorage.setItem('guestbook_messages', JSON.stringify(INITIAL_GUESTBOOK));
     }
   }, []);
+
+  const handleDeleteMessage = (id: string) => {
+    if (confirm('Tem certeza que deseja excluir esta mensagem?')) {
+      const updated = messages.filter(m => m.id !== id);
+      setMessages(updated);
+      localStorage.setItem('guestbook_messages', JSON.stringify(updated));
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -166,7 +179,18 @@ export default function GuestbookSection() {
                   <div>
                     <h4 className="font-serif text-lg text-[var(--foreground)] font-medium">{item.author}</h4>
                   </div>
-                  <span className="text-xs text-gray-400 font-mono">{item.date}</span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs text-gray-400 font-mono">{item.date}</span>
+                    {isAdmin && (
+                      <button
+                        onClick={() => handleDeleteMessage(item.id)}
+                        className="p-1.5 text-red-500 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer"
+                        title="Excluir mensagem (Administrador)"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    )}
+                  </div>
                 </div>
                 <p className="text-sm text-gray-600 dark:text-gray-300 font-sans leading-relaxed text-justified-elegant">
                   "{item.text}"

@@ -28,10 +28,10 @@ export default function PadrinhosSection() {
           className="text-center max-w-3xl mx-auto mb-16 space-y-4"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-300 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-900 text-xs uppercase tracking-widest text-[var(--foreground)] font-semibold">
-            <Users size={14} className="text-gray-400" /> Nossos Padrinhos e Madrinhas
+            <Users size={14} className="text-gray-400" /> Padrinhos e Madrinhas
           </div>
           <h2 className="text-3xl md:text-5xl font-serif text-[var(--foreground)] font-medium">
-            Área dos Padrinhos
+            Padrinhos e Madrinhas
           </h2>
           <div className="flex items-center justify-center gap-3">
             <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
@@ -173,8 +173,8 @@ export default function PadrinhosSection() {
               <div className="w-12 h-12 rounded-xl bg-white/10 text-white flex items-center justify-center mb-6 border border-white/20">
                 <Lock size={24} />
               </div>
-              <span className="text-xs uppercase tracking-wider font-semibold text-gray-400 block mb-1">Área Restrita</span>
-              <h3 className="text-xl font-serif text-white font-medium mb-3">Portal VIP do Padrinho</h3>
+              <span className="text-xs uppercase tracking-wider font-semibold text-gray-400 block mb-1">Acesso Exclusivo</span>
+              <h3 className="text-xl font-serif text-white font-medium mb-3">Portal dos Padrinhos e Madrinhas</h3>
               <p className="text-sm text-gray-300 font-sans leading-relaxed text-justified-elegant mb-4">
                 Acessem seu portal exclusivo com login e senha fornecidos para consultar recados dos noivos, detalhes do cronograma e enviar mensagens diretas.
               </p>
@@ -185,7 +185,7 @@ export default function PadrinhosSection() {
                 href="/padrinhos"
                 className="w-full inline-flex items-center justify-center gap-2 bg-white text-black py-3 px-4 rounded-xl text-xs font-semibold uppercase tracking-wider hover:bg-gray-100 transition-all shadow-sm cursor-pointer border border-gray-300"
               >
-                <Lock size={14} /> Entrar na Área dos Padrinhos
+                <Lock size={14} /> Padrinhos e Madrinhas
               </Link>
             </div>
           </motion.div>

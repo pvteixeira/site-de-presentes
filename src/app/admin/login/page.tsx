@@ -10,10 +10,11 @@ export default function AdminLogin() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === 'alineeklecio2026') {
+    if (password === 'alineeklecio2026' || password === 'alineeklecio2027') {
+      localStorage.setItem('admin_logged_in', 'true');
       router.push('/admin');
     } else {
-      alert('Senha incorreta! (Dica: alineeklecio2026)');
+      alert('Senha incorreta!');
     }
   };
 

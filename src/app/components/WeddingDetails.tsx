@@ -34,7 +34,7 @@ export default function WeddingDetails() {
           className="text-center mb-16 flex flex-col items-center"
         >
           <h2 className="text-4xl md:text-5xl font-serif text-[var(--foreground)] mb-4 font-medium">
-            Cerimônia e Recepção
+          Cerimônia Religiosa e Recepção
           </h2>
 
           <div className="flex items-center justify-center gap-3 mb-6">
@@ -57,10 +57,10 @@ export default function WeddingDetails() {
             className="glass-card bg-white dark:bg-zinc-900/90 p-8 md:p-10 flex flex-col justify-between h-full border border-gray-200 dark:border-zinc-800 shadow-sm rounded-2xl"
           >
             <div>
-              <h3 className="text-2xl font-serif text-[var(--foreground)] mb-6 pb-2 border-b border-gray-200 dark:border-zinc-800 font-semibold">
-                Cerimônia
+              <h3 className="text-2xl font-serif text-[var(--foreground)] mb-6 pb-2 border-b border-gray-200 dark:border-zinc-800 font-semibold text-center">
+                Cerimônia Religiosa
               </h3>
-              <h4 className="text-xl font-sans font-semibold text-[var(--foreground)] mb-6">
+              <h4 className="text-xl font-sans font-semibold text-[var(--foreground)] mb-6 text-center">
                 Igreja do Bom Jesus do Bonfim
               </h4>
 
@@ -99,10 +99,10 @@ export default function WeddingDetails() {
             className="glass-card bg-white dark:bg-zinc-900/90 p-8 md:p-10 flex flex-col justify-between h-full border border-gray-200 dark:border-zinc-800 shadow-sm rounded-2xl"
           >
             <div>
-              <h3 className="text-2xl font-serif text-[var(--foreground)] mb-6 pb-2 border-b border-gray-200 dark:border-zinc-800 font-semibold">
+              <h3 className="text-2xl font-serif text-[var(--foreground)] mb-6 pb-2 border-b border-gray-200 dark:border-zinc-800 font-semibold text-center">
                 Recepção
               </h3>
-              <h4 className="text-xl font-sans font-semibold text-[var(--foreground)] mb-6">
+              <h4 className="text-xl font-sans font-semibold text-[var(--foreground)] mb-6 text-center">
                 Dayse Nogueira Recepções
               </h4>
 

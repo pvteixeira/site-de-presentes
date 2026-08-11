@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { Search, ArrowUpDown, Gift as GiftIcon } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Search, ArrowUpDown, Gift as GiftIcon, ChevronDown } from 'lucide-react';
 import GiftCard from './GiftCard';
 import ContributionModal from './ContributionModal';
 import { triggerConfetti } from './Confetti';
@@ -10,6 +10,8 @@ import type { Gift } from '../types';
 import { GIFTS_DATA } from '../utils/giftsData';
 
 const CATEGORIES = ['Todas', 'Cozinha', 'Cama e Banho', 'Eletrodomésticos', 'Experiências', 'Outros'];
+const INITIAL_ITEMS_COUNT = 12;
+const ITEMS_PER_LOAD = 12;
 
 export default function GiftList() {
   const [gifts, setGifts] = useState<Gift[]>(GIFTS_DATA);
@@ -17,6 +19,12 @@ export default function GiftList() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | 'default'>('default');
   const [selectedGift, setSelectedGift] = useState<Gift | null>(null);
+  const [visibleCount, setVisibleCount] = useState<number>(INITIAL_ITEMS_COUNT);
+
+  // Reset pagination when filters or sort change
+  useEffect(() => {
+    setVisibleCount(INITIAL_ITEMS_COUNT);
+  }, [selectedCategory, searchQuery, sortOrder]);
 
   let filteredGifts = gifts.filter(gift => {
     const matchesCategory = selectedCategory === 'Todas' || gift.category === selectedCategory;
@@ -30,6 +38,13 @@ export default function GiftList() {
   } else if (sortOrder === 'desc') {
     filteredGifts = [...filteredGifts].sort((a, b) => b.totalAmount - a.totalAmount);
   }
+
+  const visibleGifts = filteredGifts.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredGifts.length;
+
+  const handleLoadMore = () => {
+    setVisibleCount(prev => prev + ITEMS_PER_LOAD);
+  };
 
   const handleContribute = (gift: Gift) => {
     setSelectedGift(gift);
@@ -79,7 +94,7 @@ export default function GiftList() {
 
           <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
             <span className="text-xs text-gray-400 font-sans font-medium">
-              {filteredGifts.length} {filteredGifts.length === 1 ? 'item' : 'itens'}
+              Mostrando {visibleGifts.length} de {filteredGifts.length} {filteredGifts.length === 1 ? 'item' : 'itens'}
             </span>
             <div className="flex items-center gap-2">
               <button
@@ -111,7 +126,7 @@ export default function GiftList() {
 
         {/* Gift Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredGifts.map((gift) => (
+          {visibleGifts.map((gift) => (
             <GiftCard
               key={gift.id}
               gift={gift}
@@ -119,6 +134,19 @@ export default function GiftList() {
             />
           ))}
         </div>
+
+        {/* Load More Button */}
+        {hasMore && (
+          <div className="mt-12 text-center">
+            <button
+              onClick={handleLoadMore}
+              className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-sans text-xs font-semibold uppercase tracking-wider transition-all duration-300 ease-in-out transform bg-gradient-to-r from-slate-300 via-gray-100 to-slate-300 hover:from-slate-400 hover:via-gray-200 hover:to-slate-400 dark:from-zinc-700 dark:via-zinc-600 dark:to-zinc-700 dark:hover:from-zinc-600 dark:hover:to-zinc-600 text-slate-900 dark:text-slate-100 border border-slate-400/80 dark:border-zinc-500 shadow-md hover:shadow-lg hover:scale-105 cursor-pointer"
+            >
+              <span>Ver mais presentes</span>
+              <ChevronDown size={16} className="text-slate-700 dark:text-slate-200" />
+            </button>
+          </div>
+        )}
 
         {filteredGifts.length === 0 && (
           <div className="text-center py-16 text-gray-500 font-sans">
