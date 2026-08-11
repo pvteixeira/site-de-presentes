@@ -100,12 +100,12 @@ export default function GuestbookSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center max-w-3xl mx-auto mb-16 space-y-4"
+          className="text-center max-w-3xl mx-auto mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-300 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-900 text-xs uppercase tracking-widest text-[var(--foreground)] font-semibold">
-            <MessageSquare size={14} className="text-gray-400" /> Mensagens aos Noivos
-          </div>
-          <div className="flex items-center justify-center gap-3">
+          <h2 className="text-4xl md:text-5xl font-serif text-[var(--foreground)] mb-4 font-medium">
+            Mensagens aos Noivos
+          </h2>
+          <div className="flex items-center justify-center gap-3 mb-6">
             <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
             <MessageSquare className="w-5 h-5 text-gray-400 dark:text-zinc-500" />
             <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
