@@ -98,7 +98,7 @@ export const GIFTS_DATA: Gift[] = [
     category: 'Experiências',
     totalAmount: 400,
     currentAmount: 0,
-    imageUrl: '/img/Cotas LUA DE MEL.png',
+    imageUrl: '/img/Cotas LUA DE MEL.jpg',
   },
   {
     id: '12',
@@ -107,7 +107,7 @@ export const GIFTS_DATA: Gift[] = [
     category: 'Experiências',
     totalAmount: 400,
     currentAmount: 0,
-    imageUrl: '/img/Cotas LUA DE MEL.png',
+    imageUrl: '/img/Cotas LUA DE MEL.jpg',
   },
   {
     id: '13',
@@ -188,7 +188,7 @@ export const GIFTS_DATA: Gift[] = [
     category: 'Experiências',
     totalAmount: 500,
     currentAmount: 0,
-    imageUrl: '/img/Cotas LUA DE MEL.png',
+    imageUrl: '/img/Cotas LUA DE MEL.jpg',
   },
   {
     id: '22',
@@ -233,7 +233,7 @@ export const GIFTS_DATA: Gift[] = [
     category: 'Experiências',
     totalAmount: 500,
     currentAmount: 0,
-    imageUrl: '/img/Cotas LUA DE MEL.png',
+    imageUrl: '/img/Cotas LUA DE MEL.jpg',
   },
   {
     id: '27',
@@ -242,7 +242,7 @@ export const GIFTS_DATA: Gift[] = [
     category: 'Experiências',
     totalAmount: 500,
     currentAmount: 0,
-    imageUrl: '/img/Cotas LUA DE MEL.png',
+    imageUrl: '/img/Cotas LUA DE MEL.jpg',
   },
   {
     id: '28',
@@ -260,7 +260,7 @@ export const GIFTS_DATA: Gift[] = [
     category: 'Experiências',
     totalAmount: 550,
     currentAmount: 0,
-    imageUrl: '/img/Cotas LUA DE MEL.png',
+    imageUrl: '/img/Cotas LUA DE MEL.jpg',
   },
   {
     id: '30',
@@ -269,7 +269,7 @@ export const GIFTS_DATA: Gift[] = [
     category: 'Experiências',
     totalAmount: 550,
     currentAmount: 0,
-    imageUrl: '/img/Cotas LUA DE MEL.png',
+    imageUrl: '/img/Cotas LUA DE MEL.jpg',
   },
   {
     id: '31',
@@ -278,7 +278,7 @@ export const GIFTS_DATA: Gift[] = [
     category: 'Experiências',
     totalAmount: 550,
     currentAmount: 0,
-    imageUrl: '/img/Cotas LUA DE MEL.png',
+    imageUrl: '/img/Cotas LUA DE MEL.jpg',
   },
   {
     id: '32',
@@ -332,7 +332,7 @@ export const GIFTS_DATA: Gift[] = [
     category: 'Experiências',
     totalAmount: 600,
     currentAmount: 0,
-    imageUrl: '/img/Cotas LUA DE MEL.png',
+    imageUrl: '/img/Cotas LUA DE MEL.jpg',
   },
   {
     id: '38',
@@ -341,7 +341,7 @@ export const GIFTS_DATA: Gift[] = [
     category: 'Experiências',
     totalAmount: 600,
     currentAmount: 0,
-    imageUrl: '/img/Cotas LUA DE MEL.png',
+    imageUrl: '/img/Cotas LUA DE MEL.jpg',
   },
   {
     id: '39',
@@ -350,7 +350,7 @@ export const GIFTS_DATA: Gift[] = [
     category: 'Experiências',
     totalAmount: 600,
     currentAmount: 0,
-    imageUrl: '/img/Cotas LUA DE MEL.png',
+    imageUrl: '/img/Cotas LUA DE MEL.jpg',
   },
   {
     id: '40',
@@ -386,7 +386,7 @@ export const GIFTS_DATA: Gift[] = [
     category: 'Experiências',
     totalAmount: 650,
     currentAmount: 0,
-    imageUrl: '/img/Cotas LUA DE MEL.png',
+    imageUrl: '/img/Cotas LUA DE MEL.jpg',
   },
   {
     id: '44',
@@ -404,7 +404,7 @@ export const GIFTS_DATA: Gift[] = [
     category: 'Experiências',
     totalAmount: 700,
     currentAmount: 0,
-    imageUrl: '/img/Cotas LUA DE MEL.png',
+    imageUrl: '/img/Cotas LUA DE MEL.jpg',
   },
   {
     id: '46',
@@ -413,7 +413,7 @@ export const GIFTS_DATA: Gift[] = [
     category: 'Experiências',
     totalAmount: 700,
     currentAmount: 0,
-    imageUrl: '/img/Cotas LUA DE MEL.png',
+    imageUrl: '/img/Cotas LUA DE MEL.jpg',
   },
   {
     id: '47',
@@ -431,7 +431,7 @@ export const GIFTS_DATA: Gift[] = [
     category: 'Experiências',
     totalAmount: 750,
     currentAmount: 0,
-    imageUrl: '/img/Cotas LUA DE MEL.png',
+    imageUrl: '/img/Cotas LUA DE MEL.jpg',
   },
   {
     id: '49',
@@ -440,7 +440,7 @@ export const GIFTS_DATA: Gift[] = [
     category: 'Experiências',
     totalAmount: 800,
     currentAmount: 0,
-    imageUrl: '/img/Cotas LUA DE MEL.png',
+    imageUrl: '/img/Cotas LUA DE MEL.jpg',
   },
   {
     id: '50',
@@ -449,7 +449,7 @@ export const GIFTS_DATA: Gift[] = [
     category: 'Experiências',
     totalAmount: 800,
     currentAmount: 0,
-    imageUrl: '/img/Cotas LUA DE MEL.png',
+    imageUrl: '/img/Cotas LUA DE MEL.jpg',
   },
   {
     id: '51',
@@ -458,7 +458,7 @@ export const GIFTS_DATA: Gift[] = [
     category: 'Experiências',
     totalAmount: 800,
     currentAmount: 0,
-    imageUrl: '/img/Cotas LUA DE MEL.png',
+    imageUrl: '/img/Cotas LUA DE MEL.jpg',
   },
   {
     id: '52',
@@ -476,7 +476,7 @@ export const GIFTS_DATA: Gift[] = [
     category: 'Experiências',
     totalAmount: 900,
     currentAmount: 0,
-    imageUrl: '/img/Cotas LUA DE MEL.png',
+    imageUrl: '/img/Cotas LUA DE MEL.jpg',
   },
   {
     id: '54',
@@ -485,7 +485,7 @@ export const GIFTS_DATA: Gift[] = [
     category: 'Experiências',
     totalAmount: 900,
     currentAmount: 0,
-    imageUrl: '/img/Cotas LUA DE MEL.png',
+    imageUrl: '/img/Cotas LUA DE MEL.jpg',
   },
   {
     id: '55',
@@ -539,7 +539,7 @@ export const GIFTS_DATA: Gift[] = [
     category: 'Experiências',
     totalAmount: 1621,
     currentAmount: 0,
-    imageUrl: '/img/Cotas LUA DE MEL.png',
+    imageUrl: '/img/Cotas LUA DE MEL.jpg',
   },
   {
     id: '61',

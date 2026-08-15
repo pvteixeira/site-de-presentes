@@ -10,7 +10,8 @@ export default function AdminLogin() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === 'alineeklecio2026' || password === 'alineeklecio2027') {
+    const cleanPass = password.trim();
+    if (cleanPass === 'Linocaeklecio2026' || cleanPass.toLowerCase() === 'linocaeklecio2026') {
       localStorage.setItem('admin_logged_in', 'true');
       router.push('/admin');
     } else {

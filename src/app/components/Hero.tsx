@@ -24,7 +24,7 @@ export default function Hero() {
         </motion.div>
 
         <motion.h1
-          className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl mb-4 font-signature font-normal tracking-normal py-2 leading-tight bg-gradient-to-r from-slate-700 via-gray-400 to-slate-700 dark:from-slate-100 dark:via-gray-300 dark:to-slate-300 bg-clip-text text-transparent drop-shadow-sm"
+          className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl mb-4 font-signature font-normal tracking-normal py-2 leading-tight bg-gradient-to-r from-slate-800 via-slate-600 to-slate-800 dark:from-slate-100 dark:via-gray-300 dark:to-slate-300 bg-clip-text text-transparent drop-shadow-sm"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, delay: 0.4 }}

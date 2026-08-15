@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Clock } from 'lucide-react';
 
 export default function Countdown() {
+  const [mounted, setMounted] = useState(false);
   const [timeLeft, setTimeLeft] = useState({
     dias: 0,
     horas: 0,
@@ -13,10 +14,11 @@ export default function Countdown() {
   });
 
   useEffect(() => {
+    setMounted(true);
     // Target date: Jan 9, 2027 at 19:30:00 UTC-3 (Brasilia Time)
     const weddingDate = new Date('2027-01-09T19:30:00-03:00');
 
-    const interval = setInterval(() => {
+    const updateTimeLeft = () => {
       const now = new Date();
       const difference = weddingDate.getTime() - now.getTime();
 
@@ -28,9 +30,12 @@ export default function Countdown() {
           segundos: Math.floor((difference / 1000) % 60),
         });
       } else {
-        clearInterval(interval);
+        setTimeLeft({ dias: 0, horas: 0, minutos: 0, segundos: 0 });
       }
-    }, 1000);
+    };
+
+    updateTimeLeft(); // Run immediately on mount
+    const interval = setInterval(updateTimeLeft, 1000);
 
     return () => clearInterval(interval);
   }, []);
@@ -65,7 +70,7 @@ export default function Countdown() {
                 className="flex flex-col items-center justify-center w-24 h-24 md:w-32 md:h-32 rounded-full border border-slate-300 dark:border-zinc-700 bg-white/90 dark:bg-zinc-800/90 shadow-md backdrop-blur-sm"
               >
                 <span className="text-3xl md:text-5xl font-serif text-[var(--foreground)] font-medium mb-1">
-                  {unit.value.toString().padStart(2, '0')}
+                  {mounted ? unit.value.toString().padStart(2, '0') : '--'}
                 </span>
                 <span className="text-[10px] md:text-xs font-sans uppercase tracking-widest text-gray-500 font-medium">
                   {unit.label}
@@ -78,3 +83,4 @@ export default function Countdown() {
     </section>
   );
 }
+
