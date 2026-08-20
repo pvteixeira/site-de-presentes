@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Copy, CheckCircle2, UploadCloud } from 'lucide-react';
+import { X, Copy, CheckCircle2, UploadCloud, User, Mail, DollarSign, Sparkles } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
-import { generatePixPayload } from '../utils/pix';
+import { generatePixPayload, OFFICIAL_PIX_KEY, BENEFICIARY_NAME } from '../utils/pix';
 import type { Gift } from '../types';
 
 interface ContributionModalProps {
@@ -16,7 +16,8 @@ interface ContributionModalProps {
 export default function ContributionModal({ gift, onClose, onSuccess }: ContributionModalProps) {
   const [step, setStep] = useState<'amount' | 'pix' | 'form' | 'success'>('amount');
   const [pixString, setPixString] = useState('');
-  const [copied, setCopied] = useState(false);
+  const [copiedPayload, setCopiedPayload] = useState(false);
+  const [copiedKey, setCopiedKey] = useState(false);
   
   // Form state
   const [guestName, setGuestName] = useState('');
@@ -25,19 +26,34 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
   if (!gift) return null;
 
   const handleGeneratePix = () => {
-    const finalAmount = gift.totalAmount;
-    // USING MOCK PIX KEY FOR DEMO
-    const pixKey = 'alineeklecio@casamento.com';
-    const payload = generatePixPayload(pixKey, 'Aline e Klécio', 'SAO PAULO', Number(finalAmount), `GIFT${gift.id}`);
-    
+    const payload = generatePixPayload(
+      OFFICIAL_PIX_KEY,
+      'ALINE_TEIXEIRA_BRUNO_SILV',
+      'OLINDA',
+      gift.totalAmount,
+      'CasamentoAlineeKlcio'
+    );
     setPixString(payload);
     setStep('pix');
   };
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(pixString);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handleCopyPayload = () => {
+    const payloadToCopy = pixString || generatePixPayload(
+      OFFICIAL_PIX_KEY,
+      'ALINE_TEIXEIRA_BRUNO_SILV',
+      'OLINDA',
+      gift.totalAmount,
+      'CasamentoAlineeKlcio'
+    );
+    navigator.clipboard.writeText(payloadToCopy);
+    setCopiedPayload(true);
+    setTimeout(() => setCopiedPayload(false), 2500);
+  };
+
+  const handleCopyKey = () => {
+    navigator.clipboard.writeText(OFFICIAL_PIX_KEY);
+    setCopiedKey(true);
+    setTimeout(() => setCopiedKey(false), 2500);
   };
 
   const handleGoToForm = () => {
@@ -104,6 +120,7 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
             <img 
               src={gift.imageUrl} 
               alt={gift.name} 
+              decoding="async"
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[var(--background)] to-transparent"></div>
@@ -143,27 +160,73 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
               <motion.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="flex flex-col items-center space-y-6"
+                className="flex flex-col items-center space-y-3.5"
               >
-                <div className="p-4 bg-white rounded-2xl shadow-inner border border-gray-200">
-                  <QRCodeSVG value={pixString} size={180} />
+                <div className="p-3.5 bg-white rounded-2xl shadow-sm border border-gray-200 flex items-center justify-center">
+                  <QRCodeSVG 
+                    value={pixString || generatePixPayload(OFFICIAL_PIX_KEY, 'ALINE_TEIXEIRA_BRUNO_SILV', 'OLINDA', gift.totalAmount, 'CasamentoAlineeKlcio')} 
+                    size={180} 
+                    level="M"
+                    includeMargin={false}
+                  />
                 </div>
-                
-                <div className="w-full">
+
+                <p className="text-[11px] text-gray-500 font-sans text-center">
+                  Aponte a câmera do aplicativo do seu banco para o QR Code acima
+                </p>
+
+                {/* Main Copia e Cola Button */}
+                <div className="w-full space-y-2">
                   <button
-                    onClick={handleCopy}
-                    className="w-full flex items-center justify-center gap-2 py-3 px-4 border border-gray-300 dark:border-zinc-700 rounded-xl text-[var(--foreground)] font-medium text-xs uppercase tracking-wider hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
+                    onClick={handleCopyPayload}
+                    className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-black dark:bg-white text-white dark:text-black rounded-xl font-semibold text-xs uppercase tracking-wider hover:opacity-90 transition-all shadow-sm cursor-pointer"
                   >
-                    {copied ? <CheckCircle2 size={16} className="text-green-500" /> : <Copy size={16} className="text-gray-400" />}
-                    {copied ? 'Código copiado!' : 'Copiar chave PIX (Copia e Cola)'}
+                    {copiedPayload ? <CheckCircle2 size={16} className="text-green-400 dark:text-green-600" /> : <Copy size={16} />}
+                    {copiedPayload ? 'Código PIX Copiado!' : 'Copiar Código PIX (Copia e Cola)'}
                   </button>
+
+                  {/* Detalhes para conferência */}
+                  <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-zinc-800/60 border border-gray-200 dark:border-zinc-700/60 space-y-2 text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-500 flex items-center gap-1.5">
+                        <Mail size={13} /> Chave (E-mail):
+                      </span>
+                      <div className="flex items-center gap-1.5 font-medium text-[var(--foreground)]">
+                        <span className="font-mono text-[11px]">{OFFICIAL_PIX_KEY}</span>
+                        <button
+                          type="button"
+                          onClick={handleCopyKey}
+                          title="Copiar e-mail"
+                          className="p-1 hover:bg-gray-200 dark:hover:bg-zinc-700 rounded transition-colors text-gray-500"
+                        >
+                          {copiedKey ? <CheckCircle2 size={13} className="text-green-500" /> : <Copy size={13} />}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-500 flex items-center gap-1.5">
+                        <User size={13} /> Beneficiária:
+                      </span>
+                      <span className="font-medium text-[var(--foreground)]">{BENEFICIARY_NAME}</span>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-500 flex items-center gap-1.5">
+                        <DollarSign size={13} /> Valor:
+                      </span>
+                      <span className="font-semibold text-green-600 dark:text-green-400">
+                        {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(gift.totalAmount)}
+                      </span>
+                    </div>
+                  </div>
                 </div>
 
                 <button
                   onClick={handleGoToForm}
-                  className="w-full py-3.5 bg-black dark:bg-white text-white dark:text-black rounded-xl font-semibold uppercase tracking-wider text-xs hover:opacity-90 transition-all shadow-sm border border-gray-800 dark:border-gray-200 cursor-pointer"
+                  className="w-full py-3 border border-gray-300 dark:border-zinc-700 text-[var(--foreground)] rounded-xl font-semibold uppercase tracking-wider text-xs hover:bg-gray-100 dark:hover:bg-zinc-800 transition-all cursor-pointer"
                 >
-                  Já realizei o pagamento
+                  Já realizei o pagamento / Enviar Comprovante
                 </button>
               </motion.div>
             )}

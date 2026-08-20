@@ -80,6 +80,7 @@ const INITIAL_GUESTBOOK: GuestbookMessage[] = [
 
 export default function AdminPage() {
   const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<'gifts' | 'pix' | 'padrinhos' | 'guestbook' | 'mural'>('gifts');
   const [gifts, setGifts] = useState<Gift[]>(GIFTS_DATA);
   const [editingGift, setEditingGift] = useState<Gift | null>(null);
@@ -94,7 +95,12 @@ export default function AdminPage() {
 
   // Check login & Load localStorage state
   useEffect(() => {
-    localStorage.setItem('admin_logged_in', 'true');
+    const isLogged = localStorage.getItem('admin_logged_in') === 'true';
+    if (!isLogged) {
+      router.replace('/admin/login');
+      return;
+    }
+    setIsAuthenticated(true);
 
     // Load Guestbook Messages
     const storedGuestbook = localStorage.getItem('guestbook_messages');
@@ -127,7 +133,7 @@ export default function AdminPage() {
         console.error(e);
       }
     }
-  }, []);
+  }, [router]);
 
   const totalArrecadado = gifts.reduce((acc, gift) => acc + gift.currentAmount, 0);
   const totalMeta = gifts.reduce((acc, gift) => acc + gift.totalAmount, 0);
@@ -207,6 +213,15 @@ export default function AdminPage() {
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 3000);
   };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-[var(--background)] flex flex-col items-center justify-center p-4">
+        <div className="w-10 h-10 border-2 border-slate-300 border-t-slate-800 dark:border-zinc-700 dark:border-t-zinc-200 rounded-full animate-spin mb-4"></div>
+        <p className="text-xs text-gray-500 font-sans tracking-wide">Verificando autorização...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[var(--background)] p-4 md:p-8 pt-12">

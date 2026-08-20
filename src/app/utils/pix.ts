@@ -1,20 +1,26 @@
-// PIX Payload Generator for Static PIX
+// PIX Payload Generator & Constants for Static PIX
 // Format: EMV QR Code (BR.GOV.BCB.PIX)
 
+export const OFFICIAL_PIX_KEY = 'alineteixeirabs@gmail.com';
+export const OFFICIAL_PIX_PAYLOAD = '00020126960014br.gov.bcb.pix0125alineteixeirabs@gmail.com0245Lista_de_Presentes_-_Casamento_Aline_e_Klecio5204000053039865802BR5925ALINE_TEIXEIRA_BRUNO_SILV6006OLINDA62240520CasamentoAlineeKlcio6304040C';
+export const BENEFICIARY_NAME = 'Aline Teixeira Bruno Silva';
+export const BENEFICIARY_CITY = 'Olinda';
+
 export function generatePixPayload(
-  pixKey: string,
-  merchantName: string,
-  merchantCity: string,
+  pixKey: string = OFFICIAL_PIX_KEY,
+  merchantName: string = 'ALINE_TEIXEIRA_BRUNO_SILV',
+  merchantCity: string = 'OLINDA',
   amount?: number,
-  txid?: string
+  txid: string = 'CasamentoAlineeKlcio'
 ) {
   const formatLength = (val: string) => val.length.toString().padStart(2, '0');
 
   const payloadFormatIndicator = '000201';
   
-  const gui = '0014BR.GOV.BCB.PIX';
+  const gui = '0014br.gov.bcb.pix';
   const key = `01${formatLength(pixKey)}${pixKey}`;
-  const merchantAccountInformation = `26${formatLength(gui + key)}${gui}${key}`;
+  const desc = '0245Lista_de_Presentes_-_Casamento_Aline_e_Klecio';
+  const merchantAccountInformation = `26${formatLength(gui + key + desc)}${gui}${key}${desc}`;
   
   const merchantCategoryCode = '52040000';
   const transactionCurrency = '5303986';
@@ -29,7 +35,7 @@ export function generatePixPayload(
   const merchantNameFmt = `59${formatLength(merchantName)}${merchantName}`;
   const merchantCityFmt = `60${formatLength(merchantCity)}${merchantCity}`;
   
-  const txidStr = txid ? txid : '***';
+  const txidStr = txid ? txid : 'CasamentoAlineeKlcio';
   const txidFmt = `05${formatLength(txidStr)}${txidStr}`;
   const additionalDataFieldTemplate = `62${formatLength(txidFmt)}${txidFmt}`;
   

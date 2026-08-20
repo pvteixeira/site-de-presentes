@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Image as ImageIcon, X, ChevronLeft, ChevronRight, Heart, Sparkles, Users, ChevronDown, ChevronUp } from 'lucide-react';
 
@@ -188,14 +188,31 @@ export default function GallerySection() {
   const hasMore = visibleCount < filteredImages.length;
 
   const handlePrev = () => {
-    if (selectedIndex === null) return;
-    setSelectedIndex((selectedIndex - 1 + displayedImages.length) % displayedImages.length);
+    if (selectedIndex === null || filteredImages.length === 0) return;
+    setSelectedIndex((selectedIndex - 1 + filteredImages.length) % filteredImages.length);
   };
 
   const handleNext = () => {
-    if (selectedIndex === null) return;
-    setSelectedIndex((selectedIndex + 1) % displayedImages.length);
+    if (selectedIndex === null || filteredImages.length === 0) return;
+    setSelectedIndex((selectedIndex + 1) % filteredImages.length);
   };
+
+  // Keyboard navigation for Lightbox modal
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (selectedIndex === null) return;
+      if (e.key === 'ArrowLeft') {
+        setSelectedIndex(prev => (prev === null ? null : (prev - 1 + filteredImages.length) % filteredImages.length));
+      } else if (e.key === 'ArrowRight') {
+        setSelectedIndex(prev => (prev === null ? null : (prev + 1) % filteredImages.length));
+      } else if (e.key === 'Escape') {
+        setSelectedIndex(null);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedIndex, filteredImages.length]);
 
   return (
     <section id="galeria" className="py-24 bg-gray-50/50 dark:bg-zinc-900/40 border-t border-gray-200 dark:border-zinc-800">
@@ -269,7 +286,10 @@ export default function GallerySection() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                onClick={() => setSelectedIndex(index)}
+                onClick={() => {
+                  const realIndex = filteredImages.findIndex(f => f.id === img.id);
+                  setSelectedIndex(realIndex !== -1 ? realIndex : index);
+                }}
                 className="group relative h-[420px] rounded-2xl overflow-hidden cursor-pointer border border-gray-200 dark:border-zinc-800 shadow-md bg-zinc-900"
               >
                 <img

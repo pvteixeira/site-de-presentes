@@ -32,6 +32,8 @@ export default function GiftCard({ gift, onContribute }: GiftCardProps) {
         <img 
           src={gift.imageUrl} 
           alt={gift.name} 
+          loading="lazy"
+          decoding="async"
           onError={(e) => {
             const target = e.target as HTMLImageElement;
             if (!target.src.endsWith('/img/aline_e_klecio.jpg')) {
@@ -43,11 +45,8 @@ export default function GiftCard({ gift, onContribute }: GiftCardProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-40"></div>
       </div>
 
-      <div className="p-6 flex flex-col flex-grow bg-white dark:bg-zinc-900">
-        <h3 className="text-xl font-serif text-[var(--foreground)] mb-2 line-clamp-1 font-medium">{gift.name}</h3>
-        <p className="text-sm text-[var(--foreground)]/75 font-sans mb-6 line-clamp-2 flex-grow leading-relaxed">
-          {gift.description}
-        </p>
+      <div className="p-6 flex flex-col flex-grow bg-white dark:bg-zinc-900 justify-between">
+        <h3 className="text-xl font-serif text-[var(--foreground)] mb-6 line-clamp-1 font-medium">{gift.name}</h3>
 
         <div className="mt-auto">
           <div className="flex items-center justify-between mb-2">

@@ -100,19 +100,16 @@ export default function GuestbookSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center max-w-3xl mx-auto mb-16"
+          className="text-center max-w-3xl mx-auto mb-12"
         >
           <h2 className="text-4xl md:text-5xl font-serif text-[var(--foreground)] mb-4 font-medium">
             Mensagens aos Noivos
           </h2>
-          <div className="flex items-center justify-center gap-3 mb-6">
+          <div className="flex items-center justify-center gap-3">
             <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
             <MessageSquare className="w-5 h-5 text-gray-400 dark:text-zinc-500" />
             <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
           </div>
-          <p className="text-sm md:text-base text-[var(--foreground)]/80 font-sans leading-relaxed text-justified-elegant text-center max-w-2xl mx-auto">
-            Deixe seu recado, desejo de felicidades ou uma lembrança especial para guardar para sempre no coração de Aline e Klécio.
-          </p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
