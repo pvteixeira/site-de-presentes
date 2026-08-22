@@ -432,7 +432,6 @@ export default function PadrinhosPortal() {
                     </span>
                   )}
                 </div>
-                <span className="text-[11px] font-sans text-gray-400 hidden sm:block">Aline e Klécio 2027</span>
               </div>
             </div>
           </div>
