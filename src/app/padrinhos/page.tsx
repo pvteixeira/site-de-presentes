@@ -26,8 +26,10 @@ import {
   Check,
   X,
   ZoomIn,
-  MessageCircle,
-  Trash2
+  Trash2,
+  Heart,
+  ChevronRight,
+  Info
 } from 'lucide-react';
 import {
   PADRINHOS_ACCOUNTS,
@@ -113,14 +115,14 @@ const MADRINHAS_GALLERY_ITEMS: GalleryItem[] = [
 ];
 
 const DRESS_COLOR_OPTIONS = [
-  { id: 'rose', name: 'Rosê Gold', hex: '#D4A373', tieName: 'Gravata Rosê Gold', description: 'Harmonização calorosa, romântica e elegante' },
-  { id: 'terracota', name: 'Terracota', hex: '#C86446', tieName: 'Gravata Terracota', description: 'Tom terroso sofisticado para fim de tarde/noite' },
-  { id: 'verde-oliva', name: 'Verde Oliva', hex: '#4A6B5D', tieName: 'Gravata Verde Oliva', description: 'Naturais, marcantes e muito chiques' },
-  { id: 'serenity', name: 'Azul Serenity', hex: '#7A9A9E', tieName: 'Gravata Azul Serenity', description: 'Suavidade clássica e atemporal' },
-  { id: 'marsala', name: 'Marsala / Vinho', hex: '#6B2D46', tieName: 'Gravata Marsala', description: 'Elegância intensa perfeita para a noite' },
-  { id: 'lavanda', name: 'Lavanda', hex: '#9E88B2', tieName: 'Gravata Lavanda', description: 'Delicadeza e frescor romântico' },
-  { id: 'prata', name: 'Prata Metalizado', hex: '#9CA3AF', tieName: 'Gravata Prata Metalizada', description: 'Harmonização metálica e moderna' },
-  { id: 'nude', name: 'Nude / Champagne', hex: '#CDB4DB', tieName: 'Gravata Nude / Champagne', description: 'Tom neutro e ultra elegante' },
+  { id: 'rose', name: 'Rosê Gold', hex: '#D4A373', description: 'Harmonização calorosa, romântica e elegante' },
+  { id: 'terracota', name: 'Terracota', hex: '#C86446', description: 'Tom terroso sofisticado para a noite' },
+  { id: 'verde-oliva', name: 'Verde Oliva', hex: '#4A6B5D', description: 'Natural, marcante e refinado' },
+  { id: 'serenity', name: 'Azul Serenity', hex: '#7A9A9E', description: 'Suavidade clássica e atemporal' },
+  { id: 'marsala', name: 'Marsala / Vinho', hex: '#6B2D46', description: 'Elegância intensa para cerimônias noturnas' },
+  { id: 'lavanda', name: 'Lavanda', hex: '#9E88B2', description: 'Delicadeza e frescor romântico' },
+  { id: 'azul-marinho', name: 'Azul Marinho', hex: '#1E293B', description: 'Profundo, nobre e altamente formal' },
+  { id: 'esmeralda', name: 'Verde Esmeralda', hex: '#1B4D3E', description: 'Suntuosidade clássica de gala' },
 ];
 
 export default function PadrinhosPortal() {
@@ -128,14 +130,14 @@ export default function PadrinhosPortal() {
   const [password, setPassword] = useState('');
   const [loggedUser, setLoggedUser] = useState<PadrinhoAccount | null>(null);
   const [loginError, setLoginError] = useState('');
-  const [activeTab, setActiveTab] = useState<'padrinhos' | 'daminhas' | 'mensagens' | 'cronograma'>('padrinhos');
+  const [activeTab, setActiveTab] = useState<'padrinhos' | 'mensagens' | 'cronograma'>('padrinhos');
 
-  // Interactive Tie Color Harmonizer state
+  // Interactive Harmonizer state
   const [selectedHarmonizerColor, setSelectedHarmonizerColor] = useState(DRESS_COLOR_OPTIONS[0]);
   const [lightboxItem, setLightboxItem] = useState<GalleryItem | null>(null);
 
   // Messages state
-  const [announcements, setAnnouncements] = useState<PadrinhoMessage[]>(INITIAL_ANNOUNCEMENTS);
+  const [announcements] = useState<PadrinhoMessage[]>(INITIAL_ANNOUNCEMENTS);
   const [newReply, setNewReply] = useState('');
   const [padrinhoReplies, setPadrinhoReplies] = useState<{ id: string; author: string; text: string; date: string }[]>([]);
   const [replySuccess, setReplySuccess] = useState(false);
@@ -152,11 +154,7 @@ export default function PadrinhosPortal() {
         const match = PADRINHOS_ACCOUNTS.find(a => a.id === parsed.id);
         if (match) {
           setLoggedUser(match);
-          if (match.role === 'daminha') {
-            setActiveTab('daminhas');
-          } else {
-            setActiveTab('padrinhos');
-          }
+          setActiveTab('padrinhos');
         }
       } catch (e) {
         console.error(e);
@@ -196,13 +194,9 @@ export default function PadrinhosPortal() {
     if (userMatch) {
       setLoggedUser(userMatch);
       localStorage.setItem('padrinho_session', JSON.stringify(userMatch));
-      if (userMatch.role === 'daminha') {
-        setActiveTab('daminhas');
-      } else {
-        setActiveTab('padrinhos');
-      }
+      setActiveTab('padrinhos');
     } else {
-      setLoginError('Usuário ou senha incorretos. Por favor, solicite a senha aos noivos.');
+      setLoginError('Usuário ou senha incorretos. Por favor, verifique com os noivos.');
     }
   };
 
@@ -234,17 +228,17 @@ export default function PadrinhosPortal() {
   if (!loggedUser) {
     return (
       <div className="min-h-screen bg-[var(--background)] flex flex-col justify-between p-4 md:p-8 relative overflow-hidden">
-        {/* Background Subtle Elements */}
-        <div className="absolute -top-32 -left-32 w-96 h-96 bg-gray-100 dark:bg-zinc-900 rounded-full blur-3xl pointer-events-none opacity-50"></div>
-        <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-gray-100 dark:bg-zinc-900 rounded-full blur-3xl pointer-events-none opacity-50"></div>
+        {/* Soft Ambient Background Elements */}
+        <div className="absolute -top-32 -left-32 w-96 h-96 bg-slate-100 dark:bg-zinc-900 rounded-full blur-3xl pointer-events-none opacity-60"></div>
+        <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-slate-100 dark:bg-zinc-900 rounded-full blur-3xl pointer-events-none opacity-60"></div>
 
-        <header className="max-w-6xl w-full mx-auto flex items-center justify-between z-10 py-2">
+        <header className="max-w-6xl w-full mx-auto flex items-center justify-between z-10 py-3">
           <Link href="/" className="flex items-center gap-2 text-xs md:text-sm text-[var(--foreground)]/70 hover:text-[var(--foreground)] transition-colors">
             <ArrowLeft size={16} /> Voltar ao site principal
           </Link>
-          <div className="flex items-center gap-2">
-            <img src="/img/LOGO_MARCA.png" alt="Logo Marca Aline e Klécio" className="w-8 h-8 rounded-full border border-gray-300 dark:border-zinc-700 object-contain" />
-            <span className="font-signature text-2xl text-[var(--foreground)] font-normal">Aline e Klécio</span>
+          <div className="flex items-center gap-2.5">
+            <img src="/img/LOGO_MARCA.png" alt="Logo Marca Aline e Klécio" className="w-8 h-8 rounded-full border border-gray-200 dark:border-zinc-700 object-contain shadow-xs" />
+            <span className="font-signature text-2xl md:text-3xl text-[var(--foreground)]">Aline e Klécio</span>
           </div>
         </header>
 
@@ -252,33 +246,38 @@ export default function PadrinhosPortal() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl w-full max-w-md rounded-2xl p-8 shadow-xl border border-gray-200 dark:border-zinc-800"
+            className="bg-white dark:bg-zinc-900/95 backdrop-blur-xl w-full max-w-md rounded-3xl p-8 md:p-10 shadow-xl border border-gray-200/90 dark:border-zinc-800"
           >
-            <div className="w-20 h-20 p-1.5 rounded-full border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-md flex items-center justify-center mx-auto mb-6 overflow-hidden">
+            <div className="w-20 h-20 p-2 rounded-full border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-850 shadow-inner flex items-center justify-center mx-auto mb-6">
               <img src="/img/LOGO_MARCA.png" alt="Logo Marca Aline e Klécio" className="w-full h-full object-contain rounded-full" />
             </div>
 
-            <h1 className="text-2xl md:text-3xl font-serif text-center text-[var(--foreground)] mb-2 font-medium">
-              Padrinhos e Madrinhas
-            </h1>
-            <p className="text-xs md:text-sm text-center text-gray-500 mb-8 font-sans leading-relaxed text-justified-elegant text-center">
-              Acesso exclusivo por perfil. Digite o usuário e senha fornecidos pelos noivos para acessar o seu conteúdo restrito.
-            </p>
+            <div className="text-center space-y-1.5 mb-6">
+              <span className="font-signature text-2xl md:text-3xl text-gray-500 dark:text-gray-400 block">
+                Área Exclusiva
+              </span>
+              <h1 className="text-2xl md:text-3xl font-serif text-[var(--foreground)] font-medium">
+                Padrinhos e Madrinhas
+              </h1>
+              <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 font-sans leading-relaxed pt-1 max-w-xs mx-auto">
+                Digite seu usuário e senha fornecidos pelos noivos para acessar suas orientações.
+              </p>
+            </div>
 
             {loginError && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
-                className="bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 p-3 rounded-xl text-xs mb-6 flex items-center gap-2"
+                className="bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 p-3.5 rounded-2xl text-xs mb-5 flex items-center gap-2.5 font-sans"
               >
                 <AlertTriangle size={16} className="shrink-0" />
                 <span>{loginError}</span>
               </motion.div>
             )}
 
-            <form onSubmit={handleLogin} className="space-y-5">
-              <div>
-                <label className="block text-xs uppercase tracking-wider text-gray-500 font-semibold mb-2">
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div className="space-y-1.5">
+                <label className="block text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 font-medium font-sans">
                   Usuário ou E-mail
                 </label>
                 <div className="relative">
@@ -287,16 +286,16 @@ export default function PadrinhosPortal() {
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    placeholder="Ex: debora.carlos ou luna"
+                    placeholder="Ex: debora.carlos ou cleber"
                     required
-                    className="w-full pl-11 pr-4 py-3.5 rounded-xl border border-gray-200 dark:border-zinc-700 bg-transparent text-[var(--foreground)] text-sm focus:outline-none focus:border-black dark:focus:border-white transition-all font-sans"
+                    className="w-full pl-11 pr-4 py-3 rounded-2xl border border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-800/40 text-[var(--foreground)] text-sm focus:outline-none focus:border-black dark:focus:border-white focus:bg-white dark:focus:bg-zinc-850 transition-all font-sans"
                   />
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs uppercase tracking-wider text-gray-500 font-semibold mb-2">
-                  Senha
+              <div className="space-y-1.5">
+                <label className="block text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 font-medium font-sans">
+                  Senha de Acesso
                 </label>
                 <div className="relative">
                   <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -306,64 +305,64 @@ export default function PadrinhosPortal() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Digite sua senha"
                     required
-                    className="w-full pl-11 pr-4 py-3.5 rounded-xl border border-gray-200 dark:border-zinc-700 bg-transparent text-[var(--foreground)] text-sm focus:outline-none focus:border-black dark:focus:border-white transition-all font-sans"
+                    className="w-full pl-11 pr-4 py-3 rounded-2xl border border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-800/40 text-[var(--foreground)] text-sm focus:outline-none focus:border-black dark:focus:border-white focus:bg-white dark:focus:bg-zinc-850 transition-all font-sans"
                   />
                 </div>
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-black dark:bg-white text-white dark:text-black py-3.5 rounded-xl font-semibold uppercase tracking-wider text-xs shadow-sm border border-gray-800 dark:border-gray-200 hover:opacity-90 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full mt-2 bg-black dark:bg-white text-white dark:text-black py-3.5 rounded-2xl font-medium tracking-wide text-xs md:text-sm shadow-md hover:opacity-90 transition-all flex items-center justify-center gap-2 cursor-pointer font-sans"
               >
-                <Lock size={16} /> Entrar no Portal
+                <Lock size={15} /> Entrar no Portal
               </button>
             </form>
 
-            <div className="mt-8 pt-6 border-t border-gray-100 dark:border-zinc-800 text-center">
+            <div className="mt-8 pt-5 border-t border-gray-100 dark:border-zinc-800 text-center">
               <p className="text-xs text-gray-400 font-sans">
-                Dúvidas ou perda de senha? Fale diretamente com Aline e Klécio.
+                Em caso de dúvidas, consulte diretamente Aline ou Klécio.
               </p>
             </div>
           </motion.div>
         </div>
 
-        <footer className="text-center text-xs text-gray-400 py-4 font-sans z-10">
-          Aline e Klécio 2027 • Casamento dos Sonhos
+        <footer className="text-center text-xs text-gray-400 py-3 font-sans z-10">
+          Aline e Klécio • Casamento dos Sonhos • 09 de Janeiro de 2027
         </footer>
       </div>
     );
   }
 
-  const isDaminha = loggedUser.role === 'daminha';
-
   return (
     <div className="min-h-screen bg-[var(--background)] flex flex-col">
-      {/* Header */}
+      {/* Top Fixed Header */}
       <header className="sticky top-0 z-40 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border-b border-gray-200 dark:border-zinc-800">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 py-3.5 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link href="/" className="text-gray-400 hover:text-[var(--foreground)] transition-colors p-1" title="Ir para home">
-              <ArrowLeft size={20} />
+            <Link href="/" className="text-gray-400 hover:text-[var(--foreground)] transition-colors p-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-zinc-800" title="Voltar à Home">
+              <ArrowLeft size={18} />
             </Link>
-            <div className="flex items-center gap-2">
-              <img src="/img/LOGO_MARCA.png" alt="Logo" className="w-8 h-8 rounded-full border border-gray-300 dark:border-zinc-700 object-contain" />
+            <div className="flex items-center gap-2.5">
+              <img src="/img/LOGO_MARCA.png" alt="Logo" className="w-8 h-8 rounded-full border border-gray-200 dark:border-zinc-700 object-contain" />
               <div>
-                <span className="font-serif font-semibold text-base md:text-lg text-[var(--foreground)] block leading-tight">
-                  {isDaminha ? 'Espaço das Daminhas' : 'Padrinhos e Madrinhas'}
+                <span className="font-serif font-medium text-base md:text-lg text-[var(--foreground)] block leading-tight">
+                  Padrinhos e Madrinhas
                 </span>
+                <span className="text-[11px] font-sans text-gray-400 hidden sm:block">Aline e Klécio 2027</span>
               </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <div className="hidden sm:block text-right">
-              <p className="text-sm font-medium text-[var(--foreground)]">{loggedUser.name}</p>
+              <span className="text-xs text-gray-400 block font-sans">Conectado como</span>
+              <p className="text-sm font-serif font-medium text-[var(--foreground)] leading-tight">{loggedUser.name}</p>
             </div>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-500/20 transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-sans font-medium bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-500/20 transition-colors cursor-pointer"
             >
-              <LogOut size={14} /> Sair
+              <LogOut size={13} /> Sair
             </button>
           </div>
         </div>
@@ -376,180 +375,213 @@ export default function PadrinhosPortal() {
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative rounded-2xl p-6 md:p-10 overflow-hidden bg-gradient-to-r from-slate-200 via-gray-100 to-slate-200 dark:from-zinc-900 dark:via-zinc-850 dark:to-zinc-900 text-slate-900 dark:text-slate-100 shadow-md border border-slate-300 dark:border-zinc-700"
+          className="relative rounded-3xl p-6 md:p-10 overflow-hidden bg-gradient-to-br from-slate-50 via-white to-gray-100 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-850 text-[var(--foreground)] shadow-md border border-gray-200 dark:border-zinc-800"
         >
-          <div className="absolute inset-0 bg-slate-300/10 dark:bg-black/20 backdrop-blur-[1px]"></div>
-
-          <div className="relative z-10 max-w-3xl">
-            <h1 className="text-3xl md:text-5xl font-serif font-medium mb-3 text-slate-900 dark:text-white">
+          <div className="max-w-3xl space-y-4">
+            <h1 className="text-3xl md:text-5xl font-serif font-medium text-[var(--foreground)] tracking-tight">
               Olá, {loggedUser.name}!
             </h1>
 
-            <p className="text-slate-700 dark:text-slate-200 text-base md:text-lg font-sans leading-relaxed mb-6 text-justified-elegant">
-              {loggedUser.customMessage || (isDaminha
-                ? 'Sua presença enche nosso coração de alegria e doçura!'
-                : 'Vocês são essenciais em nossas vidas e é um presente ter vocês ao nosso lado neste momento inesquecível!')}
+            <p className="text-gray-700 dark:text-gray-300 text-base md:text-lg font-sans leading-relaxed text-justified-elegant">
+              {loggedUser.customMessage || 'Vocês são essenciais em nossas vidas e é um presente ter vocês ao nosso lado neste momento inesquecível!'}
             </p>
-
-            <div className="flex flex-wrap gap-3 text-xs font-semibold text-slate-900 dark:text-slate-100">
-              <span className="bg-slate-300/80 dark:bg-zinc-800 border border-slate-400 dark:border-zinc-700 px-3.5 py-2 rounded-xl backdrop-blur-sm shadow-sm">📅 09 de Janeiro de 2027</span>
-              <span className="bg-slate-300/80 dark:bg-zinc-800 border border-slate-400 dark:border-zinc-700 px-3.5 py-2 rounded-xl backdrop-blur-sm shadow-sm">📍 Cerimônia Religiosa e Recepção</span>
-            </div>
           </div>
         </motion.div>
 
-        {/* Tab Navigation - Strictly Separated per Role */}
-        <div className="flex border-b border-gray-200 dark:border-zinc-800 gap-2 md:gap-4 overflow-x-auto hide-scrollbar">
-          {!isDaminha && (
-            <button
-              onClick={() => setActiveTab('padrinhos')}
-              className={`pb-4 px-4 font-serif text-base md:text-lg flex items-center gap-2 border-b-2 transition-all whitespace-nowrap cursor-pointer ${activeTab === 'padrinhos'
-                ? 'border-black dark:border-white text-[var(--foreground)] font-semibold'
-                : 'border-transparent text-gray-500 hover:text-[var(--foreground)]'
-                }`}
-            >
-              <Users size={18} className="text-gray-400" /> Padrinhos e Madrinhas
-            </button>
-          )}
-
-          {isDaminha && (
-            <button
-              onClick={() => setActiveTab('daminhas')}
-              className={`pb-4 px-4 font-serif text-base md:text-lg flex items-center gap-2 border-b-2 transition-all whitespace-nowrap cursor-pointer ${activeTab === 'daminhas'
-                ? 'border-black dark:border-white text-[var(--foreground)] font-semibold'
-                : 'border-transparent text-gray-500 hover:text-[var(--foreground)]'
-                }`}
-            >
-              <Flower2 size={18} className="text-gray-400" /> Daminhas
-            </button>
-          )}
+        {/* Tab Navigation */}
+        <div className="flex border-b border-gray-200 dark:border-zinc-800 gap-2 md:gap-3 overflow-x-auto hide-scrollbar pb-px">
+          <button
+            onClick={() => setActiveTab('padrinhos')}
+            className={`pb-3.5 px-4 font-serif text-base md:text-lg flex items-center gap-2 border-b-2 transition-all whitespace-nowrap cursor-pointer ${activeTab === 'padrinhos'
+              ? 'border-black dark:border-white text-[var(--foreground)] font-semibold'
+              : 'border-transparent text-gray-400 hover:text-[var(--foreground)]'
+              }`}
+          >
+            <Users size={18} /> Padrinhos e Madrinhas
+          </button>
 
           <button
             onClick={() => setActiveTab('mensagens')}
-            className={`pb-4 px-4 font-serif text-base md:text-lg flex items-center gap-2 border-b-2 transition-all whitespace-nowrap cursor-pointer ${activeTab === 'mensagens'
+            className={`pb-3.5 px-4 font-serif text-base md:text-lg flex items-center gap-2 border-b-2 transition-all whitespace-nowrap cursor-pointer ${activeTab === 'mensagens'
               ? 'border-black dark:border-white text-[var(--foreground)] font-semibold'
-              : 'border-transparent text-gray-500 hover:text-[var(--foreground)]'
+              : 'border-transparent text-gray-400 hover:text-[var(--foreground)]'
               }`}
           >
-            <MessageSquare size={18} className="text-gray-400" /> Mural e Avisos
+            <MessageSquare size={18} /> Mural & Avisos
           </button>
 
           <button
             onClick={() => setActiveTab('cronograma')}
-            className={`pb-4 px-4 font-serif text-base md:text-lg flex items-center gap-2 border-b-2 transition-all whitespace-nowrap cursor-pointer ${activeTab === 'cronograma'
+            className={`pb-3.5 px-4 font-serif text-base md:text-lg flex items-center gap-2 border-b-2 transition-all whitespace-nowrap cursor-pointer ${activeTab === 'cronograma'
               ? 'border-black dark:border-white text-[var(--foreground)] font-semibold'
-              : 'border-transparent text-gray-500 hover:text-[var(--foreground)]'
+              : 'border-transparent text-gray-400 hover:text-[var(--foreground)]'
               }`}
           >
-            <Calendar size={18} className="text-gray-400" /> Cronograma
+            <Calendar size={18} /> Cronograma do Dia
           </button>
         </div>
 
         {/* Tab Contents */}
         <AnimatePresence mode="wait">
 
-          {/* TAB 1: PADRINHOS E MADRINHAS (Visible strictly to Padrinhos/Madrinhas/Casais) */}
-          {!isDaminha && activeTab === 'padrinhos' && (
+          {/* TAB 1: PADRINHOS E MADRINHAS */}
+          {activeTab === 'padrinhos' && (
             <motion.div
               key="padrinhos"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="space-y-12"
+              className="space-y-10"
             >
-              {/* Introduction Banner - Editorial Style */}
-              <div className="bg-white dark:bg-zinc-900 rounded-3xl p-8 md:p-10 shadow-md border border-gray-200 dark:border-zinc-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-                <div className="space-y-2 max-w-3xl">
-                  <h2 className="text-3xl md:text-4xl font-serif text-[var(--foreground)] font-medium">
-                    Guia de Trajes e Orientações
+              {/* Introduction Banner */}
+              <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 md:p-8 shadow-sm border border-gray-200 dark:border-zinc-800">
+                <div className="max-w-3xl space-y-2">
+                  <span className="text-xs uppercase tracking-widest text-gray-400 font-sans font-semibold">
+                    Dress Code Oficial
+                  </span>
+                  <h2 className="text-2xl md:text-4xl font-serif text-[var(--foreground)] font-medium">
+                    Guia de Trajes & Orientações do Cortejo
                   </h2>
                   <p className="text-gray-600 dark:text-gray-300 font-sans text-sm md:text-base leading-relaxed text-justified-elegant">
-                    Preparamos este espaço exclusivo com todas as orientações sobre trajes, diretrizes e sugestões de harmonização para que nosso altar esteja radiante no grande dia.
+                    Preparamos todas as orientações sobre vestimentas, cores e detalhes para que todos estejamos em perfeita harmonia no altar.
                   </p>
                 </div>
               </div>
 
+              {/* Seção Exclusiva da Daminha (Exibida somente se a conta possuir daminha vinculada) */}
+              {loggedUser.daminha && (
+                <div className="bg-gradient-to-br from-rose-50/70 via-white to-pink-50/40 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-850 rounded-3xl p-6 md:p-9 shadow-sm border border-rose-200/70 dark:border-zinc-800 space-y-6">
+                  <div className="flex items-center gap-3.5 pb-4 border-b border-rose-100 dark:border-zinc-800">
+                    <div className="w-11 h-11 rounded-2xl bg-rose-100 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center justify-center font-serif font-bold text-2xl border border-rose-200 dark:border-rose-900/40 shrink-0">
+                      🌸
+                    </div>
+                    <div>
+                      <span className="text-xs uppercase tracking-widest text-rose-600 dark:text-rose-400 font-sans font-medium">Orientações Especiais</span>
+                      <h3 className="text-2xl md:text-3xl font-serif text-[var(--foreground)] font-medium leading-tight">
+                        Traje da Daminha ({loggedUser.daminha})
+                      </h3>
+                    </div>
+                  </div>
+
+                  <p className="text-gray-600 dark:text-gray-300 font-sans text-sm leading-relaxed text-justified-elegant">
+                    Como pais da nossa querida daminha <strong>{loggedUser.daminha}</strong>, preparamos as seguintes orientações para o grande dia:
+                  </p>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-sans text-sm">
+                    <div className="p-4.5 rounded-2xl bg-white dark:bg-zinc-800/40 border border-rose-100 dark:border-zinc-800 shadow-2xs space-y-1.5">
+                      <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400 font-serif font-semibold text-base">
+                        <Sparkles size={16} />
+                        <span>Vestidinho</span>
+                      </div>
+                      <p className="text-gray-600 dark:text-gray-300 text-xs leading-relaxed text-justified-elegant">
+                        Vestido infantil clássico de daminha em tons claros / off-white com detalhes delicados e corte confortável.
+                      </p>
+                    </div>
+
+                    <div className="p-4.5 rounded-2xl bg-white dark:bg-zinc-800/40 border border-rose-100 dark:border-zinc-800 shadow-2xs space-y-1.5">
+                      <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400 font-serif font-semibold text-base">
+                        <Smile size={16} />
+                        <span>Calçado & Acessórios</span>
+                      </div>
+                      <p className="text-gray-600 dark:text-gray-300 text-xs leading-relaxed text-justified-elegant">
+                        Sapatinho confortável para caminhada graciosa e leve até o altar, com acessório de cabelo delicado (tiara ou laço).
+                      </p>
+                    </div>
+
+                    <div className="p-4.5 rounded-2xl bg-white dark:bg-zinc-800/40 border border-rose-100 dark:border-zinc-800 shadow-2xs space-y-1.5">
+                      <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400 font-serif font-semibold text-base">
+                        <Clock size={16} />
+                        <span>Horário & Fotos</span>
+                      </div>
+                      <p className="text-gray-600 dark:text-gray-300 text-xs leading-relaxed text-justified-elegant">
+                        Chegada às <strong>18h</strong> com os pais ao local da cerimônia para se arrumarem sem pressa e registrarem as primeiras fotos.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Madrinhas & Padrinhos Cards Grid */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-stretch">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
 
                 {/* 1. COLUMN MADRINHAS */}
-                <div className="bg-white dark:bg-zinc-900 rounded-3xl p-8 md:p-10 shadow-md border border-gray-200 dark:border-zinc-800 flex flex-col justify-between space-y-8">
-                  <div className="space-y-8">
+                <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 md:p-9 shadow-sm border border-gray-200 dark:border-zinc-800 flex flex-col justify-between space-y-8">
+                  <div className="space-y-7">
 
                     {/* Header Block */}
-                    <div className="flex items-center gap-4 pb-6 border-b border-gray-100 dark:border-zinc-800">
-                      <div className="w-12 h-12 rounded-2xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center font-bold font-serif text-xl shadow-sm shrink-0">
+                    <div className="flex items-center gap-3.5 pb-5 border-b border-gray-100 dark:border-zinc-800">
+                      <div className="w-11 h-11 rounded-2xl bg-rose-50 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 flex items-center justify-center font-serif font-semibold text-xl border border-rose-200 dark:border-rose-900/40 shrink-0">
                         M
                       </div>
                       <div>
+                        <span className="text-xs uppercase tracking-widest text-gray-400 font-sans font-medium">Orientações Femininas</span>
                         <h3 className="text-2xl md:text-3xl font-serif text-[var(--foreground)] font-medium leading-tight">
                           {DRESS_CODE_INFO.madrinhas.title}
                         </h3>
                       </div>
                     </div>
 
-                    {/* Mensagem Inicial - Estilo Carta Elegante */}
-                    <div className="relative bg-gray-50/80 dark:bg-zinc-800/40 p-6 rounded-r-2xl border-l-4 border-gray-400 dark:border-zinc-600 shadow-xs">
-                      <span className="text-xs uppercase font-semibold text-gray-400 tracking-wider block mb-2 font-mono">TRAJES MADRINHAS</span>
-                      <p className="text-gray-700 dark:text-gray-200 text-base md:text-lg leading-relaxed text-justified-elegant font-sans">
-                        {DRESS_CODE_INFO.madrinhas.description} A paleta de cores será livre, para que possam escolher a cor e o estilo que mais combinem com vocês. No entanto, pedimos apenas que optem por vestidos longos, elegantes, que harmonizem com o horário e a proposta clássica da celebração.
+                    {/* Mensagem Inicial */}
+                    <div className="bg-gray-50/80 dark:bg-zinc-800/40 p-5 rounded-2xl border-l-3 border-gray-400 dark:border-zinc-600">
+                      <p className="text-gray-700 dark:text-gray-200 text-sm md:text-base leading-relaxed text-justified-elegant font-sans">
+                        {DRESS_CODE_INFO.madrinhas.description} A paleta de cores será livre, para que possam escolher o tom e estilo que mais combinem com vocês, com vestidos longos e elegantes para a cerimônia.
                       </p>
                     </div>
 
-                    {/* Diretrizes Principais - Lista Estruturada com Ícones */}
-                    <div className="space-y-4">
-                      <h4 className="font-serif text-lg font-medium text-[var(--foreground)] flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-zinc-800">
-                        <Sparkles size={18} className="text-gray-400" /> Diretrizes Principais
+                    {/* Diretrizes Principais */}
+                    <div className="space-y-3.5">
+                      <h4 className="font-serif text-lg font-medium text-[var(--foreground)] flex items-center gap-2 pb-1 border-b border-gray-100 dark:border-zinc-800">
+                        <Sparkles size={16} className="text-gray-400" /> Diretrizes das Madrinhas
                       </h4>
 
-                      <div className="space-y-4 font-sans text-sm">
+                      <div className="space-y-3 font-sans text-sm">
                         {/* Guideline 1 */}
-                        <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800/60">
-                          <div className="w-8 h-8 rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
-                            <Scissors size={16} />
+                        <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800">
+                          <div className="w-8 h-8 rounded-xl bg-gray-100 dark:bg-zinc-800 text-[var(--foreground)] flex items-center justify-center shrink-0 mt-0.5 border border-gray-200 dark:border-zinc-700">
+                            <Scissors size={15} />
                           </div>
                           <div>
                             <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Comprimento Obrigatório</span>
-                            <p className="text-gray-600 dark:text-gray-300 mt-1 leading-relaxed text-justified-elegant">
-                              Vestidos estritamente <strong className="text-[var(--foreground)]">LONGOS</strong> e elegantes, adequados à cerimônia solene das 19h e à proposta refinada do evento.
+                            <p className="text-gray-600 dark:text-gray-300 mt-0.5 leading-relaxed text-justified-elegant">
+                              Vestidos estritamente <strong className="text-[var(--foreground)]">LONGOS</strong> e sofisticados, adequados à solenidade da celebração às 19h.
                             </p>
                           </div>
                         </div>
 
                         {/* Guideline 2 */}
-                        <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800/60">
-                          <div className="w-8 h-8 rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
-                            <Palette size={16} />
+                        <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800">
+                          <div className="w-8 h-8 rounded-xl bg-gray-100 dark:bg-zinc-800 text-[var(--foreground)] flex items-center justify-center shrink-0 mt-0.5 border border-gray-200 dark:border-zinc-700">
+                            <Palette size={15} />
                           </div>
                           <div>
-                            <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Liberdade de Cores</span>
-                            <p className="text-gray-600 dark:text-gray-300 mt-1 leading-relaxed text-justified-elegant">
-                              Paleta de cores inteiramente <strong className="text-[var(--foreground)]">LIVRE</strong> — sinta-se à vontade para escolher a tonalidade e caimento que mais valorizem você.
+                            <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Paleta Livre</span>
+                            <p className="text-gray-600 dark:text-gray-300 mt-0.5 leading-relaxed text-justified-elegant">
+                              Cores inteiramente <strong className="text-[var(--foreground)]">LIVRES</strong> — escolha a tonalidade que faz você se sentir mais linda e confiante.
                             </p>
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    {/* Restricted Alert - Refined Modern Card */}
-                    <div className="bg-red-500/5 dark:bg-red-950/20 border-l-4 border-red-500 border-t border-r border-b border-red-200/60 dark:border-red-900/30 rounded-2xl p-5 md:p-6 space-y-2">
-                      <div className="flex items-center gap-2 text-red-600 dark:text-red-400 font-semibold font-serif text-sm">
-                        <AlertTriangle size={18} className="shrink-0" />
-                        <span>INFORMAÇÃO IMPORTANTE</span>
+                    {/* Restricted Alert */}
+                    <div className="bg-amber-500/10 dark:bg-amber-950/20 border-l-3 border-amber-500 rounded-2xl p-4.5 space-y-1.5">
+                      <div className="flex items-center gap-2 text-amber-700 dark:text-amber-400 font-semibold font-serif text-sm">
+                        <AlertTriangle size={16} className="shrink-0" />
+                        <span>Atenção Exclusiva</span>
                       </div>
-                      <p className="text-xs md:text-sm text-red-700 dark:text-red-300 font-sans leading-relaxed text-justified-elegant">
-                        Não será permitido o uso de trajes nas cores branco, off-white e champanhe.
+                      <p className="text-xs md:text-sm text-amber-900/90 dark:text-amber-200/90 font-sans leading-relaxed text-justified-elegant">
+                        Não será permitido o uso de vestidos nas cores <strong>branco, off-white e champanhe</strong> (reservadas exclusivamente à noiva).
                       </p>
                     </div>
 
                     {/* Grupo do WhatsApp das Madrinhas */}
-                    <div className="bg-[#25D366]/10 dark:bg-[#25D366]/15 border border-[#25D366]/30 dark:border-[#25D366]/20 rounded-2xl p-6 md:p-8 flex flex-col items-center text-center space-y-4 shadow-xs">
-                      <div className="space-y-1.5 max-w-md mx-auto">
-                        <h4 className="text-lg md:text-xl font-serif font-semibold text-emerald-950 dark:text-emerald-100 whitespace-nowrap">
-                          Enlace Matrimonial - Madrinhas
+                    <div className="bg-[#25D366]/10 dark:bg-[#25D366]/15 border border-[#25D366]/30 dark:border-[#25D366]/20 rounded-2xl p-5 md:p-6 flex flex-col items-center text-center space-y-3">
+                      <div className="space-y-1 max-w-md mx-auto">
+                        <h4 className="text-base md:text-lg font-serif font-medium text-emerald-950 dark:text-emerald-100">
+                          Grupo das Madrinhas
                         </h4>
-                        <p className="text-xs text-emerald-900/80 dark:text-emerald-300/80 font-sans leading-relaxed">
-                          Clique no botão abaixo para entrar no grupo das madrinhas!
+                        <p className="text-xs text-emerald-900/80 dark:text-emerald-300/80 font-sans">
+                          Tire dúvidas e alinhe os preparativos no WhatsApp exclusivo das madrinhas.
                         </p>
                       </div>
 
@@ -557,24 +589,24 @@ export default function PadrinhosPortal() {
                         href="https://chat.whatsapp.com/DzTUJcujovC9foT8p6SWJU?mode=gi_t"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#128C7E] text-white font-bold text-xs shadow-md transition-all hover:scale-[1.02] cursor-pointer"
+                        className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#128C7E] text-white font-medium text-xs shadow-sm transition-all hover:scale-[1.02] cursor-pointer font-sans"
                       >
-                        <WhatsAppIcon className="w-5 h-5 shrink-0" />
-                        <span>Entrar no Grupo</span>
+                        <WhatsAppIcon className="w-4 h-4 shrink-0" />
+                        <span>Entrar no Grupo WhatsApp</span>
                       </a>
                     </div>
 
-                    {/* Inspirações para Madrinhas - Galeria de Referências */}
-                    <div className="space-y-4 pt-4 border-t border-gray-100 dark:border-zinc-800">
+                    {/* Inspirações para Madrinhas */}
+                    <div className="space-y-4 pt-3 border-t border-gray-100 dark:border-zinc-800">
                       <div className="space-y-1">
                         <div className="flex items-center justify-between">
                           <h4 className="text-xl font-serif text-[var(--foreground)] font-medium flex items-center gap-2">
-                            <Sparkles size={18} className="text-gray-400" /> Inspirações para Madrinhas
+                            <Sparkles size={16} className="text-gray-400" /> Inspirações de Modelagens
                           </h4>
-                          <span className="text-[10px] bg-gray-100 dark:bg-zinc-800 text-gray-500 px-2.5 py-1 rounded-full font-mono font-medium">8 Referências</span>
+                          <span className="text-[11px] bg-gray-100 dark:bg-zinc-800 text-gray-500 px-2.5 py-0.5 rounded-full font-sans font-medium">8 referências</span>
                         </div>
                         <p className="text-xs text-gray-500 font-sans leading-relaxed text-justified-elegant">
-                          As imagens abaixo são apenas referências de estilo. Cada madrinha poderá escolher livremente a cor e o modelo do vestido, desde que respeite as orientações do casamento.
+                          As imagens abaixo servem como inspiração de cortes e caimentos elegantes. A cor e o tecido são de livre escolha de cada madrinha.
                         </p>
                       </div>
 
@@ -584,7 +616,7 @@ export default function PadrinhosPortal() {
                           <div
                             key={item.id}
                             onClick={() => setLightboxItem(item)}
-                            className="group relative rounded-2xl overflow-hidden border border-gray-200 dark:border-zinc-700/60 shadow-xs cursor-pointer bg-zinc-900 aspect-[3/4]"
+                            className="group relative rounded-2xl overflow-hidden border border-gray-200 dark:border-zinc-700/60 shadow-2xs cursor-pointer bg-zinc-900 aspect-[3/4]"
                           >
                             <img
                               src={item.url}
@@ -592,7 +624,6 @@ export default function PadrinhosPortal() {
                               className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                             />
 
-                            {/* Gradient Overlay & Details */}
                             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-80 group-hover:opacity-95 transition-opacity flex flex-col justify-between p-3">
                               <div className="flex justify-end">
                                 <span className="w-6 h-6 rounded-full bg-black/60 backdrop-blur-md text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity border border-white/20">
@@ -601,10 +632,10 @@ export default function PadrinhosPortal() {
                               </div>
 
                               <div>
-                                <span className="text-[9px] font-mono uppercase bg-white/20 text-white px-1.5 py-0.5 rounded backdrop-blur-xs font-semibold inline-block mb-1">
+                                <span className="text-[10px] uppercase font-sans tracking-wide bg-white/20 text-white px-2 py-0.5 rounded-full backdrop-blur-xs font-medium inline-block mb-1">
                                   {item.tag}
                                 </span>
-                                <h5 className="text-[11px] font-serif text-white font-medium line-clamp-1">{item.title}</h5>
+                                <h5 className="text-xs font-serif text-white font-medium line-clamp-1">{item.title}</h5>
                               </div>
                             </div>
                           </div>
@@ -616,110 +647,123 @@ export default function PadrinhosPortal() {
                 </div>
 
                 {/* 2. COLUMN PADRINHOS */}
-                <div className="bg-white dark:bg-zinc-900 rounded-3xl p-8 md:p-10 shadow-md border border-gray-200 dark:border-zinc-800 flex flex-col justify-between space-y-8">
-                  <div className="space-y-8">
+                <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 md:p-9 shadow-sm border border-gray-200 dark:border-zinc-800 flex flex-col justify-between space-y-8">
+                  <div className="space-y-7">
 
                     {/* Header Block */}
-                    <div className="flex items-center gap-4 pb-6 border-b border-gray-100 dark:border-zinc-800">
-                      <div className="w-12 h-12 rounded-2xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center font-bold font-serif text-xl shadow-sm shrink-0">
+                    <div className="flex items-center gap-3.5 pb-5 border-b border-gray-100 dark:border-zinc-800">
+                      <div className="w-11 h-11 rounded-2xl bg-slate-100 dark:bg-zinc-800 text-slate-900 dark:text-white flex items-center justify-center font-serif font-semibold text-xl border border-slate-300 dark:border-zinc-700 shrink-0">
                         P
                       </div>
                       <div>
+                        <span className="text-xs uppercase tracking-widest text-gray-400 font-sans font-medium">Orientações Masculinas</span>
                         <h3 className="text-2xl md:text-3xl font-serif text-[var(--foreground)] font-medium leading-tight">
                           {DRESS_CODE_INFO.padrinhos.title}
                         </h3>
                       </div>
                     </div>
 
-                    {/* Mensagem Inicial - Estilo Carta Elegante */}
-                    <div className="relative bg-gray-50/80 dark:bg-zinc-800/40 p-6 rounded-r-2xl border-l-4 border-gray-400 dark:border-zinc-600 shadow-xs">
-                      <span className="text-xs uppercase font-semibold text-gray-400 tracking-wider block mb-2 font-mono">ORIENTAÇÃO DOS NOIVOS</span>
-                      <p className="text-gray-700 dark:text-gray-200 text-base md:text-lg leading-relaxed text-justified-elegant font-sans">
-                        {DRESS_CODE_INFO.padrinhos.description} A gravata deverá harmonizar com a cor do vestido do seu par, preservando a harmonia visual da celebração.
+                    {/* Mensagem Inicial */}
+                    <div className="bg-gray-50/80 dark:bg-zinc-800/40 p-5 rounded-2xl border-l-3 border-gray-400 dark:border-zinc-600">
+                      <p className="text-gray-700 dark:text-gray-200 text-sm md:text-base leading-relaxed text-justified-elegant font-sans">
+                        {DRESS_CODE_INFO.padrinhos.description}
                       </p>
                     </div>
 
-                    {/* Diretrizes Principais - Lista Estruturada com Ícones */}
-                    <div className="space-y-4">
-                      <h4 className="font-serif text-lg font-medium text-[var(--foreground)] flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-zinc-800">
-                        <CheckCircle2 size={18} className="text-gray-400" /> Diretrizes dos Padrinhos
+                    {/* Diretrizes Principais */}
+                    <div className="space-y-3.5">
+                      <h4 className="font-serif text-lg font-medium text-[var(--foreground)] flex items-center gap-2 pb-1 border-b border-gray-100 dark:border-zinc-800">
+                        <CheckCircle2 size={16} className="text-gray-400" /> Diretrizes dos Padrinhos
                       </h4>
 
-                      <div className="space-y-3 font-sans text-sm">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-sans text-sm">
                         {/* Guideline 1: Terno */}
-                        <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800/60">
-                          <div className="w-8 h-8 rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
-                            <Shirt size={16} />
+                        <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800">
+                          <div className="w-8 h-8 rounded-xl bg-black text-white flex items-center justify-center shrink-0 mt-0.5">
+                            <Shirt size={15} />
                           </div>
                           <div>
-                            <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Terno Completo Preto</span>
-                            <p className="text-gray-600 dark:text-gray-300 mt-0.5 leading-relaxed text-justified-elegant">
-                              Terno social preto clássico (paletó e calça pretos).
+                            <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Terno Preto</span>
+                            <p className="text-gray-600 dark:text-gray-300 text-xs mt-0.5 leading-relaxed">
+                              Social completo clássico (paletó e calça pretos).
                             </p>
                           </div>
                         </div>
 
-                        {/* Guideline 2: Camisa */}
-                        <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800/60">
-                          <div className="w-8 h-8 rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
-                            <CheckCircle2 size={16} />
+                        {/* Guideline 2: Gravata */}
+                        <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800">
+                          <div className="w-8 h-8 rounded-xl bg-slate-300 text-slate-800 flex items-center justify-center shrink-0 mt-0.5 border border-slate-400/50">
+                            <Sparkles size={15} />
                           </div>
                           <div>
-                            <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Camisa Social Branca</span>
-                            <p className="text-gray-600 dark:text-gray-300 mt-0.5 leading-relaxed text-justified-elegant">
-                              Camisa social branca tradicional de manga longa.
+                            <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Gravata Prata</span>
+                            <p className="text-gray-600 dark:text-gray-300 text-xs mt-0.5 leading-relaxed">
+                              Gravata social clássica na cor prata.
                             </p>
                           </div>
                         </div>
 
-                        {/* Guideline 3: Gravata */}
-                        <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800/60">
-                          <div className="w-8 h-8 rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
-                            <Sparkles size={16} />
+                        {/* Guideline 3: Sapato */}
+                        <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800">
+                          <div className="w-8 h-8 rounded-xl bg-black text-white flex items-center justify-center shrink-0 mt-0.5">
+                            <CheckCircle2 size={15} />
                           </div>
                           <div>
-                            <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Gravata Harmonizada</span>
-                            <p className="text-gray-600 dark:text-gray-300 mt-0.5 leading-relaxed text-justified-elegant">
-                              Na mesma cor ou tom harmonizado com o vestido da sua madrinha/par.
+                            <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Sapato Preto</span>
+                            <p className="text-gray-600 dark:text-gray-300 text-xs mt-0.5 leading-relaxed">
+                              Sapato social preto com meias pretas.
                             </p>
                           </div>
                         </div>
 
-                        {/* Guideline 4: Sapatos */}
-                        <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800/60">
-                          <div className="w-8 h-8 rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
-                            <CheckCircle2 size={16} />
+                        {/* Guideline 4: Camisa */}
+                        <div className="flex items-start gap-3.5 p-3.5 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800">
+                          <div className="w-8 h-8 rounded-xl bg-white text-black flex items-center justify-center shrink-0 mt-0.5 border border-gray-300">
+                            <CheckCircle2 size={15} />
                           </div>
                           <div>
-                            <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Sapato Social Preto</span>
-                            <p className="text-gray-600 dark:text-gray-300 mt-0.5 leading-relaxed text-justified-elegant">
-                              Sapato social preto clássico com meias pretas.
+                            <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Camisa Branca</span>
+                            <p className="text-gray-600 dark:text-gray-300 text-xs mt-0.5 leading-relaxed">
+                              Social branca de manga longa tradicional.
                             </p>
                           </div>
                         </div>
                       </div>
+
+                      {/* Orientação para Pajens */}
+                      <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-blue-50/60 dark:bg-blue-950/25 border border-blue-100 dark:border-blue-900/40 mt-3">
+                        <div className="w-8 h-8 rounded-xl bg-blue-900 dark:bg-blue-300 text-white dark:text-blue-950 flex items-center justify-center shrink-0 mt-0.5 font-serif font-semibold text-sm">
+                          P
+                        </div>
+                        <div>
+                          <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Traje dos Pajens</span>
+                          <p className="text-gray-600 dark:text-gray-300 text-xs md:text-sm mt-0.5 leading-relaxed text-justified-elegant font-sans">
+                            Para os pajens: traje social infantil em <strong className="text-[var(--foreground)]">Azul Marinho ou Preto</strong>.
+                          </p>
+                        </div>
+                      </div>
                     </div>
 
-                    {/* Interactive Harmonizer Widget - Fully Restored & Premium Component */}
-                    <div className="bg-gradient-to-br from-zinc-950 via-zinc-900 to-black text-white p-6 md:p-8 rounded-3xl shadow-xl border border-zinc-800 space-y-6">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-zinc-800">
+                    {/* Interactive Harmonizer Widget */}
+                    <div className="bg-gradient-to-br from-zinc-950 via-zinc-900 to-black text-white p-6 md:p-7 rounded-3xl shadow-xl border border-zinc-800 space-y-5">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 pb-3 border-b border-zinc-800">
                         <div>
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-[10px] font-semibold uppercase tracking-widest text-gray-300 backdrop-blur-md mb-2 border border-white/10 font-mono">
-                            <Sparkles size={12} className="text-gray-300" /> SIMULADOR INTERATIVO EM TEMPO REAL
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-[10px] font-sans font-medium uppercase tracking-widest text-gray-300 backdrop-blur-md mb-1.5 border border-white/10">
+                            <Sparkles size={11} className="text-gray-300" /> Simulador do Casal no Altar
                           </span>
-                          <h4 className="text-xl md:text-2xl font-serif text-white font-medium">Harmonizador de Trajes do Casal</h4>
+                          <h4 className="text-xl font-serif text-white font-medium">Harmonia Visual no Altar</h4>
                         </div>
                         <span className="text-xs text-gray-400 font-sans">
-                          Toque em uma cor para simular
+                          Selecione um tom para visualizar
                         </span>
                       </div>
 
                       {/* Color Palette Selector */}
                       <div>
-                        <p className="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-3 font-mono">
-                          Selecione a cor do vestido da Madrinha:
+                        <p className="text-xs uppercase tracking-wider text-gray-400 font-medium mb-2.5 font-sans">
+                          Cor do vestido da Madrinha:
                         </p>
-                        <div className="grid grid-cols-4 sm:grid-cols-8 gap-2.5">
+                        <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
                           {DRESS_COLOR_OPTIONS.map((opt) => {
                             const isSelected = selectedHarmonizerColor.id === opt.id;
                             return (
@@ -734,12 +778,12 @@ export default function PadrinhosPortal() {
                                 title={opt.name}
                               >
                                 <div
-                                  className="w-7 h-7 rounded-full shadow-inner border border-white/20 transition-transform group-hover:scale-110 flex items-center justify-center"
+                                  className="w-6 h-6 rounded-full shadow-inner border border-white/20 transition-transform group-hover:scale-110 flex items-center justify-center"
                                   style={{ backgroundColor: opt.hex }}
                                 >
-                                  {isSelected && <Check size={14} className="text-white drop-shadow-md" />}
+                                  {isSelected && <Check size={12} className="text-white drop-shadow-md" />}
                                 </div>
-                                <span className="text-[10px] text-gray-300 font-sans mt-1.5 line-clamp-1 text-center font-medium">
+                                <span className="text-[10px] text-gray-300 font-sans mt-1 line-clamp-1 text-center font-medium">
                                   {opt.name.split('/')[0]}
                                 </span>
                               </button>
@@ -749,11 +793,11 @@ export default function PadrinhosPortal() {
                       </div>
 
                       {/* Visual Live Comparison Preview */}
-                      <div className="bg-zinc-900/80 rounded-2xl p-6 border border-zinc-800 flex flex-col sm:flex-row items-center justify-around gap-6">
+                      <div className="bg-zinc-900/80 rounded-2xl p-5 border border-zinc-800 flex flex-col sm:flex-row items-center justify-around gap-5">
 
                         {/* Madrinha Model Preview */}
-                        <div className="flex flex-col items-center text-center space-y-3">
-                          <span className="text-xs uppercase font-semibold tracking-wider text-gray-400 font-mono">Vestido Madrinha</span>
+                        <div className="flex flex-col items-center text-center space-y-2">
+                          <span className="text-xs uppercase font-medium tracking-wider text-gray-400 font-sans">Vestido Madrinha</span>
                           <AnimatePresence mode="wait">
                             <motion.div
                               key={selectedHarmonizerColor.id + '-dress'}
@@ -761,12 +805,12 @@ export default function PadrinhosPortal() {
                               animate={{ opacity: 1, scale: 1 }}
                               exit={{ opacity: 0, scale: 0.9 }}
                               transition={{ duration: 0.3 }}
-                              className="relative w-28 h-36 rounded-2xl border border-white/20 flex flex-col items-center justify-center shadow-lg p-3 overflow-hidden"
+                              className="relative w-28 h-32 rounded-2xl border border-white/20 flex flex-col items-center justify-center shadow-lg p-3 overflow-hidden"
                               style={{ backgroundColor: selectedHarmonizerColor.hex }}
                             >
                               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-white/20 pointer-events-none"></div>
                               <div className="z-10 text-white flex flex-col items-center">
-                                <span className="text-2xl mb-1">👗</span>
+                                <span className="text-xl mb-0.5">👗</span>
                                 <span className="text-xs font-serif font-bold text-white drop-shadow-md">LONGO</span>
                                 <span className="text-[10px] font-sans text-white/90 drop-shadow-xs uppercase mt-0.5">{selectedHarmonizerColor.name}</span>
                               </div>
@@ -775,42 +819,33 @@ export default function PadrinhosPortal() {
                         </div>
 
                         {/* Harmony Indicator Plus */}
-                        <div className="flex flex-col items-center text-gray-500">
-                          <span className="text-2xl font-serif text-white/80">+</span>
-                          <span className="text-[9px] uppercase tracking-widest text-gray-400 font-mono">Harmonização</span>
+                        <div className="flex flex-col items-center text-gray-400">
+                          <span className="text-xl font-serif text-white/80">+</span>
+                          <span className="text-[10px] uppercase tracking-widest text-gray-400 font-sans">Combinação</span>
                         </div>
 
                         {/* Padrinho Model Preview */}
-                        <div className="flex flex-col items-center text-center space-y-3">
-                          <span className="text-xs uppercase font-semibold tracking-wider text-gray-400 font-mono">Terno & Gravata</span>
-                          <AnimatePresence mode="wait">
-                            <motion.div
-                              key={selectedHarmonizerColor.id + '-tie'}
-                              initial={{ opacity: 0, scale: 0.9 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              exit={{ opacity: 0, scale: 0.9 }}
-                              transition={{ duration: 0.3 }}
-                              className="relative w-28 h-36 bg-zinc-950 rounded-2xl border border-zinc-700 flex flex-col items-center justify-start pt-3 shadow-lg p-3 overflow-hidden"
-                            >
-                              <div className="w-10 h-5 bg-white rounded-b-sm flex items-center justify-center shadow-xs">
-                                <div
-                                  className="w-3.5 h-16 rounded-b shadow-md transition-colors duration-500"
-                                  style={{ backgroundColor: selectedHarmonizerColor.hex }}
-                                ></div>
-                              </div>
-                              <div className="z-10 mt-auto text-center">
-                                <span className="text-[10px] font-bold text-white block uppercase tracking-wider">Terno Preto</span>
-                                <span className="text-[10px] font-sans text-gray-300 block">{selectedHarmonizerColor.tieName}</span>
-                              </div>
-                            </motion.div>
-                          </AnimatePresence>
+                        <div className="flex flex-col items-center text-center space-y-2">
+                          <span className="text-xs uppercase font-medium tracking-wider text-gray-400 font-sans">Traje Padrinho</span>
+                          <div className="relative w-28 h-32 bg-zinc-950 rounded-2xl border border-zinc-700 flex flex-col items-center justify-start pt-2.5 shadow-lg p-3 overflow-hidden">
+                            <div className="w-10 h-5 bg-white rounded-b-sm flex items-center justify-center shadow-xs">
+                              <div
+                                className="w-3 h-14 rounded-b shadow-md bg-slate-300 border-x border-slate-400"
+                                style={{ backgroundColor: '#D1D5DB' }}
+                              ></div>
+                            </div>
+                            <div className="z-10 mt-auto text-center">
+                              <span className="text-[10px] font-bold text-white block uppercase tracking-wider">Terno Preto</span>
+                              <span className="text-[10px] font-sans text-slate-300 block">Gravata Prata</span>
+                            </div>
+                          </div>
                         </div>
                       </div>
 
                       {/* Description Footnote */}
-                      <div className="pt-3 border-t border-zinc-800/80 text-center">
+                      <div className="pt-2 border-t border-zinc-800/80 text-center">
                         <p className="text-xs text-gray-300 font-sans leading-relaxed">
-                          ✨ <strong>Combinação Selecionada:</strong> Vestido <span className="text-white font-semibold">{selectedHarmonizerColor.name}</span> + <span className="text-white font-semibold">{selectedHarmonizerColor.tieName}</span> em Terno Preto Clássico. ({selectedHarmonizerColor.description}).
+                          ✨ O Terno Preto com Gravata Prata e Camisa Branca compõe um visual atemporal que harmoniza perfeitamente com o vestido <span className="text-white font-semibold">{selectedHarmonizerColor.name}</span> da Madrinha!
                         </p>
                       </div>
                     </div>
@@ -822,89 +857,7 @@ export default function PadrinhosPortal() {
             </motion.div>
           )}
 
-          {/* TAB 2: ÁREA EXCLUSIVA DAS DAMINHAS (Visible strictly to Daminhas) */}
-          {isDaminha && activeTab === 'daminhas' && (
-            <motion.div
-              key="daminhas"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="space-y-8"
-            >
-              {/* Header Daminhas */}
-              <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 md:p-8 shadow-sm border border-gray-200 dark:border-zinc-800">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-zinc-800 text-[var(--foreground)] flex items-center justify-center font-bold font-serif">
-                    🌸
-                  </div>
-                  <div>
-                    <h2 className="text-2xl font-serif text-[var(--foreground)] font-medium">Espaço das Daminhas</h2>
-                    <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Espaço Especial • {loggedUser.name}</p>
-                  </div>
-                </div>
-                <p className="text-gray-600 dark:text-gray-300 font-sans text-sm md:text-base leading-relaxed text-justified-elegant">
-                  {DRESS_CODE_INFO.daminhas.description}
-                </p>
-              </div>
-
-              {/* Grid de Informações para Daminhas */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-                <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-gray-200 dark:border-zinc-800 shadow-sm">
-                  <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-zinc-800 text-[var(--foreground)] flex items-center justify-center mb-4 border border-gray-200 dark:border-zinc-700">
-                    <Clock size={20} />
-                  </div>
-                  <h3 className="font-serif text-lg text-[var(--foreground)] font-medium mb-2">Horário de Chegada</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 font-sans leading-relaxed text-justified-elegant">
-                    Chegada às <strong className="text-[var(--foreground)]">18h</strong> com os pais ao local da cerimônia para se arrumarem sem correria e fazerem fotos prévias com carinho.
-                  </p>
-                </div>
-
-                <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-gray-200 dark:border-zinc-800 shadow-sm">
-                  <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-zinc-800 text-[var(--foreground)] flex items-center justify-center mb-4 border border-gray-200 dark:border-zinc-700">
-                    <Sparkles size={20} />
-                  </div>
-                  <h3 className="font-serif text-lg text-[var(--foreground)] font-medium mb-2">Vestimenta e Sapatos</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 font-sans leading-relaxed text-justified-elegant">
-                    Vestidinhos delicados e sapatinhos muito confortáveis para garantir a liberdade e o sorriso de {loggedUser.name}.
-                  </p>
-                </div>
-
-                <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-gray-200 dark:border-zinc-800 shadow-sm">
-                  <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-zinc-800 text-[var(--foreground)] flex items-center justify-center mb-4 border border-gray-200 dark:border-zinc-700">
-                    <Smile size={20} />
-                  </div>
-                  <h3 className="font-serif text-lg text-[var(--foreground)] font-medium mb-2">Entrada Festiva e Leve</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 font-sans leading-relaxed text-justified-elegant">
-                    Entrada cheia de doçura. O momento deve ser totalmente sem pressão, celebrado com leveza e o apoio próximo dos pais!
-                  </p>
-                </div>
-
-                <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-gray-200 dark:border-zinc-800 shadow-sm">
-                  <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-zinc-800 text-[var(--foreground)] flex items-center justify-center mb-4 border border-gray-200 dark:border-zinc-700">
-                    <Camera size={20} />
-                  </div>
-                  <h3 className="font-serif text-lg text-[var(--foreground)] font-medium mb-2">Sessão de Fotos</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 font-sans leading-relaxed text-justified-elegant">
-                    Fotos oficiais carinhosas no altar com Aline e Klécio logo após a bênção, antes de abrirem a pista e os docinhos na recepção.
-                  </p>
-                </div>
-
-                <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-gray-200 dark:border-zinc-800 shadow-sm md:col-span-2">
-                  <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-zinc-800 text-[var(--foreground)] flex items-center justify-center mb-4 border border-gray-200 dark:border-zinc-700">
-                    <HelpCircle size={20} />
-                  </div>
-                  <h3 className="font-serif text-lg text-[var(--foreground)] font-medium mb-2">Dúvidas ou Suporte das Famílias</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 font-sans leading-relaxed text-justified-elegant">
-                    Caso haja qualquer dúvida dos pais sobre roupas, acessórios ou horários, a cerimonialista e a noiva Aline estão totalmente disponíveis para apoiar com todo carinho!
-                  </p>
-                </div>
-
-              </div>
-            </motion.div>
-          )}
-
-          {/* TAB 3: MURAL E AVISOS */}
+          {/* TAB 2: MURAL E AVISOS */}
           {activeTab === 'mensagens' && (
             <motion.div
               key="mensagens"
@@ -913,9 +866,10 @@ export default function PadrinhosPortal() {
               exit={{ opacity: 0, y: -10 }}
               className="space-y-8"
             >
-              <div>
-                <h2 className="text-2xl font-serif text-[var(--foreground)] mb-6 flex items-center gap-2 font-medium">
-                  <Sparkles size={22} className="text-gray-400" /> Recados e Avisos dos Noivos
+              <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 md:p-8 shadow-sm border border-gray-200 dark:border-zinc-800">
+                <span className="text-xs uppercase tracking-widest text-gray-400 font-sans font-semibold">Comunicados</span>
+                <h2 className="text-2xl md:text-3xl font-serif text-[var(--foreground)] font-medium mb-6 flex items-center gap-2">
+                  <Sparkles size={20} className="text-gray-400" /> Recados e Avisos dos Noivos
                 </h2>
 
                 <div className="space-y-4">
@@ -923,12 +877,12 @@ export default function PadrinhosPortal() {
                     <div
                       key={ann.id}
                       className={`p-6 rounded-2xl border transition-all ${ann.isImportant
-                        ? 'bg-zinc-50 dark:bg-zinc-800/80 border-gray-300 dark:border-zinc-700'
+                        ? 'bg-slate-50/80 dark:bg-zinc-800/80 border-slate-300 dark:border-zinc-700 shadow-2xs'
                         : 'bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800'
                         }`}
                     >
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-semibold uppercase tracking-wider text-[var(--foreground)]">
+                        <span className="text-xs font-semibold uppercase tracking-wider text-[var(--foreground)] font-sans">
                           {ann.author}
                         </span>
                         <span className="text-xs text-gray-400 font-sans">{ann.date}</span>
@@ -943,16 +897,16 @@ export default function PadrinhosPortal() {
               </div>
 
               {/* Reply Section */}
-              <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 md:p-8 shadow-sm border border-gray-200 dark:border-zinc-800">
-                <h3 className="text-xl font-serif text-[var(--foreground)] mb-2 flex items-center gap-2 font-medium">
-                  <MessageSquare size={20} className="text-gray-400" /> Deixar Recado para Aline e Klécio
+              <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 md:p-8 shadow-sm border border-gray-200 dark:border-zinc-800">
+                <h3 className="text-xl font-serif text-[var(--foreground)] mb-1 flex items-center gap-2 font-medium">
+                  <MessageSquare size={18} className="text-gray-400" /> Deixar Recado para Aline e Klécio
                 </h3>
                 <p className="text-xs text-gray-500 font-sans mb-6">
                   Escreva um recado especial, tire dúvidas ou envie um carinho para os noivos.
                 </p>
 
                 {replySuccess && (
-                  <div className="bg-green-500/10 border border-green-500/30 text-green-600 p-3 rounded-xl text-sm mb-4 flex items-center gap-2">
+                  <div className="bg-green-500/10 border border-green-500/30 text-green-600 p-3.5 rounded-2xl text-xs md:text-sm mb-4 flex items-center gap-2 font-sans">
                     <CheckCircle2 size={16} /> Recado enviado com sucesso para os noivos!
                   </div>
                 )}
@@ -961,25 +915,25 @@ export default function PadrinhosPortal() {
                   <textarea
                     value={newReply}
                     onChange={(e) => setNewReply(e.target.value)}
-                    placeholder="Digite sua mensagem aqui..."
+                    placeholder="Digite sua mensagem aqui com carinho..."
                     rows={4}
                     required
-                    className="w-full p-4 rounded-xl border border-gray-200 dark:border-zinc-700 bg-transparent text-[var(--foreground)] focus:outline-none focus:border-black dark:focus:border-white font-sans text-sm"
+                    className="w-full p-4 rounded-2xl border border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-800/40 text-[var(--foreground)] focus:outline-none focus:border-black dark:focus:border-white focus:bg-white dark:focus:bg-zinc-850 font-sans text-sm transition-all"
                   />
                   <button
                     type="submit"
-                    className="flex items-center gap-2 bg-black dark:bg-white text-white dark:text-black px-6 py-3.5 rounded-xl font-semibold uppercase tracking-wider text-xs hover:opacity-90 transition-colors shadow-sm cursor-pointer border border-gray-800 dark:border-gray-200"
+                    className="flex items-center gap-2 bg-black dark:bg-white text-white dark:text-black px-6 py-3 rounded-2xl font-medium text-xs md:text-sm hover:opacity-90 transition-colors shadow-sm cursor-pointer font-sans"
                   >
-                    <Send size={16} /> Enviar Mensagem aos Noivos
+                    <Send size={15} /> Enviar Mensagem aos Noivos
                   </button>
                 </form>
 
                 {padrinhoReplies.length > 0 && (
                   <div className="mt-8 pt-6 border-t border-gray-100 dark:border-zinc-800">
-                    <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-4">Seus Recados Enviados:</h4>
+                    <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-400 font-sans mb-4">Seus Recados Enviados:</h4>
                     <div className="space-y-3">
                       {padrinhoReplies.map((r) => (
-                        <div key={r.id} className="bg-gray-50 dark:bg-zinc-800/40 p-4 rounded-xl text-sm font-sans border border-gray-100 dark:border-zinc-700/50">
+                        <div key={r.id} className="bg-gray-50 dark:bg-zinc-800/40 p-4 rounded-2xl text-sm font-sans border border-gray-100 dark:border-zinc-700/50">
                           <div className="flex justify-between items-center text-xs text-gray-400 mb-1">
                             <span className="font-bold text-[var(--foreground)]">{r.author}</span>
                             <div className="flex items-center gap-2">
@@ -990,7 +944,7 @@ export default function PadrinhosPortal() {
                                   className="p-1 text-red-500 hover:bg-red-500/10 rounded transition-colors cursor-pointer"
                                   title="Excluir recado (ADM)"
                                 >
-                                  <Trash2 size={14} />
+                                  <Trash2 size={13} />
                                 </button>
                               )}
                             </div>
@@ -1012,54 +966,55 @@ export default function PadrinhosPortal() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="bg-white dark:bg-zinc-900 rounded-2xl p-6 md:p-8 shadow-sm border border-gray-200 dark:border-zinc-800"
+              className="bg-white dark:bg-zinc-900 rounded-3xl p-6 md:p-8 shadow-sm border border-gray-200 dark:border-zinc-800"
             >
-              <h2 className="text-2xl font-serif text-[var(--foreground)] mb-2 flex items-center gap-2 font-medium">
-                <Calendar size={22} className="text-gray-400" /> Cronograma do Grande Dia
-              </h2>
-              <p className="text-xs text-gray-500 font-sans mb-8">
-                Horários orientativos planejados com carinho para aproveitarem cada instante!
-              </p>
+              <div className="space-y-1 mb-8">
+                <span className="text-xs uppercase tracking-widest text-gray-400 font-sans font-semibold">Organização</span>
+                <h2 className="text-2xl md:text-3xl font-serif text-[var(--foreground)] font-medium flex items-center gap-2">
+                  <Calendar size={20} className="text-gray-400" /> Cronograma do Grande Dia
+                </h2>
+                <p className="text-xs text-gray-500 font-sans">
+                  Horários planejados com carinho para aproveitarmos juntos cada instante da celebração.
+                </p>
+              </div>
 
-              <div className="relative border-l-2 border-gray-300 dark:border-zinc-700 pl-6 space-y-8 ml-2">
+              <div className="relative border-l-2 border-slate-200 dark:border-zinc-700 pl-6 md:pl-8 space-y-8 ml-2">
 
                 <div className="relative">
-                  <div className="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-black dark:bg-white border-4 border-white dark:border-zinc-900"></div>
-                  <span className="text-xs font-bold text-gray-500 uppercase tracking-wider block font-mono">18h</span>
+                  <div className="absolute -left-[31px] md:-left-[39px] top-1 w-4 h-4 rounded-full bg-black dark:bg-white border-4 border-white dark:border-zinc-900 shadow-xs"></div>
+                  <span className="text-xs font-medium text-gray-500 uppercase tracking-wider block font-sans">18h00</span>
                   <h3 className="text-lg font-serif text-[var(--foreground)] font-semibold">
-                    {isDaminha ? 'Chegada das Daminhas com os Pais' : 'Chegada dos Padrinhos e Madrinhas'}
+                    Chegada do Cortejo (Padrinhos, Madrinhas e Daminhas)
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400 font-sans mt-1 text-justified-elegant">
-                    {isDaminha
-                      ? 'Chegada com os pais ao local para vestimento tranquilo e primeiras fotos.'
-                      : 'Chegada antecedente ao local da celebração para organização e alinhamento.'}
+                    Chegada antecipada ao local da celebração para alinhamento do cortejo, organização e fotos oficiais com os noivos.
                   </p>
                 </div>
 
                 <div className="relative">
-                  <div className="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-black dark:bg-white border-4 border-white dark:border-zinc-900"></div>
-                  <span className="text-xs font-bold text-gray-500 uppercase tracking-wider block font-mono">19h</span>
-                  <h3 className="text-lg font-serif text-[var(--foreground)] font-semibold">Início Solene da Cerimônia</h3>
+                  <div className="absolute -left-[31px] md:-left-[39px] top-1 w-4 h-4 rounded-full bg-black dark:bg-white border-4 border-white dark:border-zinc-900 shadow-xs"></div>
+                  <span className="text-xs font-medium text-gray-500 uppercase tracking-wider block font-sans">19h00</span>
+                  <h3 className="text-lg font-serif text-[var(--foreground)] font-semibold">Início Solene da Cerimônia Religiosa</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400 font-sans mt-1 text-justified-elegant">
-                    Momento emocionante da celebração do casamento de Aline e Klécio.
+                    Momento sagrado da celebração do casamento e troca de votos de Aline e Klécio.
                   </p>
                 </div>
 
                 <div className="relative">
-                  <div className="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-black dark:bg-white border-4 border-white dark:border-zinc-900"></div>
-                  <span className="text-xs font-bold text-gray-500 uppercase tracking-wider block font-mono">20h15</span>
-                  <h3 className="text-lg font-serif text-[var(--foreground)] font-semibold">Sessão de Fotos Oficiais com os Noivos</h3>
+                  <div className="absolute -left-[31px] md:-left-[39px] top-1 w-4 h-4 rounded-full bg-black dark:bg-white border-4 border-white dark:border-zinc-900 shadow-xs"></div>
+                  <span className="text-xs font-medium text-gray-500 uppercase tracking-wider block font-sans">20h15</span>
+                  <h3 className="text-lg font-serif text-[var(--foreground)] font-semibold">Sessão de Fotos Oficiais no Altar</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400 font-sans mt-1 text-justified-elegant">
-                    Fotos registradas com todo o carinho no altar.
+                    Registro de fotos carinhosas no altar com padrinhos, madrinhas, daminhas e familiares.
                   </p>
                 </div>
 
                 <div className="relative">
-                  <div className="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-black dark:bg-white border-4 border-white dark:border-zinc-900"></div>
-                  <span className="text-xs font-bold text-gray-500 uppercase tracking-wider block font-mono">22h em diante</span>
+                  <div className="absolute -left-[31px] md:-left-[39px] top-1 w-4 h-4 rounded-full bg-black dark:bg-white border-4 border-white dark:border-zinc-900 shadow-xs"></div>
+                  <span className="text-xs font-medium text-gray-500 uppercase tracking-wider block font-sans">22h00 em diante</span>
                   <h3 className="text-lg font-serif text-[var(--foreground)] font-semibold">Recepção, Brinde e Festa</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400 font-sans mt-1 text-justified-elegant">
-                    Abertura da pista de dança, recepção e comemoração inesquecível!
+                    Abertura da pista de dança, buffet e celebração inesquecível da nossa união!
                   </p>
                 </div>
 
@@ -1080,19 +1035,19 @@ export default function PadrinhosPortal() {
               className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 md:p-8"
             >
               <motion.div
-                initial={{ scale: 0.9, opacity: 0 }}
+                initial={{ scale: 0.95, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
+                exit={{ scale: 0.95, opacity: 0 }}
                 onClick={(e) => e.stopPropagation()}
                 className="relative max-w-4xl w-full bg-zinc-950 border border-zinc-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh]"
               >
                 {/* Close Button */}
                 <button
                   onClick={() => setLightboxItem(null)}
-                  className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/60 text-white hover:bg-white hover:text-black transition-colors flex items-center justify-center cursor-pointer border border-white/20"
+                  className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-black/60 text-white hover:bg-white hover:text-black transition-colors flex items-center justify-center cursor-pointer border border-white/20"
                   title="Fechar"
                 >
-                  <X size={20} />
+                  <X size={18} />
                 </button>
 
                 {/* Image Display */}
@@ -1107,7 +1062,7 @@ export default function PadrinhosPortal() {
                 {/* Details Display */}
                 <div className="md:w-2/5 p-6 md:p-8 flex flex-col justify-between text-white space-y-6">
                   <div className="space-y-3">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-[10px] uppercase font-semibold tracking-widest text-gray-300 border border-white/15 font-mono">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-[10px] uppercase font-sans font-medium tracking-widest text-gray-300 border border-white/15">
                       {lightboxItem.tag}
                     </span>
                     <h3 className="text-2xl md:text-3xl font-serif font-medium">{lightboxItem.title}</h3>
@@ -1117,13 +1072,13 @@ export default function PadrinhosPortal() {
                   </div>
 
                   <div className="pt-4 border-t border-zinc-800 space-y-3">
-                    <div className="p-4 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-gray-400 font-sans leading-relaxed">
-                      💡 <strong>Lembrete dos Noivos:</strong> Esta imagem é apenas uma referência de modelo e caimento. A escolha da cor e estilo é inteiramente livre para cada madrinha.
+                    <div className="p-3.5 rounded-2xl bg-zinc-900 border border-zinc-800 text-xs text-gray-400 font-sans leading-relaxed">
+                      💡 <strong>Lembrete dos Noivos:</strong> Esta imagem é apenas uma referência de caimento. A cor e o tecido são de livre escolha de cada madrinha.
                     </div>
 
                     <button
                       onClick={() => setLightboxItem(null)}
-                      className="w-full py-3 bg-white text-black font-semibold rounded-xl text-xs uppercase tracking-wider hover:bg-gray-200 transition-colors cursor-pointer"
+                      className="w-full py-3 bg-white text-black font-medium rounded-2xl text-xs uppercase tracking-wider hover:bg-gray-200 transition-colors cursor-pointer font-sans"
                     >
                       Fechar Visualização
                     </button>
