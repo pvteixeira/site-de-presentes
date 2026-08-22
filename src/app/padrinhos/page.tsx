@@ -580,184 +580,179 @@ export default function PadrinhosPortal() {
               )}
 
               {/* Madrinhas & Padrinhos Cards Grid */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                 {/* 1. COLUMN MADRINHAS */}
-                <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 md:p-9 shadow-sm border border-gray-200 dark:border-zinc-800 flex flex-col justify-between space-y-8">
-                  <div className="space-y-7">
-                    {/* Header Block */}
-                    <div className="flex items-center gap-3.5 pb-5 border-b border-gray-100 dark:border-zinc-800">
-                      <div className="w-11 h-11 rounded-2xl bg-rose-50 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 flex items-center justify-center font-serif font-semibold text-xl border border-rose-200 dark:border-rose-900/40 shrink-0">
-                        M
+                <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 md:p-9 shadow-sm border border-gray-200 dark:border-zinc-800 space-y-7">
+                  {/* Header Block */}
+                  <div className="flex items-center gap-3.5 pb-5 border-b border-gray-100 dark:border-zinc-800">
+                    <div className="w-11 h-11 rounded-2xl bg-rose-50 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 flex items-center justify-center font-serif font-semibold text-xl border border-rose-200 dark:border-rose-900/40 shrink-0">
+                      M
+                    </div>
+                    <div>
+                      <span className="text-xs uppercase tracking-widest text-gray-400 font-sans font-medium">Orientações Femininas</span>
+                      <h3 className="text-2xl md:text-3xl font-serif text-[var(--foreground)] font-medium leading-tight">
+                        {DRESS_CODE_INFO.madrinhas.title}
+                      </h3>
+                    </div>
+                  </div>
+
+                  {/* Mensagem Inicial */}
+                  <div className="bg-gray-50/80 dark:bg-zinc-800/40 p-5 rounded-2xl border-l-3 border-gray-400 dark:border-zinc-600">
+                    <p className="text-gray-700 dark:text-gray-200 text-sm md:text-base leading-relaxed text-justified-elegant font-sans">
+                      {DRESS_CODE_INFO.madrinhas.description} A paleta de cores será livre, para que possam escolher o tom e estilo que mais combinem com vocês, com vestidos longos e elegantes para a cerimônia.
+                    </p>
+                  </div>
+
+                  {/* Diretrizes Principais */}
+                  <div className="space-y-3.5">
+                    <h4 className="font-serif text-lg font-medium text-[var(--foreground)] flex items-center gap-2 pb-1 border-b border-gray-100 dark:border-zinc-800">
+                      <Sparkles size={16} className="text-gray-400" /> Diretrizes das Madrinhas
+                    </h4>
+
+                    <div className="space-y-3 font-sans text-sm">
+                      {/* Guideline 1 */}
+                      <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800">
+                        <div className="w-8 h-8 rounded-xl bg-gray-100 dark:bg-zinc-800 text-[var(--foreground)] flex items-center justify-center shrink-0 mt-0.5 border border-gray-200 dark:border-zinc-700">
+                          <Scissors size={15} />
+                        </div>
+                        <div>
+                          <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Comprimento Obrigatório</span>
+                          <p className="text-gray-600 dark:text-gray-300 mt-0.5 leading-relaxed text-justified-elegant">
+                            Vestidos estritamente <strong className="text-[var(--foreground)]">LONGOS</strong> e sofisticados, adequados à solenidade da celebração às 19h.
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <span className="text-xs uppercase tracking-widest text-gray-400 font-sans font-medium">Orientações Femininas</span>
-                        <h3 className="text-2xl md:text-3xl font-serif text-[var(--foreground)] font-medium leading-tight">
-                          {DRESS_CODE_INFO.madrinhas.title}
-                        </h3>
+
+                      {/* Guideline 2 */}
+                      <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800">
+                        <div className="w-8 h-8 rounded-xl bg-gray-100 dark:bg-zinc-800 text-[var(--foreground)] flex items-center justify-center shrink-0 mt-0.5 border border-gray-200 dark:border-zinc-700">
+                          <Palette size={15} />
+                        </div>
+                        <div>
+                          <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Paleta Livre</span>
+                          <p className="text-gray-600 dark:text-gray-300 mt-0.5 leading-relaxed text-justified-elegant">
+                            Cores inteiramente <strong className="text-[var(--foreground)]">LIVRES</strong> — escolha a tonalidade que faz você se sentir mais linda e confiante.
+                          </p>
+                        </div>
                       </div>
                     </div>
+                  </div>
 
-                    {/* Mensagem Inicial */}
-                    <div className="bg-gray-50/80 dark:bg-zinc-800/40 p-5 rounded-2xl border-l-3 border-gray-400 dark:border-zinc-600">
-                      <p className="text-gray-700 dark:text-gray-200 text-sm md:text-base leading-relaxed text-justified-elegant font-sans">
-                        {DRESS_CODE_INFO.madrinhas.description} A paleta de cores será livre, para que possam escolher o tom e estilo que mais combinem com vocês, com vestidos longos e elegantes para a cerimônia.
-                      </p>
+                  {/* Restricted Alert */}
+                  <div className="bg-amber-500/10 dark:bg-amber-950/20 border-l-3 border-amber-500 rounded-2xl p-4.5 space-y-1.5">
+                    <div className="flex items-center gap-2 text-amber-700 dark:text-amber-400 font-semibold font-serif text-sm">
+                      <AlertTriangle size={16} className="shrink-0" />
+                      <span>Atenção Exclusiva</span>
                     </div>
+                    <p className="text-xs md:text-sm text-amber-900/90 dark:text-amber-200/90 font-sans leading-relaxed text-justified-elegant">
+                      Não será permitido o uso de vestidos nas cores <strong>branco, off-white e champanhe</strong> (reservadas exclusivamente à noiva).
+                    </p>
+                  </div>
 
-                    {/* Diretrizes Principais */}
-                    <div className="space-y-3.5">
-                      <h4 className="font-serif text-lg font-medium text-[var(--foreground)] flex items-center gap-2 pb-1 border-b border-gray-100 dark:border-zinc-800">
-                        <Sparkles size={16} className="text-gray-400" /> Diretrizes das Madrinhas
+                  {/* Grupo do WhatsApp das Madrinhas */}
+                  <div className="bg-[#25D366]/10 dark:bg-[#25D366]/15 border border-[#25D366]/30 dark:border-[#25D366]/20 rounded-2xl p-5 md:p-6 flex flex-col items-center text-center space-y-3">
+                    <div className="space-y-1 max-w-md mx-auto">
+                      <h4 className="text-base md:text-lg font-serif font-medium text-emerald-950 dark:text-emerald-100">
+                        Grupo das Madrinhas
                       </h4>
-
-                      <div className="space-y-3 font-sans text-sm">
-                        {/* Guideline 1 */}
-                        <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800">
-                          <div className="w-8 h-8 rounded-xl bg-gray-100 dark:bg-zinc-800 text-[var(--foreground)] flex items-center justify-center shrink-0 mt-0.5 border border-gray-200 dark:border-zinc-700">
-                            <Scissors size={15} />
-                          </div>
-                          <div>
-                            <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Comprimento Obrigatório</span>
-                            <p className="text-gray-600 dark:text-gray-300 mt-0.5 leading-relaxed text-justified-elegant">
-                              Vestidos estritamente <strong className="text-[var(--foreground)]">LONGOS</strong> e sofisticados, adequados à solenidade da celebração às 19h.
-                            </p>
-                          </div>
-                        </div>
-
-                        {/* Guideline 2 */}
-                        <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800">
-                          <div className="w-8 h-8 rounded-xl bg-gray-100 dark:bg-zinc-800 text-[var(--foreground)] flex items-center justify-center shrink-0 mt-0.5 border border-gray-200 dark:border-zinc-700">
-                            <Palette size={15} />
-                          </div>
-                          <div>
-                            <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Paleta Livre</span>
-                            <p className="text-gray-600 dark:text-gray-300 mt-0.5 leading-relaxed text-justified-elegant">
-                              Cores inteiramente <strong className="text-[var(--foreground)]">LIVRES</strong> — escolha a tonalidade que faz você se sentir mais linda e confiante.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Restricted Alert */}
-                    <div className="bg-amber-500/10 dark:bg-amber-950/20 border-l-3 border-amber-500 rounded-2xl p-4.5 space-y-1.5">
-                      <div className="flex items-center gap-2 text-amber-700 dark:text-amber-400 font-semibold font-serif text-sm">
-                        <AlertTriangle size={16} className="shrink-0" />
-                        <span>Atenção Exclusiva</span>
-                      </div>
-                      <p className="text-xs md:text-sm text-amber-900/90 dark:text-amber-200/90 font-sans leading-relaxed text-justified-elegant">
-                        Não será permitido o uso de vestidos nas cores <strong>branco, off-white e champanhe</strong> (reservadas exclusivamente à noiva).
+                      <p className="text-xs text-emerald-900/80 dark:text-emerald-300/80 font-sans">
+                        Tire dúvidas e alinhe os preparativos no WhatsApp exclusivo das madrinhas.
                       </p>
                     </div>
 
-                    {/* Grupo do WhatsApp das Madrinhas */}
-                    <div className="bg-[#25D366]/10 dark:bg-[#25D366]/15 border border-[#25D366]/30 dark:border-[#25D366]/20 rounded-2xl p-5 md:p-6 flex flex-col items-center text-center space-y-3">
-                      <div className="space-y-1 max-w-md mx-auto">
-                        <h4 className="text-base md:text-lg font-serif font-medium text-emerald-950 dark:text-emerald-100">
-                          Grupo das Madrinhas
-                        </h4>
-                        <p className="text-xs text-emerald-900/80 dark:text-emerald-300/80 font-sans">
-                          Tire dúvidas e alinhe os preparativos no WhatsApp exclusivo das madrinhas.
-                        </p>
-                      </div>
-
-                      <a
-                        href="https://chat.whatsapp.com/DzTUJcujovC9foT8p6SWJU?mode=gi_t"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#128C7E] text-white font-medium text-xs shadow-sm transition-all hover:scale-[1.02] cursor-pointer font-sans"
-                      >
-                        <WhatsAppIcon className="w-4 h-4 shrink-0" />
-                        <span>Entrar no Grupo WhatsApp</span>
-                      </a>
-                    </div>
+                    <a
+                      href="https://chat.whatsapp.com/DzTUJcujovC9foT8p6SWJU?mode=gi_t"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#128C7E] text-white font-medium text-xs shadow-sm transition-all hover:scale-[1.02] cursor-pointer font-sans"
+                    >
+                      <WhatsAppIcon className="w-4 h-4 shrink-0" />
+                      <span>Entrar no Grupo WhatsApp</span>
+                    </a>
                   </div>
                 </div>
 
                 {/* 2. COLUMN PADRINHOS */}
-                <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 md:p-9 shadow-sm border border-gray-200 dark:border-zinc-800 flex flex-col justify-between space-y-8">
-                  <div className="space-y-7">
-                    {/* Header Block */}
-                    <div className="flex items-center gap-3.5 pb-5 border-b border-gray-100 dark:border-zinc-800">
-                      <div className="w-11 h-11 rounded-2xl bg-slate-100 dark:bg-zinc-800 text-slate-900 dark:text-white flex items-center justify-center font-serif font-semibold text-xl border border-slate-300 dark:border-zinc-700 shrink-0">
-                        P
-                      </div>
-                      <div>
-                        <span className="text-xs uppercase tracking-widest text-gray-400 font-sans font-medium">Orientações Masculinas</span>
-                        <h3 className="text-2xl md:text-3xl font-serif text-[var(--foreground)] font-medium leading-tight">
-                          {DRESS_CODE_INFO.padrinhos.title}
-                        </h3>
-                      </div>
+                <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 md:p-9 shadow-sm border border-gray-200 dark:border-zinc-800 space-y-7">
+                  {/* Header Block */}
+                  <div className="flex items-center gap-3.5 pb-5 border-b border-gray-100 dark:border-zinc-800">
+                    <div className="w-11 h-11 rounded-2xl bg-slate-100 dark:bg-zinc-800 text-slate-900 dark:text-white flex items-center justify-center font-serif font-semibold text-xl border border-slate-300 dark:border-zinc-700 shrink-0">
+                      P
                     </div>
-
-                    {/* Mensagem Inicial */}
-                    <div className="bg-gray-50/80 dark:bg-zinc-800/40 p-5 rounded-2xl border-l-3 border-gray-400 dark:border-zinc-600">
-                      <p className="text-gray-700 dark:text-gray-200 text-sm md:text-base leading-relaxed text-justified-elegant font-sans">
-                        {DRESS_CODE_INFO.padrinhos.description}
-                      </p>
+                    <div>
+                      <span className="text-xs uppercase tracking-widest text-gray-400 font-sans font-medium">Orientações Masculinas</span>
+                      <h3 className="text-2xl md:text-3xl font-serif text-[var(--foreground)] font-medium leading-tight">
+                        {DRESS_CODE_INFO.padrinhos.title}
+                      </h3>
                     </div>
+                  </div>
 
-                    {/* Diretrizes Principais dos Padrinhos */}
-                    <div className="space-y-3.5">
-                      <h4 className="font-serif text-lg font-medium text-[var(--foreground)] flex items-center gap-2 pb-1 border-b border-gray-100 dark:border-zinc-800">
-                        <CheckCircle2 size={16} className="text-gray-400" /> Diretrizes dos Padrinhos
-                      </h4>
+                  {/* Mensagem Inicial */}
+                  <div className="bg-gray-50/80 dark:bg-zinc-800/40 p-5 rounded-2xl border-l-3 border-gray-400 dark:border-zinc-600">
+                    <p className="text-gray-700 dark:text-gray-200 text-sm md:text-base leading-relaxed text-justified-elegant font-sans">
+                      {DRESS_CODE_INFO.padrinhos.description}
+                    </p>
+                  </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-sans text-sm">
-                        {/* Guideline 1: Terno */}
-                        <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800">
-                          <div className="w-8 h-8 rounded-xl bg-black text-white flex items-center justify-center shrink-0 mt-0.5">
-                            <Shirt size={15} />
-                          </div>
-                          <div>
-                            <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Terno Preto</span>
-                            <p className="text-gray-600 dark:text-gray-300 text-xs mt-0.5 leading-relaxed">
-                              Social completo clássico (paletó e calça pretos).
-                            </p>
-                          </div>
+                  {/* Diretrizes Principais dos Padrinhos */}
+                  <div className="space-y-3.5">
+                    <h4 className="font-serif text-lg font-medium text-[var(--foreground)] flex items-center gap-2 pb-1 border-b border-gray-100 dark:border-zinc-800">
+                      <CheckCircle2 size={16} className="text-gray-400" /> Diretrizes dos Padrinhos
+                    </h4>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-sans text-sm">
+                      {/* Guideline 1: Terno */}
+                      <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800">
+                        <div className="w-8 h-8 rounded-xl bg-black text-white flex items-center justify-center shrink-0 mt-0.5">
+                          <Shirt size={15} />
                         </div>
-
-                        {/* Guideline 2: Gravata */}
-                        <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800">
-                          <div className="w-8 h-8 rounded-xl bg-slate-300 text-slate-800 flex items-center justify-center shrink-0 mt-0.5 border border-slate-400/50">
-                            <Sparkles size={15} />
-                          </div>
-                          <div>
-                            <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Gravata Prata</span>
-                            <p className="text-gray-600 dark:text-gray-300 text-xs mt-0.5 leading-relaxed">
-                              Gravata social clássica na cor prata.
-                            </p>
-                          </div>
+                        <div>
+                          <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Terno Preto</span>
+                          <p className="text-gray-600 dark:text-gray-300 text-xs mt-0.5 leading-relaxed">
+                            Social completo clássico (paletó e calça pretos).
+                          </p>
                         </div>
+                      </div>
 
-                        {/* Guideline 3: Sapato */}
-                        <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800">
-                          <div className="w-8 h-8 rounded-xl bg-black text-white flex items-center justify-center shrink-0 mt-0.5">
-                            <CheckCircle2 size={15} />
-                          </div>
-                          <div>
-                            <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Sapato Preto</span>
-                            <p className="text-gray-600 dark:text-gray-300 text-xs mt-0.5 leading-relaxed">
-                              Sapato social preto com meias pretas.
-                            </p>
-                          </div>
+                      {/* Guideline 2: Gravata */}
+                      <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800">
+                        <div className="w-8 h-8 rounded-xl bg-slate-300 text-slate-800 flex items-center justify-center shrink-0 mt-0.5 border border-slate-400/50">
+                          <Sparkles size={15} />
                         </div>
+                        <div>
+                          <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Gravata Prata</span>
+                          <p className="text-gray-600 dark:text-gray-300 text-xs mt-0.5 leading-relaxed">
+                            Gravata social clássica na cor prata.
+                          </p>
+                        </div>
+                      </div>
 
-                        {/* Guideline 4: Camisa */}
-                        <div className="flex items-start gap-3.5 p-3.5 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800">
-                          <div className="w-8 h-8 rounded-xl bg-white text-black flex items-center justify-center shrink-0 mt-0.5 border border-gray-300">
-                            <CheckCircle2 size={15} />
-                          </div>
-                          <div>
-                            <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Camisa Branca</span>
-                            <p className="text-gray-600 dark:text-gray-300 text-xs mt-0.5 leading-relaxed">
-                              Social branca de manga longa tradicional.
-                            </p>
-                          </div>
+                      {/* Guideline 3: Sapato */}
+                      <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800">
+                        <div className="w-8 h-8 rounded-xl bg-black text-white flex items-center justify-center shrink-0 mt-0.5">
+                          <CheckCircle2 size={15} />
+                        </div>
+                        <div>
+                          <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Sapato Preto</span>
+                          <p className="text-gray-600 dark:text-gray-300 text-xs mt-0.5 leading-relaxed">
+                            Sapato social preto com meias pretas.
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Guideline 4: Camisa */}
+                      <div className="flex items-start gap-3.5 p-3.5 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800">
+                        <div className="w-8 h-8 rounded-xl bg-white text-black flex items-center justify-center shrink-0 mt-0.5 border border-gray-300">
+                          <CheckCircle2 size={15} />
+                        </div>
+                        <div>
+                          <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Camisa Branca</span>
+                          <p className="text-gray-600 dark:text-gray-300 text-xs mt-0.5 leading-relaxed">
+                            Social branca de manga longa tradicional.
+                          </p>
                         </div>
                       </div>
                     </div>
-
                   </div>
                 </div>
               </div>
