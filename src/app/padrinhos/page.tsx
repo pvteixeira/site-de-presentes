@@ -25,17 +25,24 @@ import {
   Scissors,
   Check,
   X,
-  ZoomIn,
   Trash2,
   Heart,
   ChevronRight,
-  Info
+  Info,
+  Plus,
+  Edit2,
+  RotateCcw,
+  Crown,
+  ExternalLink,
+  Save
 } from 'lucide-react';
 import {
   PADRINHOS_ACCOUNTS,
   PadrinhoAccount,
   INITIAL_ANNOUNCEMENTS,
   PadrinhoMessage,
+  INITIAL_SCHEDULE,
+  ScheduleItem,
   DRESS_CODE_INFO
 } from '../data/padrinhosData';
 
@@ -47,84 +54,6 @@ function WhatsAppIcon({ className = "w-5 h-5" }: { className?: string }) {
   );
 }
 
-interface GalleryItem {
-  id: string;
-  title: string;
-  tag: string;
-  description: string;
-  url: string;
-}
-
-const MADRINHAS_GALLERY_ITEMS: GalleryItem[] = [
-  {
-    id: 'sereia',
-    title: 'Corte Sereia Elegante',
-    tag: 'Corte Sereia',
-    description: 'Modelagem ajustada ao corpo que se abre delicadamente a partir dos joelhos.',
-    url: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=1000&auto=format&fit=crop',
-  },
-  {
-    id: 'evase',
-    title: 'Corte Evasê Clássico',
-    tag: 'Corte Evasê',
-    description: 'Caimento em A que valoriza a silhueta com leveza e movimento natural.',
-    url: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000&auto=format&fit=crop',
-  },
-  {
-    id: 'cetim',
-    title: 'Tecido Acetinado Nobre',
-    tag: 'Tecido Acetinado',
-    description: 'Seda ou cetim fluido com brilho discreto para celebrações à noite.',
-    url: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=1000&auto=format&fit=crop',
-  },
-  {
-    id: 'chiffon',
-    title: 'Chiffon Esvoaçante',
-    tag: 'Chiffon Leve',
-    description: 'Tecido leve e esvoaçante que traz frescor e extrema delicadeza.',
-    url: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=1000&auto=format&fit=crop',
-  },
-  {
-    id: 'mangas',
-    title: 'Vestido com Mangas Delicadas',
-    tag: 'Mangas Elegantes',
-    description: 'Mangas longas ou 3/4 em tule ou tecido estruturado para um toque solene.',
-    url: 'https://images.unsplash.com/photo-1502716119720-b23a93e5fe1b?q=80&w=1000&auto=format&fit=crop',
-  },
-  {
-    id: 'um-ombro',
-    title: 'Ombro Único (Assimétrico)',
-    tag: 'Um Ombro Só',
-    description: 'Decote assimétrico moderno mantendo a sobriedade e sofisticação.',
-    url: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1000&auto=format&fit=crop',
-  },
-  {
-    id: 'decote-discreto',
-    title: 'Decote Clássico e Discreto',
-    tag: 'Decote Discreto',
-    description: 'Gola alta, decote canoa ou reto que valorizam o colo de forma elegante.',
-    url: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80&w=1000&auto=format&fit=crop',
-  },
-  {
-    id: 'minimalista',
-    title: 'Minimalista Chique',
-    tag: 'Minimalista',
-    description: 'Linhas limpas, sem bordados excessivos, com foco no corte impecável.',
-    url: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=1000&auto=format&fit=crop',
-  },
-];
-
-const DRESS_COLOR_OPTIONS = [
-  { id: 'rose', name: 'Rosê Gold', hex: '#D4A373', description: 'Harmonização calorosa, romântica e elegante' },
-  { id: 'terracota', name: 'Terracota', hex: '#C86446', description: 'Tom terroso sofisticado para a noite' },
-  { id: 'verde-oliva', name: 'Verde Oliva', hex: '#4A6B5D', description: 'Natural, marcante e refinado' },
-  { id: 'serenity', name: 'Azul Serenity', hex: '#7A9A9E', description: 'Suavidade clássica e atemporal' },
-  { id: 'marsala', name: 'Marsala / Vinho', hex: '#6B2D46', description: 'Elegância intensa para cerimônias noturnas' },
-  { id: 'lavanda', name: 'Lavanda', hex: '#9E88B2', description: 'Delicadeza e frescor romântico' },
-  { id: 'azul-marinho', name: 'Azul Marinho', hex: '#1E293B', description: 'Profundo, nobre e altamente formal' },
-  { id: 'esmeralda', name: 'Verde Esmeralda', hex: '#1B4D3E', description: 'Suntuosidade clássica de gala' },
-];
-
 export default function PadrinhosPortal() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -132,20 +61,49 @@ export default function PadrinhosPortal() {
   const [loginError, setLoginError] = useState('');
   const [activeTab, setActiveTab] = useState<'padrinhos' | 'mensagens' | 'cronograma'>('padrinhos');
 
-  // Interactive Harmonizer state
-  const [selectedHarmonizerColor, setSelectedHarmonizerColor] = useState(DRESS_COLOR_OPTIONS[0]);
-  const [lightboxItem, setLightboxItem] = useState<GalleryItem | null>(null);
-
-  // Messages state
-  const [announcements] = useState<PadrinhoMessage[]>(INITIAL_ANNOUNCEMENTS);
+  // Messages & Announcements state
+  const [announcements, setAnnouncements] = useState<PadrinhoMessage[]>(INITIAL_ANNOUNCEMENTS);
   const [newReply, setNewReply] = useState('');
   const [padrinhoReplies, setPadrinhoReplies] = useState<{ id: string; author: string; text: string; date: string }[]>([]);
   const [replySuccess, setReplySuccess] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 
-  // Check stored session on mount
+  // Noivos Announcement creation form
+  const [showAddAnnouncement, setShowAddAnnouncement] = useState(false);
+  const [annTitle, setAnnTitle] = useState('');
+  const [annContent, setAnnContent] = useState('');
+  const [annImportant, setAnnImportant] = useState(false);
+
+  // Schedule state & Noivos Schedule editing
+  const [schedule, setSchedule] = useState<ScheduleItem[]>(INITIAL_SCHEDULE);
+  const [showScheduleModal, setShowScheduleModal] = useState(false);
+  const [editingScheduleItem, setEditingScheduleItem] = useState<ScheduleItem | null>(null);
+  const [schTime, setSchTime] = useState('');
+  const [schTitle, setSchTitle] = useState('');
+  const [schDescription, setSchDescription] = useState('');
+
+  // Strict check: only true if the logged user is Aline e Klécio (role: 'noivos')
+  const isNoivos = loggedUser?.role === 'noivos';
+
+  // Check stored session and data on mount
   useEffect(() => {
-    setIsAdmin(localStorage.getItem('admin_logged_in') === 'true');
+    const savedAnnouncements = localStorage.getItem('padrinho_announcements');
+    if (savedAnnouncements) {
+      try {
+        setAnnouncements(JSON.parse(savedAnnouncements));
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    const savedSchedule = localStorage.getItem('wedding_schedule_items');
+    if (savedSchedule) {
+      try {
+        setSchedule(JSON.parse(savedSchedule));
+      } catch (e) {
+        console.error(e);
+      }
+    }
 
     const savedUser = localStorage.getItem('padrinho_session');
     if (savedUser) {
@@ -154,11 +112,25 @@ export default function PadrinhosPortal() {
         const match = PADRINHOS_ACCOUNTS.find(a => a.id === parsed.id);
         if (match) {
           setLoggedUser(match);
+          if (match.role === 'noivos') {
+            setIsAdmin(true);
+            localStorage.setItem('admin_logged_in', 'true');
+          } else {
+            setIsAdmin(false);
+            localStorage.removeItem('admin_logged_in');
+          }
           setActiveTab('padrinhos');
+        } else {
+          setLoggedUser(null);
+          setIsAdmin(false);
+          localStorage.removeItem('padrinho_session');
+          localStorage.removeItem('admin_logged_in');
         }
       } catch (e) {
         console.error(e);
       }
+    } else {
+      setIsAdmin(false);
     }
 
     const savedReplies = localStorage.getItem('padrinho_replies');
@@ -170,6 +142,98 @@ export default function PadrinhosPortal() {
       }
     }
   }, []);
+
+  const handleAddAnnouncement = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!annTitle.trim() || !annContent.trim()) return;
+
+    const newAnn: PadrinhoMessage = {
+      id: 'ann-' + Date.now(),
+      title: annTitle.trim(),
+      content: annContent.trim(),
+      author: 'Aline e Klécio',
+      date: new Date().toLocaleDateString('pt-BR'),
+      isImportant: annImportant
+    };
+
+    const updated = [newAnn, ...announcements];
+    setAnnouncements(updated);
+    localStorage.setItem('padrinho_announcements', JSON.stringify(updated));
+    setAnnTitle('');
+    setAnnContent('');
+    setAnnImportant(false);
+    setShowAddAnnouncement(false);
+  };
+
+  const handleDeleteAnnouncement = (id: string) => {
+    if (confirm('Deseja realmente remover este comunicado do mural?')) {
+      const updated = announcements.filter(a => a.id !== id);
+      setAnnouncements(updated);
+      localStorage.setItem('padrinho_announcements', JSON.stringify(updated));
+    }
+  };
+
+  const handleOpenAddSchedule = () => {
+    setEditingScheduleItem(null);
+    setSchTime('');
+    setSchTitle('');
+    setSchDescription('');
+    setShowScheduleModal(true);
+  };
+
+  const handleOpenEditSchedule = (item: ScheduleItem) => {
+    setEditingScheduleItem(item);
+    setSchTime(item.time);
+    setSchTitle(item.title);
+    setSchDescription(item.description);
+    setShowScheduleModal(true);
+  };
+
+  const handleSaveScheduleItem = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!schTime.trim() || !schTitle.trim()) return;
+
+    let updated: ScheduleItem[];
+    if (editingScheduleItem) {
+      updated = schedule.map(item => item.id === editingScheduleItem.id ? {
+        ...item,
+        time: schTime.trim(),
+        title: schTitle.trim(),
+        description: schDescription.trim()
+      } : item);
+    } else {
+      const newItem: ScheduleItem = {
+        id: 'sch-' + Date.now(),
+        time: schTime.trim(),
+        title: schTitle.trim(),
+        description: schDescription.trim()
+      };
+      updated = [...schedule, newItem];
+    }
+
+    setSchedule(updated);
+    localStorage.setItem('wedding_schedule_items', JSON.stringify(updated));
+    setShowScheduleModal(false);
+    setEditingScheduleItem(null);
+    setSchTime('');
+    setSchTitle('');
+    setSchDescription('');
+  };
+
+  const handleDeleteScheduleItem = (id: string) => {
+    if (confirm('Deseja realmente excluir este horário do cronograma?')) {
+      const updated = schedule.filter(s => s.id !== id);
+      setSchedule(updated);
+      localStorage.setItem('wedding_schedule_items', JSON.stringify(updated));
+    }
+  };
+
+  const handleResetSchedule = () => {
+    if (confirm('Deseja restaurar o cronograma padrão original?')) {
+      setSchedule(INITIAL_SCHEDULE);
+      localStorage.setItem('wedding_schedule_items', JSON.stringify(INITIAL_SCHEDULE));
+    }
+  };
 
   const handleDeleteReply = (id: string) => {
     if (confirm('Tem certeza que deseja excluir este recado?')) {
@@ -188,12 +252,19 @@ export default function PadrinhosPortal() {
     const userMatch = PADRINHOS_ACCOUNTS.find(acc => {
       const matchUsername = acc.username.toLowerCase() === cleanUser ||
         acc.alternateUsernames?.some(alt => alt.toLowerCase() === cleanUser);
-      return matchUsername && acc.password === cleanPass;
+      return matchUsername && (acc.password === cleanPass || (acc.role === 'noivos' && acc.password.toLowerCase() === cleanPass.toLowerCase()));
     });
 
     if (userMatch) {
       setLoggedUser(userMatch);
       localStorage.setItem('padrinho_session', JSON.stringify(userMatch));
+      if (userMatch.role === 'noivos') {
+        setIsAdmin(true);
+        localStorage.setItem('admin_logged_in', 'true');
+      } else {
+        setIsAdmin(false);
+        localStorage.removeItem('admin_logged_in');
+      }
       setActiveTab('padrinhos');
     } else {
       setLoginError('Usuário ou senha incorretos. Por favor, verifique com os noivos.');
@@ -202,7 +273,9 @@ export default function PadrinhosPortal() {
 
   const handleLogout = () => {
     setLoggedUser(null);
+    setIsAdmin(false);
     localStorage.removeItem('padrinho_session');
+    localStorage.removeItem('admin_logged_in');
   };
 
   const handleSendReply = (e: React.FormEvent) => {
@@ -248,8 +321,12 @@ export default function PadrinhosPortal() {
             animate={{ opacity: 1, y: 0 }}
             className="bg-white dark:bg-zinc-900/95 backdrop-blur-xl w-full max-w-md rounded-3xl p-8 md:p-10 shadow-xl border border-gray-200/90 dark:border-zinc-800"
           >
-            <div className="w-20 h-20 p-2 rounded-full border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-850 shadow-inner flex items-center justify-center mx-auto mb-6">
-              <img src="/img/LOGO_MARCA.png" alt="Logo Marca Aline e Klécio" className="w-full h-full object-contain rounded-full" />
+            <div className="w-20 h-20 p-1.5 rounded-full border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-md flex items-center justify-center overflow-hidden mx-auto mb-6">
+              <img
+                src="/img/LOGO_MARCA.png"
+                alt="Logo Marca Aline e Klécio"
+                className="w-full h-full object-contain rounded-full"
+              />
             </div>
 
             <div className="text-center space-y-1.5 mb-6">
@@ -278,7 +355,7 @@ export default function PadrinhosPortal() {
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-1.5">
                 <label className="block text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 font-medium font-sans">
-                  Usuário ou E-mail
+                  Usuário
                 </label>
                 <div className="relative">
                   <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -286,7 +363,7 @@ export default function PadrinhosPortal() {
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    placeholder="Ex: debora.carlos ou cleber"
+                    placeholder="Digite seu usuário"
                     required
                     className="w-full pl-11 pr-4 py-3 rounded-2xl border border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-800/40 text-[var(--foreground)] text-sm focus:outline-none focus:border-black dark:focus:border-white focus:bg-white dark:focus:bg-zinc-850 transition-all font-sans"
                   />
@@ -345,18 +422,37 @@ export default function PadrinhosPortal() {
             <div className="flex items-center gap-2.5">
               <img src="/img/LOGO_MARCA.png" alt="Logo" className="w-8 h-8 rounded-full border border-gray-200 dark:border-zinc-700 object-contain" />
               <div>
-                <span className="font-serif font-medium text-base md:text-lg text-[var(--foreground)] block leading-tight">
-                  Padrinhos e Madrinhas
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="font-serif font-medium text-base md:text-lg text-[var(--foreground)] block leading-tight">
+                    Padrinhos e Madrinhas
+                  </span>
+                  {isNoivos && (
+                    <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-sans font-semibold bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">
+                      <Crown size={11} /> Noivos
+                    </span>
+                  )}
+                </div>
                 <span className="text-[11px] font-sans text-gray-400 hidden sm:block">Aline e Klécio 2027</span>
               </div>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
+            {isNoivos && (
+              <Link
+                href="/admin"
+                className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-sans font-medium bg-gray-100 dark:bg-zinc-800 text-[var(--foreground)] hover:bg-gray-200 dark:hover:bg-zinc-700 transition-colors"
+                title="Acessar painel geral de presentes e mensagens"
+              >
+                <ExternalLink size={13} /> Painel Geral
+              </Link>
+            )}
+
             <div className="hidden sm:block text-right">
               <span className="text-xs text-gray-400 block font-sans">Conectado como</span>
-              <p className="text-sm font-serif font-medium text-[var(--foreground)] leading-tight">{loggedUser.name}</p>
+              <p className="text-sm font-serif font-medium text-[var(--foreground)] leading-tight flex items-center justify-end gap-1">
+                {isNoivos && <Crown size={13} className="text-amber-500" />} {loggedUser.name}
+              </p>
             </div>
             <button
               onClick={handleLogout}
@@ -378,9 +474,16 @@ export default function PadrinhosPortal() {
           className="relative rounded-3xl p-6 md:p-10 overflow-hidden bg-gradient-to-br from-slate-50 via-white to-gray-100 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-850 text-[var(--foreground)] shadow-md border border-gray-200 dark:border-zinc-800"
         >
           <div className="max-w-3xl space-y-4">
-            <h1 className="text-3xl md:text-5xl font-serif font-medium text-[var(--foreground)] tracking-tight">
-              Olá, {loggedUser.name}!
-            </h1>
+            <div className="flex items-center gap-2">
+              <h1 className="text-3xl md:text-5xl font-serif font-medium text-[var(--foreground)] tracking-tight">
+                Olá, {loggedUser.name}!
+              </h1>
+              {isNoivos && (
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-sans font-semibold bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">
+                  <Crown size={13} /> Espaço dos Noivos
+                </span>
+              )}
+            </div>
 
             <p className="text-gray-700 dark:text-gray-300 text-base md:text-lg font-sans leading-relaxed text-justified-elegant">
               {loggedUser.customMessage || 'Vocês são essenciais em nossas vidas e é um presente ter vocês ao nosso lado neste momento inesquecível!'}
@@ -408,6 +511,11 @@ export default function PadrinhosPortal() {
               }`}
           >
             <MessageSquare size={18} /> Mural & Avisos
+            {announcements.length > 0 && (
+              <span className="text-xs bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-full font-sans font-medium">
+                {announcements.length}
+              </span>
+            )}
           </button>
 
           <button
@@ -424,77 +532,47 @@ export default function PadrinhosPortal() {
         {/* Tab Contents */}
         <AnimatePresence mode="wait">
 
-          {/* TAB 1: PADRINHOS E MADRINHAS */}
+          {/* TAB 1: PADRINHOS & MADRINHAS GUIDELINES */}
           {activeTab === 'padrinhos' && (
             <motion.div
               key="padrinhos"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="space-y-10"
+              className="space-y-8"
             >
-              {/* Introduction Banner */}
-              <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 md:p-8 shadow-sm border border-gray-200 dark:border-zinc-800">
-                <div className="max-w-3xl space-y-2">
-                  <span className="text-xs uppercase tracking-widest text-gray-400 font-sans font-semibold">
-                    Dress Code Oficial
-                  </span>
-                  <h2 className="text-2xl md:text-4xl font-serif text-[var(--foreground)] font-medium">
-                    Guia de Trajes & Orientações do Cortejo
-                  </h2>
-                  <p className="text-gray-600 dark:text-gray-300 font-sans text-sm md:text-base leading-relaxed text-justified-elegant">
-                    Preparamos todas as orientações sobre vestimentas, cores e detalhes para que todos estejamos em perfeita harmonia no altar.
-                  </p>
-                </div>
-              </div>
-
-              {/* Seção Exclusiva da Daminha (Exibida somente se a conta possuir daminha vinculada) */}
+              {/* Daminha Alert */}
               {loggedUser.daminha && (
-                <div className="bg-gradient-to-br from-rose-50/70 via-white to-pink-50/40 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-850 rounded-3xl p-6 md:p-9 shadow-sm border border-rose-200/70 dark:border-zinc-800 space-y-6">
-                  <div className="flex items-center gap-3.5 pb-4 border-b border-rose-100 dark:border-zinc-800">
-                    <div className="w-11 h-11 rounded-2xl bg-rose-100 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center justify-center font-serif font-bold text-2xl border border-rose-200 dark:border-rose-900/40 shrink-0">
-                      🌸
+                <div className="bg-gradient-to-r from-rose-50/80 to-purple-50/80 dark:from-zinc-800/60 dark:to-zinc-800/40 p-6 rounded-3xl border border-rose-200/80 dark:border-zinc-700/80 shadow-xs">
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-10 h-10 rounded-2xl bg-rose-100 dark:bg-zinc-700 text-rose-600 dark:text-rose-300 flex items-center justify-center shrink-0">
+                      <Flower2 size={20} />
                     </div>
                     <div>
-                      <span className="text-xs uppercase tracking-widest text-rose-600 dark:text-rose-400 font-sans font-medium">Orientações Especiais</span>
-                      <h3 className="text-2xl md:text-3xl font-serif text-[var(--foreground)] font-medium leading-tight">
-                        Traje da Daminha ({loggedUser.daminha})
-                      </h3>
+                      <h4 className="font-serif text-lg font-medium text-[var(--foreground)]">
+                        Orientações Especiais para a Daminha ({loggedUser.daminha})
+                      </h4>
+                      <p className="text-gray-600 dark:text-gray-300 text-xs md:text-sm mt-0.5 leading-relaxed text-justified-elegant font-sans">
+                        Vestido infantil em tom suave (off-white ou bege claro) com laço e calçado confortável para conduzir as alianças com graciosidade.
+                      </p>
                     </div>
                   </div>
+                </div>
+              )}
 
-                  <p className="text-gray-600 dark:text-gray-300 font-sans text-sm leading-relaxed text-justified-elegant">
-                    Como pais da nossa querida daminha <strong>{loggedUser.daminha}</strong>, preparamos as seguintes orientações para o grande dia:
-                  </p>
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-sans text-sm">
-                    <div className="p-4.5 rounded-2xl bg-white dark:bg-zinc-800/40 border border-rose-100 dark:border-zinc-800 shadow-2xs space-y-1.5">
-                      <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400 font-serif font-semibold text-base">
-                        <Sparkles size={16} />
-                        <span>Vestidinho</span>
-                      </div>
-                      <p className="text-gray-600 dark:text-gray-300 text-xs leading-relaxed text-justified-elegant">
-                        Vestido infantil clássico de daminha em tons claros / off-white com detalhes delicados e corte confortável.
-                      </p>
+              {/* Pajem Alert */}
+              {loggedUser.pajem && (
+                <div className="bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-zinc-800/60 dark:to-zinc-800/40 p-6 rounded-3xl border border-blue-200/80 dark:border-zinc-700/80 shadow-xs">
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-10 h-10 rounded-2xl bg-blue-100 dark:bg-zinc-700 text-blue-600 dark:text-blue-300 flex items-center justify-center shrink-0">
+                      <Sparkles size={20} />
                     </div>
-
-                    <div className="p-4.5 rounded-2xl bg-white dark:bg-zinc-800/40 border border-rose-100 dark:border-zinc-800 shadow-2xs space-y-1.5">
-                      <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400 font-serif font-semibold text-base">
-                        <Smile size={16} />
-                        <span>Calçado & Acessórios</span>
-                      </div>
-                      <p className="text-gray-600 dark:text-gray-300 text-xs leading-relaxed text-justified-elegant">
-                        Sapatinho confortável para caminhada graciosa e leve até o altar, com acessório de cabelo delicado (tiara ou laço).
-                      </p>
-                    </div>
-
-                    <div className="p-4.5 rounded-2xl bg-white dark:bg-zinc-800/40 border border-rose-100 dark:border-zinc-800 shadow-2xs space-y-1.5">
-                      <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400 font-serif font-semibold text-base">
-                        <Clock size={16} />
-                        <span>Horário & Fotos</span>
-                      </div>
-                      <p className="text-gray-600 dark:text-gray-300 text-xs leading-relaxed text-justified-elegant">
-                        Chegada às <strong>18h</strong> com os pais ao local da cerimônia para se arrumarem sem pressa e registrarem as primeiras fotos.
+                    <div>
+                      <h4 className="font-serif text-lg font-medium text-[var(--foreground)]">
+                        Orientações Especiais para o Pajem ({loggedUser.pajem})
+                      </h4>
+                      <p className="text-gray-600 dark:text-gray-300 text-xs md:text-sm mt-0.5 leading-relaxed text-justified-elegant font-sans">
+                        Como pais do nosso querido pajem <strong>{loggedUser.pajem}</strong>: traje social infantil em <strong className="text-[var(--foreground)]">Azul Marinho ou Preto</strong> com camisa social branca e calçado confortável para conduzir esse momento especial até o altar.
                       </p>
                     </div>
                   </div>
@@ -503,11 +581,9 @@ export default function PadrinhosPortal() {
 
               {/* Madrinhas & Padrinhos Cards Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-
                 {/* 1. COLUMN MADRINHAS */}
                 <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 md:p-9 shadow-sm border border-gray-200 dark:border-zinc-800 flex flex-col justify-between space-y-8">
                   <div className="space-y-7">
-
                     {/* Header Block */}
                     <div className="flex items-center gap-3.5 pb-5 border-b border-gray-100 dark:border-zinc-800">
                       <div className="w-11 h-11 rounded-2xl bg-rose-50 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 flex items-center justify-center font-serif font-semibold text-xl border border-rose-200 dark:border-rose-900/40 shrink-0">
@@ -595,61 +671,12 @@ export default function PadrinhosPortal() {
                         <span>Entrar no Grupo WhatsApp</span>
                       </a>
                     </div>
-
-                    {/* Inspirações para Madrinhas */}
-                    <div className="space-y-4 pt-3 border-t border-gray-100 dark:border-zinc-800">
-                      <div className="space-y-1">
-                        <div className="flex items-center justify-between">
-                          <h4 className="text-xl font-serif text-[var(--foreground)] font-medium flex items-center gap-2">
-                            <Sparkles size={16} className="text-gray-400" /> Inspirações de Modelagens
-                          </h4>
-                          <span className="text-[11px] bg-gray-100 dark:bg-zinc-800 text-gray-500 px-2.5 py-0.5 rounded-full font-sans font-medium">8 referências</span>
-                        </div>
-                        <p className="text-xs text-gray-500 font-sans leading-relaxed text-justified-elegant">
-                          As imagens abaixo servem como inspiração de cortes e caimentos elegantes. A cor e o tecido são de livre escolha de cada madrinha.
-                        </p>
-                      </div>
-
-                      {/* Responsive Image Grid */}
-                      <div className="grid grid-cols-2 gap-3">
-                        {MADRINHAS_GALLERY_ITEMS.map((item) => (
-                          <div
-                            key={item.id}
-                            onClick={() => setLightboxItem(item)}
-                            className="group relative rounded-2xl overflow-hidden border border-gray-200 dark:border-zinc-700/60 shadow-2xs cursor-pointer bg-zinc-900 aspect-[3/4]"
-                          >
-                            <img
-                              src={item.url}
-                              alt={item.title}
-                              className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                            />
-
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-80 group-hover:opacity-95 transition-opacity flex flex-col justify-between p-3">
-                              <div className="flex justify-end">
-                                <span className="w-6 h-6 rounded-full bg-black/60 backdrop-blur-md text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity border border-white/20">
-                                  <ZoomIn size={12} />
-                                </span>
-                              </div>
-
-                              <div>
-                                <span className="text-[10px] uppercase font-sans tracking-wide bg-white/20 text-white px-2 py-0.5 rounded-full backdrop-blur-xs font-medium inline-block mb-1">
-                                  {item.tag}
-                                </span>
-                                <h5 className="text-xs font-serif text-white font-medium line-clamp-1">{item.title}</h5>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
                   </div>
                 </div>
 
                 {/* 2. COLUMN PADRINHOS */}
                 <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 md:p-9 shadow-sm border border-gray-200 dark:border-zinc-800 flex flex-col justify-between space-y-8">
                   <div className="space-y-7">
-
                     {/* Header Block */}
                     <div className="flex items-center gap-3.5 pb-5 border-b border-gray-100 dark:border-zinc-800">
                       <div className="w-11 h-11 rounded-2xl bg-slate-100 dark:bg-zinc-800 text-slate-900 dark:text-white flex items-center justify-center font-serif font-semibold text-xl border border-slate-300 dark:border-zinc-700 shrink-0">
@@ -670,7 +697,7 @@ export default function PadrinhosPortal() {
                       </p>
                     </div>
 
-                    {/* Diretrizes Principais */}
+                    {/* Diretrizes Principais dos Padrinhos */}
                     <div className="space-y-3.5">
                       <h4 className="font-serif text-lg font-medium text-[var(--foreground)] flex items-center gap-2 pb-1 border-b border-gray-100 dark:border-zinc-800">
                         <CheckCircle2 size={16} className="text-gray-400" /> Diretrizes dos Padrinhos
@@ -729,130 +756,10 @@ export default function PadrinhosPortal() {
                           </div>
                         </div>
                       </div>
-
-                      {/* Orientação para Pajens */}
-                      <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-blue-50/60 dark:bg-blue-950/25 border border-blue-100 dark:border-blue-900/40 mt-3">
-                        <div className="w-8 h-8 rounded-xl bg-blue-900 dark:bg-blue-300 text-white dark:text-blue-950 flex items-center justify-center shrink-0 mt-0.5 font-serif font-semibold text-sm">
-                          P
-                        </div>
-                        <div>
-                          <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Traje dos Pajens</span>
-                          <p className="text-gray-600 dark:text-gray-300 text-xs md:text-sm mt-0.5 leading-relaxed text-justified-elegant font-sans">
-                            Para os pajens: traje social infantil em <strong className="text-[var(--foreground)]">Azul Marinho ou Preto</strong>.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Interactive Harmonizer Widget */}
-                    <div className="bg-gradient-to-br from-zinc-950 via-zinc-900 to-black text-white p-6 md:p-7 rounded-3xl shadow-xl border border-zinc-800 space-y-5">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 pb-3 border-b border-zinc-800">
-                        <div>
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-[10px] font-sans font-medium uppercase tracking-widest text-gray-300 backdrop-blur-md mb-1.5 border border-white/10">
-                            <Sparkles size={11} className="text-gray-300" /> Simulador do Casal no Altar
-                          </span>
-                          <h4 className="text-xl font-serif text-white font-medium">Harmonia Visual no Altar</h4>
-                        </div>
-                        <span className="text-xs text-gray-400 font-sans">
-                          Selecione um tom para visualizar
-                        </span>
-                      </div>
-
-                      {/* Color Palette Selector */}
-                      <div>
-                        <p className="text-xs uppercase tracking-wider text-gray-400 font-medium mb-2.5 font-sans">
-                          Cor do vestido da Madrinha:
-                        </p>
-                        <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
-                          {DRESS_COLOR_OPTIONS.map((opt) => {
-                            const isSelected = selectedHarmonizerColor.id === opt.id;
-                            return (
-                              <button
-                                key={opt.id}
-                                type="button"
-                                onClick={() => setSelectedHarmonizerColor(opt)}
-                                className={`group relative flex flex-col items-center justify-center p-2 rounded-xl border transition-all duration-300 cursor-pointer ${isSelected
-                                  ? 'border-white bg-white/15 scale-105 shadow-md'
-                                  : 'border-zinc-800 bg-zinc-900/60 hover:border-zinc-600 hover:bg-zinc-800/80'
-                                  }`}
-                                title={opt.name}
-                              >
-                                <div
-                                  className="w-6 h-6 rounded-full shadow-inner border border-white/20 transition-transform group-hover:scale-110 flex items-center justify-center"
-                                  style={{ backgroundColor: opt.hex }}
-                                >
-                                  {isSelected && <Check size={12} className="text-white drop-shadow-md" />}
-                                </div>
-                                <span className="text-[10px] text-gray-300 font-sans mt-1 line-clamp-1 text-center font-medium">
-                                  {opt.name.split('/')[0]}
-                                </span>
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-
-                      {/* Visual Live Comparison Preview */}
-                      <div className="bg-zinc-900/80 rounded-2xl p-5 border border-zinc-800 flex flex-col sm:flex-row items-center justify-around gap-5">
-
-                        {/* Madrinha Model Preview */}
-                        <div className="flex flex-col items-center text-center space-y-2">
-                          <span className="text-xs uppercase font-medium tracking-wider text-gray-400 font-sans">Vestido Madrinha</span>
-                          <AnimatePresence mode="wait">
-                            <motion.div
-                              key={selectedHarmonizerColor.id + '-dress'}
-                              initial={{ opacity: 0, scale: 0.9 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              exit={{ opacity: 0, scale: 0.9 }}
-                              transition={{ duration: 0.3 }}
-                              className="relative w-28 h-32 rounded-2xl border border-white/20 flex flex-col items-center justify-center shadow-lg p-3 overflow-hidden"
-                              style={{ backgroundColor: selectedHarmonizerColor.hex }}
-                            >
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-white/20 pointer-events-none"></div>
-                              <div className="z-10 text-white flex flex-col items-center">
-                                <span className="text-xl mb-0.5">👗</span>
-                                <span className="text-xs font-serif font-bold text-white drop-shadow-md">LONGO</span>
-                                <span className="text-[10px] font-sans text-white/90 drop-shadow-xs uppercase mt-0.5">{selectedHarmonizerColor.name}</span>
-                              </div>
-                            </motion.div>
-                          </AnimatePresence>
-                        </div>
-
-                        {/* Harmony Indicator Plus */}
-                        <div className="flex flex-col items-center text-gray-400">
-                          <span className="text-xl font-serif text-white/80">+</span>
-                          <span className="text-[10px] uppercase tracking-widest text-gray-400 font-sans">Combinação</span>
-                        </div>
-
-                        {/* Padrinho Model Preview */}
-                        <div className="flex flex-col items-center text-center space-y-2">
-                          <span className="text-xs uppercase font-medium tracking-wider text-gray-400 font-sans">Traje Padrinho</span>
-                          <div className="relative w-28 h-32 bg-zinc-950 rounded-2xl border border-zinc-700 flex flex-col items-center justify-start pt-2.5 shadow-lg p-3 overflow-hidden">
-                            <div className="w-10 h-5 bg-white rounded-b-sm flex items-center justify-center shadow-xs">
-                              <div
-                                className="w-3 h-14 rounded-b shadow-md bg-slate-300 border-x border-slate-400"
-                                style={{ backgroundColor: '#D1D5DB' }}
-                              ></div>
-                            </div>
-                            <div className="z-10 mt-auto text-center">
-                              <span className="text-[10px] font-bold text-white block uppercase tracking-wider">Terno Preto</span>
-                              <span className="text-[10px] font-sans text-slate-300 block">Gravata Prata</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Description Footnote */}
-                      <div className="pt-2 border-t border-zinc-800/80 text-center">
-                        <p className="text-xs text-gray-300 font-sans leading-relaxed">
-                          ✨ O Terno Preto com Gravata Prata e Camisa Branca compõe um visual atemporal que harmoniza perfeitamente com o vestido <span className="text-white font-semibold">{selectedHarmonizerColor.name}</span> da Madrinha!
-                        </p>
-                      </div>
                     </div>
 
                   </div>
                 </div>
-
               </div>
             </motion.div>
           )}
@@ -866,26 +773,129 @@ export default function PadrinhosPortal() {
               exit={{ opacity: 0, y: -10 }}
               className="space-y-8"
             >
+              {/* Noivos Announcement Creation Card */}
+              {isNoivos && (
+                <div className="bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent dark:from-amber-950/20 dark:via-zinc-900 dark:to-zinc-900 rounded-3xl p-6 md:p-8 border border-amber-500/30 shadow-sm">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                    <div>
+                      <span className="text-xs uppercase tracking-widest text-amber-700 dark:text-amber-400 font-sans font-semibold flex items-center gap-1.5">
+                        <Crown size={14} /> Espaço dos Noivos
+                      </span>
+                      <h3 className="text-xl md:text-2xl font-serif text-[var(--foreground)] font-medium">
+                        Publicar Comunicado no Mural
+                      </h3>
+                    </div>
+                    <button
+                      onClick={() => setShowAddAnnouncement(!showAddAnnouncement)}
+                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-black dark:bg-white text-white dark:text-black text-xs font-sans font-medium shadow-sm hover:opacity-90 transition-all cursor-pointer w-fit"
+                    >
+                      {showAddAnnouncement ? <X size={15} /> : <Plus size={15} />}
+                      <span>{showAddAnnouncement ? 'Fechar Formulário' : 'Novo Comunicado'}</span>
+                    </button>
+                  </div>
+
+                  {showAddAnnouncement && (
+                    <motion.form
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      onSubmit={handleAddAnnouncement}
+                      className="space-y-4 pt-4 border-t border-amber-500/20"
+                    >
+                      <div>
+                        <label className="block text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 font-sans font-medium mb-1.5">
+                          Título do Aviso
+                        </label>
+                        <input
+                          type="text"
+                          value={annTitle}
+                          onChange={(e) => setAnnTitle(e.target.value)}
+                          placeholder="Ex: Horário do ensaio definido, Dica de transporte..."
+                          required
+                          className="w-full px-4 py-3 rounded-2xl border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-[var(--foreground)] text-sm font-sans focus:outline-none focus:border-black dark:focus:border-white transition-all"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 font-sans font-medium mb-1.5">
+                          Conteúdo do Comunicado
+                        </label>
+                        <textarea
+                          value={annContent}
+                          onChange={(e) => setAnnContent(e.target.value)}
+                          placeholder="Escreva as instruções ou recado detalhado para os padrinhos e cortejo..."
+                          rows={4}
+                          required
+                          className="w-full p-4 rounded-2xl border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-[var(--foreground)] text-sm font-sans focus:outline-none focus:border-black dark:focus:border-white transition-all"
+                        />
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          id="annImportant"
+                          checked={annImportant}
+                          onChange={(e) => setAnnImportant(e.target.checked)}
+                          className="w-4 h-4 rounded accent-black dark:accent-white cursor-pointer"
+                        />
+                        <label htmlFor="annImportant" className="text-xs font-sans text-[var(--foreground)] cursor-pointer">
+                          📌 Marcar como <strong>Aviso Importante / Destaque</strong>
+                        </label>
+                      </div>
+
+                      <div className="flex justify-end gap-3 pt-2">
+                        <button
+                          type="button"
+                          onClick={() => setShowAddAnnouncement(false)}
+                          className="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-zinc-700 text-xs font-sans text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
+                        >
+                          Cancelar
+                        </button>
+                        <button
+                          type="submit"
+                          className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-black dark:bg-white text-white dark:text-black text-xs font-sans font-medium shadow-sm hover:opacity-90 transition-all cursor-pointer"
+                        >
+                          <Send size={14} /> Publicar no Mural
+                        </button>
+                      </div>
+                    </motion.form>
+                  )}
+                </div>
+              )}
+
+              {/* Announcements List */}
               <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 md:p-8 shadow-sm border border-gray-200 dark:border-zinc-800">
-                <span className="text-xs uppercase tracking-widest text-gray-400 font-sans font-semibold">Comunicados</span>
-                <h2 className="text-2xl md:text-3xl font-serif text-[var(--foreground)] font-medium mb-6 flex items-center gap-2">
-                  <Sparkles size={20} className="text-gray-400" /> Recados e Avisos dos Noivos
-                </h2>
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <span className="text-xs uppercase tracking-widest text-gray-400 font-sans font-semibold">Comunicados</span>
+                    <h2 className="text-2xl md:text-3xl font-serif text-[var(--foreground)] font-medium flex items-center gap-2">
+                      <Sparkles size={20} className="text-gray-400" /> Recados e Avisos dos Noivos
+                    </h2>
+                  </div>
+                </div>
 
                 <div className="space-y-4">
                   {announcements.map((ann) => (
                     <div
                       key={ann.id}
-                      className={`p-6 rounded-2xl border transition-all ${ann.isImportant
-                        ? 'bg-slate-50/80 dark:bg-zinc-800/80 border-slate-300 dark:border-zinc-700 shadow-2xs'
-                        : 'bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800'
-                        }`}
+                      className="p-6 rounded-2xl border transition-all bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800"
                     >
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-xs font-semibold uppercase tracking-wider text-[var(--foreground)] font-sans">
                           {ann.author}
                         </span>
-                        <span className="text-xs text-gray-400 font-sans">{ann.date}</span>
+                        <div className="flex items-center gap-3">
+                          <span className="text-xs text-gray-400 font-sans">{ann.date}</span>
+                          {isNoivos && (
+                            <button
+                              onClick={() => handleDeleteAnnouncement(ann.id)}
+                              className="p-1.5 text-red-500 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer"
+                              title="Excluir comunicado"
+                            >
+                              <Trash2 size={15} />
+                            </button>
+                          )}
+                        </div>
                       </div>
                       <h3 className="text-xl font-serif text-[var(--foreground)] mb-2 font-medium">{ann.title}</h3>
                       <p className="text-gray-600 dark:text-gray-300 font-sans text-sm md:text-base leading-relaxed text-justified-elegant">
@@ -894,196 +904,248 @@ export default function PadrinhosPortal() {
                     </div>
                   ))}
                 </div>
-              </div>
 
-              {/* Reply Section */}
-              <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 md:p-8 shadow-sm border border-gray-200 dark:border-zinc-800">
-                <h3 className="text-xl font-serif text-[var(--foreground)] mb-1 flex items-center gap-2 font-medium">
-                  <MessageSquare size={18} className="text-gray-400" /> Deixar Recado para Aline e Klécio
-                </h3>
-                <p className="text-xs text-gray-500 font-sans mb-6">
-                  Escreva um recado especial, tire dúvidas ou envie um carinho para os noivos.
-                </p>
+                {/* Reply Section */}
+                <div className="mt-12 pt-8 border-t border-gray-100 dark:border-zinc-800">
+                  <h3 className="text-xl font-serif text-[var(--foreground)] mb-1 flex items-center gap-2 font-medium">
+                    <MessageSquare size={18} className="text-gray-400" /> Deixar Recado para Aline e Klécio
+                  </h3>
+                  <p className="text-xs text-gray-500 font-sans mb-6">
+                    Escreva um recado especial, tire dúvidas ou envie um carinho para os noivos.
+                  </p>
 
-                {replySuccess && (
-                  <div className="bg-green-500/10 border border-green-500/30 text-green-600 p-3.5 rounded-2xl text-xs md:text-sm mb-4 flex items-center gap-2 font-sans">
-                    <CheckCircle2 size={16} /> Recado enviado com sucesso para os noivos!
-                  </div>
-                )}
-
-                <form onSubmit={handleSendReply} className="space-y-4">
-                  <textarea
-                    value={newReply}
-                    onChange={(e) => setNewReply(e.target.value)}
-                    placeholder="Digite sua mensagem aqui com carinho..."
-                    rows={4}
-                    required
-                    className="w-full p-4 rounded-2xl border border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-800/40 text-[var(--foreground)] focus:outline-none focus:border-black dark:focus:border-white focus:bg-white dark:focus:bg-zinc-850 font-sans text-sm transition-all"
-                  />
-                  <button
-                    type="submit"
-                    className="flex items-center gap-2 bg-black dark:bg-white text-white dark:text-black px-6 py-3 rounded-2xl font-medium text-xs md:text-sm hover:opacity-90 transition-colors shadow-sm cursor-pointer font-sans"
-                  >
-                    <Send size={15} /> Enviar Mensagem aos Noivos
-                  </button>
-                </form>
-
-                {padrinhoReplies.length > 0 && (
-                  <div className="mt-8 pt-6 border-t border-gray-100 dark:border-zinc-800">
-                    <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-400 font-sans mb-4">Seus Recados Enviados:</h4>
-                    <div className="space-y-3">
-                      {padrinhoReplies.map((r) => (
-                        <div key={r.id} className="bg-gray-50 dark:bg-zinc-800/40 p-4 rounded-2xl text-sm font-sans border border-gray-100 dark:border-zinc-700/50">
-                          <div className="flex justify-between items-center text-xs text-gray-400 mb-1">
-                            <span className="font-bold text-[var(--foreground)]">{r.author}</span>
-                            <div className="flex items-center gap-2">
-                              <span>{r.date}</span>
-                              {isAdmin && (
-                                <button
-                                  onClick={() => handleDeleteReply(r.id)}
-                                  className="p-1 text-red-500 hover:bg-red-500/10 rounded transition-colors cursor-pointer"
-                                  title="Excluir recado (ADM)"
-                                >
-                                  <Trash2 size={13} />
-                                </button>
-                              )}
-                            </div>
-                          </div>
-                          <p className="text-gray-700 dark:text-gray-300 text-justified-elegant">{r.text}</p>
-                        </div>
-                      ))}
+                  {replySuccess && (
+                    <div className="bg-green-500/10 border border-green-500/30 text-green-600 p-3.5 rounded-2xl text-xs md:text-sm mb-4 flex items-center gap-2 font-sans">
+                      <CheckCircle2 size={16} /> Recado enviado com sucesso para os noivos!
                     </div>
-                  </div>
-                )}
+                  )}
+
+                  <form onSubmit={handleSendReply} className="space-y-4">
+                    <textarea
+                      value={newReply}
+                      onChange={(e) => setNewReply(e.target.value)}
+                      placeholder="Digite sua mensagem aqui com carinho..."
+                      rows={4}
+                      required
+                      className="w-full p-4 rounded-2xl border border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-800/40 text-[var(--foreground)] focus:outline-none focus:border-black dark:focus:border-white focus:bg-white dark:focus:bg-zinc-850 font-sans text-sm transition-all"
+                    />
+                    <button
+                      type="submit"
+                      className="flex items-center gap-2 bg-black dark:bg-white text-white dark:text-black px-6 py-3 rounded-2xl font-medium text-xs md:text-sm hover:opacity-90 transition-colors shadow-sm cursor-pointer font-sans"
+                    >
+                      <Send size={15} /> Enviar Mensagem aos Noivos
+                    </button>
+                  </form>
+
+                  {padrinhoReplies.length > 0 && (
+                    <div className="mt-8 pt-6 border-t border-gray-100 dark:border-zinc-800">
+                      <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-400 font-sans mb-4">
+                        {isNoivos ? 'Todos os Recados Recebidos dos Padrinhos:' : 'Seus Recados Enviados:'}
+                      </h4>
+                      <div className="space-y-3">
+                        {padrinhoReplies.map((r) => (
+                          <div key={r.id} className="bg-gray-50 dark:bg-zinc-800/40 p-4 rounded-2xl text-sm font-sans border border-gray-100 dark:border-zinc-700/50">
+                            <div className="flex justify-between items-center text-xs text-gray-400 mb-1">
+                              <span className="font-bold text-[var(--foreground)]">{r.author}</span>
+                              <div className="flex items-center gap-2">
+                                <span>{r.date}</span>
+                                {isNoivos && (
+                                  <button
+                                    onClick={() => handleDeleteReply(r.id)}
+                                    className="p-1 text-red-500 hover:bg-red-500/10 rounded transition-colors cursor-pointer"
+                                    title="Excluir recado"
+                                  >
+                                    <Trash2 size={14} />
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                            <p className="text-gray-700 dark:text-gray-300 text-justified-elegant">{r.text}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </motion.div>
           )}
 
-          {/* TAB 4: CRONOGRAMA */}
+          {/* TAB 3: CRONOGRAMA */}
           {activeTab === 'cronograma' && (
             <motion.div
               key="cronograma"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="bg-white dark:bg-zinc-900 rounded-3xl p-6 md:p-8 shadow-sm border border-gray-200 dark:border-zinc-800"
+              className="bg-white dark:bg-zinc-900 rounded-3xl p-6 md:p-8 shadow-sm border border-gray-200 dark:border-zinc-800 space-y-6"
             >
-              <div className="space-y-1 mb-8">
-                <span className="text-xs uppercase tracking-widest text-gray-400 font-sans font-semibold">Organização</span>
-                <h2 className="text-2xl md:text-3xl font-serif text-[var(--foreground)] font-medium flex items-center gap-2">
-                  <Calendar size={20} className="text-gray-400" /> Cronograma do Grande Dia
-                </h2>
-                <p className="text-xs text-gray-500 font-sans">
-                  Horários planejados com carinho para aproveitarmos juntos cada instante da celebração.
-                </p>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-gray-100 dark:border-zinc-800">
+                <div className="space-y-1">
+                  <span className="text-xs uppercase tracking-widest text-gray-400 font-sans font-semibold">Organização</span>
+                  <h2 className="text-2xl md:text-3xl font-serif text-[var(--foreground)] font-medium flex items-center gap-2">
+                    <Calendar size={20} className="text-gray-400" /> Cronograma do Grande Dia
+                  </h2>
+                  <p className="text-xs text-gray-500 font-sans">
+                    Horários planejados com carinho para aproveitarmos juntos cada instante da celebração.
+                  </p>
+                </div>
+
+                {isNoivos && (
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      onClick={handleResetSchedule}
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-gray-200 dark:border-zinc-700 text-xs font-sans text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
+                      title="Restaurar cronograma padrão original"
+                    >
+                      <RotateCcw size={13} /> Restaurar Padrão
+                    </button>
+                    <button
+                      onClick={handleOpenAddSchedule}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-black dark:bg-white text-white dark:text-black text-xs font-sans font-medium shadow-sm hover:opacity-90 transition-all cursor-pointer"
+                    >
+                      <Plus size={14} /> Adicionar Horário
+                    </button>
+                  </div>
+                )}
               </div>
 
-              <div className="relative border-l-2 border-slate-200 dark:border-zinc-700 pl-6 md:pl-8 space-y-8 ml-2">
+              {/* Schedule Timeline */}
+              <div className="relative border-l-2 border-slate-200 dark:border-zinc-700 pl-6 md:pl-8 space-y-8 ml-2 pt-2">
+                {schedule.map((item) => (
+                  <div key={item.id} className="relative group">
+                    <div className="absolute -left-[31px] md:-left-[39px] top-1 w-4 h-4 rounded-full bg-black dark:bg-white border-4 border-white dark:border-zinc-900 shadow-xs"></div>
+                    
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="space-y-1">
+                        <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider block font-sans">
+                          {item.time}
+                        </span>
+                        <h3 className="text-lg font-serif text-[var(--foreground)] font-semibold">
+                          {item.title}
+                        </h3>
+                        {item.description && (
+                          <p className="text-sm text-gray-600 dark:text-gray-400 font-sans mt-1 text-justified-elegant">
+                            {item.description}
+                          </p>
+                        )}
+                      </div>
 
-                <div className="relative">
-                  <div className="absolute -left-[31px] md:-left-[39px] top-1 w-4 h-4 rounded-full bg-black dark:bg-white border-4 border-white dark:border-zinc-900 shadow-xs"></div>
-                  <span className="text-xs font-medium text-gray-500 uppercase tracking-wider block font-sans">18h00</span>
-                  <h3 className="text-lg font-serif text-[var(--foreground)] font-semibold">
-                    Chegada do Cortejo (Padrinhos, Madrinhas e Daminhas)
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-sans mt-1 text-justified-elegant">
-                    Chegada antecipada ao local da celebração para alinhamento do cortejo, organização e fotos oficiais com os noivos.
-                  </p>
-                </div>
-
-                <div className="relative">
-                  <div className="absolute -left-[31px] md:-left-[39px] top-1 w-4 h-4 rounded-full bg-black dark:bg-white border-4 border-white dark:border-zinc-900 shadow-xs"></div>
-                  <span className="text-xs font-medium text-gray-500 uppercase tracking-wider block font-sans">19h00</span>
-                  <h3 className="text-lg font-serif text-[var(--foreground)] font-semibold">Início Solene da Cerimônia Religiosa</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-sans mt-1 text-justified-elegant">
-                    Momento sagrado da celebração do casamento e troca de votos de Aline e Klécio.
-                  </p>
-                </div>
-
-                <div className="relative">
-                  <div className="absolute -left-[31px] md:-left-[39px] top-1 w-4 h-4 rounded-full bg-black dark:bg-white border-4 border-white dark:border-zinc-900 shadow-xs"></div>
-                  <span className="text-xs font-medium text-gray-500 uppercase tracking-wider block font-sans">20h15</span>
-                  <h3 className="text-lg font-serif text-[var(--foreground)] font-semibold">Sessão de Fotos Oficiais no Altar</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-sans mt-1 text-justified-elegant">
-                    Registro de fotos carinhosas no altar com padrinhos, madrinhas, daminhas e familiares.
-                  </p>
-                </div>
-
-                <div className="relative">
-                  <div className="absolute -left-[31px] md:-left-[39px] top-1 w-4 h-4 rounded-full bg-black dark:bg-white border-4 border-white dark:border-zinc-900 shadow-xs"></div>
-                  <span className="text-xs font-medium text-gray-500 uppercase tracking-wider block font-sans">22h00 em diante</span>
-                  <h3 className="text-lg font-serif text-[var(--foreground)] font-semibold">Recepção, Brinde e Festa</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-sans mt-1 text-justified-elegant">
-                    Abertura da pista de dança, buffet e celebração inesquecível da nossa união!
-                  </p>
-                </div>
-
+                      {isNoivos && (
+                        <div className="flex items-center gap-1.5 shrink-0 opacity-80 group-hover:opacity-100 transition-opacity">
+                          <button
+                            onClick={() => handleOpenEditSchedule(item)}
+                            className="p-1.5 text-gray-500 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-lg transition-colors cursor-pointer"
+                            title="Editar horário"
+                          >
+                            <Edit2 size={15} />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteScheduleItem(item.id)}
+                            className="p-1.5 text-red-500 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer"
+                            title="Excluir horário"
+                          >
+                            <Trash2 size={15} />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
               </div>
             </motion.div>
           )}
 
         </AnimatePresence>
 
-        {/* Lightbox Modal for Madrinhas Inspiration Gallery */}
+        {/* Schedule Add/Edit Modal */}
         <AnimatePresence>
-          {lightboxItem && (
+          {showScheduleModal && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setLightboxItem(null)}
-              className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 md:p-8"
+              onClick={() => setShowScheduleModal(false)}
+              className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
             >
               <motion.div
                 initial={{ scale: 0.95, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.95, opacity: 0 }}
                 onClick={(e) => e.stopPropagation()}
-                className="relative max-w-4xl w-full bg-zinc-950 border border-zinc-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh]"
+                className="relative max-w-lg w-full bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-3xl p-6 md:p-8 shadow-2xl space-y-5"
               >
-                {/* Close Button */}
-                <button
-                  onClick={() => setLightboxItem(null)}
-                  className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-black/60 text-white hover:bg-white hover:text-black transition-colors flex items-center justify-center cursor-pointer border border-white/20"
-                  title="Fechar"
-                >
-                  <X size={18} />
-                </button>
-
-                {/* Image Display */}
-                <div className="md:w-3/5 bg-black flex items-center justify-center overflow-hidden">
-                  <img
-                    src={lightboxItem.url}
-                    alt={lightboxItem.title}
-                    className="w-full h-full object-cover max-h-[60vh] md:max-h-[85vh]"
-                  />
+                <div className="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-zinc-800">
+                  <h3 className="text-xl font-serif font-medium text-[var(--foreground)] flex items-center gap-2">
+                    <Calendar size={18} className="text-gray-400" />
+                    {editingScheduleItem ? 'Editar Evento do Cronograma' : 'Adicionar Evento ao Cronograma'}
+                  </h3>
+                  <button
+                    onClick={() => setShowScheduleModal(false)}
+                    className="p-1.5 text-gray-400 hover:text-[var(--foreground)] rounded-lg cursor-pointer"
+                  >
+                    <X size={18} />
+                  </button>
                 </div>
 
-                {/* Details Display */}
-                <div className="md:w-2/5 p-6 md:p-8 flex flex-col justify-between text-white space-y-6">
-                  <div className="space-y-3">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-[10px] uppercase font-sans font-medium tracking-widest text-gray-300 border border-white/15">
-                      {lightboxItem.tag}
-                    </span>
-                    <h3 className="text-2xl md:text-3xl font-serif font-medium">{lightboxItem.title}</h3>
-                    <p className="text-sm text-gray-300 font-sans leading-relaxed text-justified-elegant">
-                      {lightboxItem.description}
-                    </p>
+                <form onSubmit={handleSaveScheduleItem} className="space-y-4 font-sans">
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 font-medium mb-1.5">
+                      Horário
+                    </label>
+                    <input
+                      type="text"
+                      value={schTime}
+                      onChange={(e) => setSchTime(e.target.value)}
+                      placeholder="Ex: 18h00, 19h30, 22h00 em diante..."
+                      required
+                      className="w-full px-4 py-3 rounded-2xl border border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-800/50 text-[var(--foreground)] text-sm focus:outline-none focus:border-black dark:focus:border-white transition-all"
+                    />
                   </div>
 
-                  <div className="pt-4 border-t border-zinc-800 space-y-3">
-                    <div className="p-3.5 rounded-2xl bg-zinc-900 border border-zinc-800 text-xs text-gray-400 font-sans leading-relaxed">
-                      💡 <strong>Lembrete dos Noivos:</strong> Esta imagem é apenas uma referência de caimento. A cor e o tecido são de livre escolha de cada madrinha.
-                    </div>
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 font-medium mb-1.5">
+                      Título do Evento
+                    </label>
+                    <input
+                      type="text"
+                      value={schTitle}
+                      onChange={(e) => setSchTitle(e.target.value)}
+                      placeholder="Ex: Cerimônia Religiosa, Sessão de Fotos, Recepção..."
+                      required
+                      className="w-full px-4 py-3 rounded-2xl border border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-800/50 text-[var(--foreground)] text-sm focus:outline-none focus:border-black dark:focus:border-white transition-all"
+                    />
+                  </div>
 
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 font-medium mb-1.5">
+                      Descrição / Detalhes (Opcional)
+                    </label>
+                    <textarea
+                      value={schDescription}
+                      onChange={(e) => setSchDescription(e.target.value)}
+                      placeholder="Detalhes ou orientações sobre este momento..."
+                      rows={3}
+                      className="w-full p-4 rounded-2xl border border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-800/50 text-[var(--foreground)] text-sm focus:outline-none focus:border-black dark:focus:border-white transition-all"
+                    />
+                  </div>
+
+                  <div className="flex justify-end gap-3 pt-3 border-t border-gray-100 dark:border-zinc-800">
                     <button
-                      onClick={() => setLightboxItem(null)}
-                      className="w-full py-3 bg-white text-black font-medium rounded-2xl text-xs uppercase tracking-wider hover:bg-gray-200 transition-colors cursor-pointer font-sans"
+                      type="button"
+                      onClick={() => setShowScheduleModal(false)}
+                      className="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-zinc-700 text-xs font-sans text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
                     >
-                      Fechar Visualização
+                      Cancelar
+                    </button>
+                    <button
+                      type="submit"
+                      className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-black dark:bg-white text-white dark:text-black text-xs font-sans font-medium shadow-sm hover:opacity-90 transition-all cursor-pointer"
+                    >
+                      <Save size={14} /> Salvar Horário
                     </button>
                   </div>
-                </div>
+                </form>
               </motion.div>
             </motion.div>
           )}

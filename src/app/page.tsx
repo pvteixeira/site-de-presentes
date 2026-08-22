@@ -151,9 +151,8 @@ export default function Home() {
           <Link href="#lista-presentes" className="hover:text-white transition-colors">Lista de Presentes</Link>
           <Link href="#galeria" className="hover:text-white transition-colors">Galeria de Fotos</Link>
           <Link href="/padrinhos" className="hover:text-white transition-colors font-semibold text-gray-200">Acesso Padrinhos e Madrinhas</Link>
-          <Link href="/admin/login" className="hover:text-white transition-colors">Noivos (Admin)</Link>
         </div>
-        <p className="text-xs text-gray-500 font-sans tracking-widest uppercase">Com amor, 2027 • Todos os direitos reservados</p>
+        <p className="text-xs text-gray-500 font-sans tracking-widest uppercase">Com amor, 2027 • Aline e Klécio • Todos os direitos reservados</p>
       </footer>
     </main>
   );

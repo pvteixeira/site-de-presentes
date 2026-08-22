@@ -4,10 +4,11 @@ export interface PadrinhoAccount {
   username: string;
   alternateUsernames?: string[];
   password: string;
-  role: 'casal' | 'madrinha' | 'padrinho';
+  role: 'casal' | 'madrinha' | 'padrinho' | 'noivos';
   members: string[];
   customMessage?: string;
   daminha?: string;
+  pajem?: string;
 }
 
 export interface PadrinhoMessage {
@@ -19,7 +20,51 @@ export interface PadrinhoMessage {
   isImportant?: boolean;
 }
 
+export interface ScheduleItem {
+  id: string;
+  time: string;
+  title: string;
+  description: string;
+}
+
+export const INITIAL_SCHEDULE: ScheduleItem[] = [
+  {
+    id: 'sch-1',
+    time: '18h00',
+    title: 'Chegada do Cortejo (Padrinhos, Madrinhas e Daminhas)',
+    description: 'Chegada antecipada ao local da celebração para alinhamento do cortejo, organização e fotos oficiais com os noivos.'
+  },
+  {
+    id: 'sch-2',
+    time: '19h00',
+    title: 'Início Solene da Cerimônia Religiosa',
+    description: 'Momento sagrado da celebração do casamento e troca de votos de Aline e Klécio.'
+  },
+  {
+    id: 'sch-3',
+    time: '20h15',
+    title: 'Sessão de Fotos Oficiais no Altar',
+    description: 'Registro de fotos carinhosas no altar com padrinhos, madrinhas, daminhas e familiares.'
+  },
+  {
+    id: 'sch-4',
+    time: '22h00 em diante',
+    title: 'Recepção, Brinde e Festa',
+    description: 'Abertura da pista de dança, buffet e celebração inesquecível da nossa união!'
+  }
+];
+
 export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
+  {
+    id: 'aline-klecio',
+    name: 'Aline e Klécio',
+    username: 'aline.klecio',
+    alternateUsernames: ['aline', 'klecio', 'noivos', 'admin'],
+    password: 'Linocaeklecio2026',
+    role: 'noivos',
+    members: ['Aline', 'Klécio'],
+    customMessage: 'Bem-vindos ao espaço dos noivos! Aqui vocês podem publicar novos comunicados no mural, gerenciar os recados dos padrinhos e editar o cronograma oficial do grande dia.'
+  },
   {
     id: 'debora-carlos',
     name: 'Débora e Carlos',
@@ -28,6 +73,7 @@ export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
     password: '7492',
     role: 'casal',
     members: ['Débora', 'Carlos'],
+    pajem: 'Heitor',
     customMessage: 'No dia mais importante das nossas vidas, queremos estar cercados por aqueles que amamos e que fazem parte da nossa história. É uma alegria imensa poder dividir com vocês a nossa felicidade. E neste momento tão especial, não poderia ser diferente: desejamos ter vocês ao nosso lado, caminhando conosco, fortalecendo a nossa fé, compartilhando sonhos e construindo memórias inesquecíveis.'
   },
   {
@@ -159,13 +205,13 @@ export const INITIAL_ANNOUNCEMENTS: PadrinhoMessage[] = [
     title: 'Bem-vindos à Área Exclusiva do Nosso Cortejo!',
     content: 'Queridos padrinhos, madrinhas, pajens e daminhas! Preparamos este espaço exclusivo para compartilharmos todas as orientações sobre o nosso grande dia, detalhes das vestimentas e comunicados importantes ao longo dos preparativos.',
     author: 'Aline e Klécio',
-    isImportant: true,
+    isImportant: false,
   },
   {
     id: 'msg-dresscode',
     date: '2026-07-23',
     title: 'Orientações das Vestimentas e Dress Code',
-    content: 'Confiram no Guia de Trajes todas as orientações: Padrinhos usarão terno preto, gravata prata, sapato preto e camisa branca. Madrinhas têm paleta de cores livre em vestidos longos (exceto branco, off-white e champanhe). Pajens usarão azul marinho ou preto!',
+    content: 'Confiram no Guia de Trajes todas as orientações: Padrinhos usarão terno preto, gravata prata, sapato preto e camisa branca. Madrinhas têm paleta de cores livre em vestidos longos (exceto branco, off-white e champanhe).',
     author: 'Aline e Klécio',
     isImportant: false,
   }
