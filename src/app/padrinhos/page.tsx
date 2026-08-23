@@ -411,10 +411,6 @@ export default function PadrinhosPortal() {
             </div>
           </motion.div>
         </div>
-
-        <footer className="text-center text-xs text-gray-400 py-3 font-sans z-10">
-          Aline e Klécio • Casamento dos Sonhos • 09 de Janeiro de 2027
-        </footer>
       </div>
     );
   }

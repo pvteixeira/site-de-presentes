@@ -17,7 +17,7 @@ const GALLERY_IMAGES: GalleryImage[] = [
   {
     id: 1,
     src: '/img/Galeria/01.jpg',
-    title: 'Klécio 1 Aninho',
+    title: '1 aninho de Klécio',
     subtitle: 'Primeiro aniversário do noivo',
     category: 'infancia',
     objectPosition: 'object-center'
@@ -25,7 +25,7 @@ const GALLERY_IMAGES: GalleryImage[] = [
   {
     id: 2,
     src: '/img/Galeria/02.jpg',
-    title: 'Aline 1 Aninho',
+    title: '1 aninho de Aline',
     subtitle: 'Primeiros sorrisos da noiva',
     category: 'infancia',
     objectPosition: 'object-center'
@@ -102,6 +102,46 @@ const GALLERY_IMAGES: GalleryImage[] = [
     category: 'casal',
     objectPosition: 'object-center'
   },
+  {
+    id: 12,
+    src: '/img/Galeria/12.jpg',
+    title: 'Dia de Praia',
+    subtitle: 'Aproveitando o sol e o mar juntos',
+    category: 'casal',
+    objectPosition: 'object-center'
+  },
+  {
+    id: 13,
+    src: '/img/Galeria/13.jpg',
+    title: 'Viagem Inesquecível',
+    subtitle: 'Novos destinos e boas risadas',
+    category: 'casal',
+    objectPosition: 'object-top'
+  },
+  {
+    id: 14,
+    src: '/img/Galeria/14.jpg',
+    title: 'Sintonia e Festa',
+    subtitle: 'Celebrando momentos felizes juntos',
+    category: 'casal',
+    objectPosition: 'object-top'
+  },
+  {
+    id: 15,
+    src: '/img/Galeria/15.jpg',
+    title: 'Aventura a Dois',
+    subtitle: 'Passeio de quadriciclo na praia',
+    category: 'casal',
+    objectPosition: 'object-center'
+  },
+  {
+    id: 16,
+    src: '/img/Galeria/16.jpg',
+    title: 'Carnaval em Olinda',
+    subtitle: 'Alegria e festa juntos no Camarote',
+    category: 'casal',
+    objectPosition: 'object-top'
+  },
 ];
 
 const CATEGORIES = [
@@ -169,9 +209,6 @@ export default function GallerySection() {
             <ImageIcon className="w-5 h-5 text-gray-400 dark:text-zinc-500" />
             <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
           </div>
-          <p className="text-sm md:text-base text-[var(--foreground)]/80 font-sans leading-relaxed text-justified-elegant text-center max-w-2xl mx-auto">
-            Registros inesquecíveis da nossa caminhada, infância e cumplicidade ao longo dos anos.
-          </p>
         </motion.div>
 
         {/* Category Filters */}

@@ -37,15 +37,11 @@ export default function WeddingDetails() {
           Cerimônia Religiosa e Recepção
           </h2>
 
-          <div className="flex items-center justify-center gap-3 mb-6">
+          <div className="flex items-center justify-center gap-3">
             <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
             <MapPin className="w-5 h-5 text-gray-400 dark:text-zinc-500" />
             <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
           </div>
-
-          <p className="text-base md:text-lg text-[var(--foreground)]/80 font-sans max-w-2xl mx-auto leading-relaxed text-justified-elegant text-center">
-            É com muita alegria que compartilhamos com vocês os locais escolhidos para celebrar este momento tão especial.
-          </p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
@@ -110,7 +106,7 @@ export default function WeddingDetails() {
                 <li className="flex items-center gap-3">
                   <Clock className="w-5 h-5 text-gray-400 shrink-0" />
                   <div>
-                    <span className="font-semibold text-[var(--foreground)] text-lg">22h</span>
+                    <span className="font-semibold text-[var(--foreground)] text-lg">21h</span>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
