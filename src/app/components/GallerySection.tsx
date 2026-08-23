@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Image as ImageIcon, X, ChevronLeft, ChevronRight, Heart, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
 
@@ -95,14 +96,6 @@ const GALLERY_IMAGES: GalleryImage[] = [
     objectPosition: 'object-top'
   },
   {
-    id: 11,
-    src: '/img/Galeria/11.jpeg',
-    title: 'Passeio Histórico',
-    subtitle: 'Descobrindo novos lugares juntos',
-    category: 'casal',
-    objectPosition: 'object-center'
-  },
-  {
     id: 12,
     src: '/img/Galeria/12.jpg',
     title: 'Dia de Praia',
@@ -141,6 +134,14 @@ const GALLERY_IMAGES: GalleryImage[] = [
     subtitle: 'Alegria e festa juntos no Camarote',
     category: 'casal',
     objectPosition: 'object-top'
+  },
+  {
+    id: 11,
+    src: '/img/Galeria/11.jpeg',
+    title: 'Passeio Histórico',
+    subtitle: 'Descobrindo novos lugares juntos',
+    category: 'casal',
+    objectPosition: 'object-center'
   },
 ];
 
@@ -264,16 +265,16 @@ export default function GallerySection() {
                 }}
                 className="group relative h-[420px] rounded-2xl overflow-hidden cursor-pointer border border-gray-200 dark:border-zinc-800 shadow-md bg-zinc-900"
               >
-                <img
+                <Image
                   src={img.src}
-                  alt={img.title}
-                  className={`w-full h-full object-cover ${img.objectPosition || 'object-top'} transition-transform duration-700 group-hover:scale-105`}
-                  loading="lazy"
+                  alt={`Foto ${img.id}`}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  quality={85}
+                  priority={index < 6}
+                  loading={index < 6 ? 'eager' : 'lazy'}
+                  className={`object-cover ${img.objectPosition || 'object-top'} transition-transform duration-700 group-hover:scale-105`}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5 text-white">
-                  <h3 className="font-serif text-lg font-medium text-white mb-0.5">{img.title}</h3>
-                  <p className="text-xs text-gray-300 font-sans">{img.subtitle}</p>
-                </div>
               </motion.div>
             ))}
           </AnimatePresence>
@@ -320,31 +321,31 @@ export default function GallerySection() {
           >
             <button
               onClick={() => setSelectedIndex(null)}
-              className="absolute top-6 right-6 text-white/80 hover:text-white p-2 rounded-full bg-white/10 backdrop-blur-md cursor-pointer"
+              className="absolute top-6 right-6 text-white/80 hover:text-white p-2 rounded-full bg-white/10 backdrop-blur-md cursor-pointer z-10"
             >
               <X size={24} />
             </button>
 
             <button
               onClick={handlePrev}
-              className="absolute left-6 text-white/80 hover:text-white p-3 rounded-full bg-white/10 backdrop-blur-md cursor-pointer"
+              className="absolute left-4 md:left-6 text-white/80 hover:text-white p-3 rounded-full bg-white/10 backdrop-blur-md cursor-pointer z-10"
             >
               <ChevronLeft size={28} />
             </button>
 
-            <div className="max-w-4xl max-h-[85vh] flex flex-col items-center text-center">
-              <img
-                src={filteredImages[selectedIndex].src}
-                alt={filteredImages[selectedIndex].title}
-                className="max-w-full max-h-[70vh] object-contain rounded-xl shadow-2xl border border-white/10"
-              />
-              <p className="text-white font-serif text-xl mt-4 font-medium">
-                {filteredImages[selectedIndex].title}
-              </p>
-              <p className="text-gray-300 font-sans text-sm mt-1">
-                {filteredImages[selectedIndex].subtitle}
-              </p>
-              <p className="text-gray-400 font-mono text-xs mt-2">
+            <div className="w-full max-w-4xl flex flex-col items-center text-center">
+              <div className="relative w-full h-[70vh] md:h-[80vh]">
+                <Image
+                  src={filteredImages[selectedIndex].src}
+                  alt={`Foto ${filteredImages[selectedIndex].id}`}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 1200px"
+                  quality={90}
+                  priority
+                  className="object-contain rounded-xl shadow-2xl"
+                />
+              </div>
+              <p className="text-gray-400 font-mono text-xs mt-3">
                 {selectedIndex + 1} de {filteredImages.length}
               </p>
             </div>

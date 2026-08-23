@@ -142,11 +142,10 @@ export default function Home() {
           <p className="font-signature text-3xl md:text-4xl text-white font-normal tracking-wide">Aline e Klécio</p>
         </div>
         <div className="flex flex-wrap justify-center gap-6 text-xs text-gray-400 px-4">
-          <Link href="/" className="hover:text-white transition-colors">Início</Link>
+          <Link href="#inicio" className="hover:text-white transition-colors">Início</Link>
           <Link href="#os-noivos" className="hover:text-white transition-colors">Os Noivos</Link>
           <Link href="#historia" className="hover:text-white transition-colors">Nossa História</Link>
           <Link href="#o-grande-dia" className="hover:text-white transition-colors">Local</Link>
-          <Link href="#cortejo" className="hover:text-white transition-colors">Padrinhos e Madrinhas</Link>
           <Link href="#mensagens-noivos" className="hover:text-white transition-colors">Mensagens</Link>
           <Link href="#lista-presentes" className="hover:text-white transition-colors">Lista de Presentes</Link>
           <Link href="#galeria" className="hover:text-white transition-colors">Galeria de Fotos</Link>

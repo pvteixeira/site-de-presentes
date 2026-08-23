@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 export default function Hero() {
   return (
-    <section className="relative h-screen flex flex-col items-center justify-center overflow-hidden bg-white text-[var(--foreground)]">
+    <section id="inicio" className="relative h-screen flex flex-col items-center justify-center overflow-hidden bg-white text-[var(--foreground)]">
       {/* Background subtle luxury gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-gray-50/80 via-white to-gray-50/50 pointer-events-none z-0"></div>
 

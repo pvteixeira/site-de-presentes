@@ -6,16 +6,35 @@ import { Lock } from 'lucide-react';
 
 export default function AdminLogin() {
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const cleanPass = password.trim();
-    if (cleanPass === 'Linocaeklecio2026' || cleanPass.toLowerCase() === 'linocaeklecio2026') {
-      localStorage.setItem('admin_logged_in', 'true');
-      router.push('/admin');
-    } else {
-      alert('Senha incorreta!');
+    setErrorMessage('');
+    setIsLoading(true);
+
+    try {
+      const res = await fetch('/api/auth/admin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        localStorage.setItem('admin_logged_in', 'true');
+        router.push('/admin');
+      } else {
+        setErrorMessage(data.message || 'Senha incorreta!');
+      }
+    } catch (err) {
+      console.error(err);
+      setErrorMessage('Erro de conexão com o servidor.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -32,21 +51,29 @@ export default function AdminLogin() {
         </p>
 
         <form onSubmit={handleLogin} className="space-y-6">
+          {errorMessage && (
+            <div className="p-3 bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 rounded-xl text-xs font-sans">
+              {errorMessage}
+            </div>
+          )}
+
           <div>
             <input 
               type="password" 
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Digite a senha" 
+              required
               className="w-full px-4 py-3.5 rounded-xl border border-gray-200 dark:border-zinc-700 bg-transparent text-center text-xl tracking-widest focus:outline-none focus:border-black dark:focus:border-white transition-all"
             />
           </div>
           
           <button 
             type="submit" 
-            className="w-full bg-black dark:bg-white text-white dark:text-black py-3.5 rounded-xl font-semibold uppercase tracking-wider text-xs border border-gray-800 dark:border-gray-200 hover:opacity-90 transition-colors shadow-sm cursor-pointer"
+            disabled={isLoading}
+            className="w-full bg-black dark:bg-white text-white dark:text-black py-3.5 rounded-xl font-semibold uppercase tracking-wider text-xs border border-gray-800 dark:border-gray-200 hover:opacity-90 disabled:opacity-50 transition-colors shadow-sm cursor-pointer flex items-center justify-center gap-2"
           >
-            Acessar Painel
+            {isLoading ? 'Verificando...' : 'Acessar Painel'}
           </button>
         </form>
       </div>

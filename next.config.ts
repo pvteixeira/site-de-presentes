@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
     '172.*.*.*',
     'localhost:3000'
   ],
+  images: {
+    qualities: [75, 80, 85, 90, 95],
+  },
 };
 
 export default nextConfig;

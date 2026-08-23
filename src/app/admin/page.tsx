@@ -26,7 +26,7 @@ import {
 import Link from 'next/link';
 
 import { GIFTS_DATA } from '../utils/giftsData';
-import { PADRINHOS_ACCOUNTS } from '../data/padrinhosData';
+import { PadrinhoAccount } from '../data/padrinhosData';
 
 interface GuestbookMessage {
   id: string;
@@ -65,11 +65,12 @@ export default function AdminPage() {
   const [isAdding, setIsAdding] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
-  // Messages & Pix state
+  // Messages, Pix & Padrinhos state
   const [guestbookMessages, setGuestbookMessages] = useState<GuestbookMessage[]>(INITIAL_GUESTBOOK);
   const [padrinhoReplies, setPadrinhoReplies] = useState<PadrinhoReply[]>([]);
   const [pixContributions, setPixContributions] = useState<PixContribution[]>([]);
   const [selectedReceipt, setSelectedReceipt] = useState<PixContribution | null>(null);
+  const [padrinhosAccounts, setPadrinhosAccounts] = useState<PadrinhoAccount[]>([]);
 
   // Check login & Load localStorage state
   useEffect(() => {
@@ -112,6 +113,20 @@ export default function AdminPage() {
         console.error(e);
       }
     }
+
+    // Load Padrinhos Accounts via Secure Server API
+    fetch('/api/admin/padrinhos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ adminSecret: 'Linocaeklecio2026' })
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.accounts) {
+          setPadrinhosAccounts(data.accounts);
+        }
+      })
+      .catch(console.error);
   }, [router]);
 
   const totalArrecadado = gifts.reduce((acc, gift) => acc + gift.currentAmount, 0);
@@ -275,7 +290,7 @@ export default function AdminPage() {
                 : 'border-transparent text-gray-500 hover:text-[var(--foreground)]'
             }`}
           >
-            <Users size={18} /> Contas Padrinhos ({PADRINHOS_ACCOUNTS.length})
+            <Users size={18} /> Contas Padrinhos ({padrinhosAccounts.length})
           </button>
 
           <button
@@ -486,7 +501,7 @@ export default function AdminPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {PADRINHOS_ACCOUNTS.map((acc) => (
+                  {padrinhosAccounts.map((acc) => (
                     <tr key={acc.id} className="border-b border-gray-100 dark:border-zinc-800 hover:bg-gray-50/50 dark:hover:bg-zinc-800/20">
                       <td className="p-4">
                         <p className="font-medium font-serif text-[var(--foreground)] text-sm">{acc.name}</p>
@@ -502,7 +517,7 @@ export default function AdminPage() {
                       </td>
                       <td className="p-4 text-right">
                         <button
-                          onClick={() => copyWhatsAppMessage(acc.name, acc.username, acc.password, acc.id)}
+                          onClick={() => copyWhatsAppMessage(acc.name, acc.username, acc.password || '', acc.id)}
                           className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-medium bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/30 hover:bg-green-500/20 transition-colors cursor-pointer"
                         >
                           {copiedId === acc.id ? (

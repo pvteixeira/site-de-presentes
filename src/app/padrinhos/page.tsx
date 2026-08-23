@@ -59,6 +59,7 @@ export default function PadrinhosPortal() {
   const [password, setPassword] = useState('');
   const [loggedUser, setLoggedUser] = useState<PadrinhoAccount | null>(null);
   const [loginError, setLoginError] = useState('');
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [activeTab, setActiveTab] = useState<'padrinhos' | 'mensagens' | 'cronograma'>('padrinhos');
 
   // Messages & Announcements state
@@ -118,10 +119,9 @@ export default function PadrinhosPortal() {
     if (savedUser) {
       try {
         const parsed: PadrinhoAccount = JSON.parse(savedUser);
-        const match = PADRINHOS_ACCOUNTS.find(a => a.id === parsed.id);
-        if (match) {
-          setLoggedUser(match);
-          if (match.role === 'noivos') {
+        if (parsed && parsed.id && parsed.name) {
+          setLoggedUser(parsed);
+          if (parsed.role === 'noivos') {
             setIsAdmin(true);
             localStorage.setItem('admin_logged_in', 'true');
           } else {
@@ -129,11 +129,6 @@ export default function PadrinhosPortal() {
             localStorage.removeItem('admin_logged_in');
           }
           setActiveTab('padrinhos');
-        } else {
-          setLoggedUser(null);
-          setIsAdmin(false);
-          localStorage.removeItem('padrinho_session');
-          localStorage.removeItem('admin_logged_in');
         }
       } catch (e) {
         console.error(e);
@@ -252,31 +247,39 @@ export default function PadrinhosPortal() {
     }
   };
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError('');
-    const cleanUser = username.trim().toLowerCase();
-    const cleanPass = password.trim();
+    setIsAuthenticating(true);
 
-    const userMatch = PADRINHOS_ACCOUNTS.find(acc => {
-      const matchUsername = acc.username.toLowerCase() === cleanUser ||
-        acc.alternateUsernames?.some(alt => alt.toLowerCase() === cleanUser);
-      return matchUsername && (acc.password === cleanPass || (acc.role === 'noivos' && acc.password.toLowerCase() === cleanPass.toLowerCase()));
-    });
+    try {
+      const res = await fetch('/api/auth/padrinhos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
 
-    if (userMatch) {
-      setLoggedUser(userMatch);
-      localStorage.setItem('padrinho_session', JSON.stringify(userMatch));
-      if (userMatch.role === 'noivos') {
-        setIsAdmin(true);
-        localStorage.setItem('admin_logged_in', 'true');
+      const data = await res.json();
+
+      if (data.success && data.user) {
+        setLoggedUser(data.user);
+        localStorage.setItem('padrinho_session', JSON.stringify(data.user));
+        if (data.user.role === 'noivos') {
+          setIsAdmin(true);
+          localStorage.setItem('admin_logged_in', 'true');
+        } else {
+          setIsAdmin(false);
+          localStorage.removeItem('admin_logged_in');
+        }
+        setActiveTab('padrinhos');
       } else {
-        setIsAdmin(false);
-        localStorage.removeItem('admin_logged_in');
+        setLoginError(data.message || 'Usuário ou senha incorretos. Por favor, verifique com os noivos.');
       }
-      setActiveTab('padrinhos');
-    } else {
-      setLoginError('Usuário ou senha incorretos. Por favor, verifique com os noivos.');
+    } catch (err) {
+      console.error(err);
+      setLoginError('Erro de conexão ao autenticar. Tente novamente.');
+    } finally {
+      setIsAuthenticating(false);
     }
   };
 
@@ -398,9 +401,19 @@ export default function PadrinhosPortal() {
 
               <button
                 type="submit"
-                className="w-full mt-2 bg-black dark:bg-white text-white dark:text-black py-3.5 rounded-2xl font-medium tracking-wide text-xs md:text-sm shadow-md hover:opacity-90 transition-all flex items-center justify-center gap-2 cursor-pointer font-sans"
+                disabled={isAuthenticating}
+                className="w-full mt-2 bg-black dark:bg-white text-white dark:text-black py-3.5 rounded-2xl font-medium tracking-wide text-xs md:text-sm shadow-md hover:opacity-90 disabled:opacity-50 transition-all flex items-center justify-center gap-2 cursor-pointer font-sans"
               >
-                <Lock size={15} /> Entrar no Portal
+                {isAuthenticating ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                    Entrando...
+                  </>
+                ) : (
+                  <>
+                    <Lock size={15} /> Entrar no Portal
+                  </>
+                )}
               </button>
             </form>
 
