@@ -558,7 +558,7 @@ export default function PadrinhosPortal() {
                     </div>
                     <div className="space-y-1.5">
                       <h4 className="font-serif text-lg font-medium text-[var(--foreground)]">
-                        Para a Daminha {loggedUser.daminha}
+                        Para Daminha {loggedUser.daminha}
                       </h4>
                       {loggedUser.daminha.toLowerCase().includes('julia') ? (
                         <>
@@ -733,7 +733,7 @@ export default function PadrinhosPortal() {
 
                   {/* Mensagem Inicial */}
                   <div className="bg-gray-50/80 dark:bg-zinc-800/40 p-5 rounded-2xl border-l-3 border-gray-400 dark:border-zinc-600">
-                    <p className="text-gray-700 dark:text-gray-200 text-sm md:text-base leading-relaxed text-justified-elegant font-sans">
+                    <p className="text-gray-700 dark:text-gray-200 text-sm md:text-base leading-relaxed text-justified-elegant font-sans whitespace-pre-line">
                       {DRESS_CODE_INFO.padrinhos.description}
                     </p>
                   </div>
@@ -813,6 +813,28 @@ export default function PadrinhosPortal() {
                         </div>
                       </div>
                     </div>
+                  </div>
+
+                  {/* Grupo do WhatsApp dos Padrinhos */}
+                  <div className="bg-[#25D366]/10 dark:bg-[#25D366]/15 border border-[#25D366]/30 dark:border-[#25D366]/20 rounded-2xl p-5 md:p-6 flex flex-col items-center text-center space-y-3">
+                    <div className="space-y-1 max-w-md mx-auto">
+                      <h4 className="text-base md:text-lg font-serif font-medium text-emerald-950 dark:text-emerald-100">
+                        Grupo dos Padrinhos
+                      </h4>
+                      <p className="text-xs text-emerald-900/80 dark:text-emerald-300/80 font-sans">
+                        Tire dúvidas e alinhe os preparativos no WhatsApp exclusivo dos padrinhos.
+                      </p>
+                    </div>
+
+                    <a
+                      href="https://chat.whatsapp.com/GcHXzSla9So127WYkONZp5?s=sw&p=i&mlu=4"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#128C7E] text-white font-medium text-xs shadow-sm transition-all hover:scale-[1.02] cursor-pointer font-sans"
+                    >
+                      <WhatsAppIcon className="w-4 h-4 shrink-0" />
+                      <span>Entrar no Grupo WhatsApp</span>
+                    </a>
                   </div>
                 </div>
               </div>

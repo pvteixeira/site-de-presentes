@@ -213,7 +213,7 @@ export const DRESS_CODE_INFO = {
   },
   padrinhos: {
     title: 'Para os Padrinhos',
-    description: 'Os padrinhos deverão utilizar terno preto clássico com gravata prata, camisa branca e sapato preto, seguindo a proposta sofisticada e solene da celebração.',
+    description: 'Queremos que vocês estejam elegantes, pensando na proposta clássica da nossa cerimônia, escolhemos um traje que mantenha a harmonia e a sofisticação desse momento.',
     rules: [
       'Terno: Preto completo clássico (Paletó e Calça pretos).',
       'Gravata: Prata clássica.',
