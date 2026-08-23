@@ -54,29 +54,7 @@ interface PixContribution {
   receiptName?: string;
 }
 
-const INITIAL_GUESTBOOK: GuestbookMessage[] = [
-  {
-    id: '1',
-    author: 'Maria Clara e João',
-    relation: 'Amigos dos Noivos',
-    text: 'Que a união de vocês seja sempre guiada pelo amor, cumplicidade e muitas alegrias. Estamos ansiosos para celebrar este dia tão inesquecível ao lado de vocês!',
-    date: '28/07/2026'
-  },
-  {
-    id: '2',
-    author: 'Tia Luciana e Família',
-    relation: 'Família',
-    text: 'Aline e Klécio, acompanhar essa trajetória linda enche nosso coração de orgulho. Que Deus abençoe ricamente essa nova família que se inicia.',
-    date: '30/07/2026'
-  },
-  {
-    id: '3',
-    author: 'Carlos e Débora',
-    relation: 'Padrinhos',
-    text: 'É uma honra imensa sermos padrinhos deste amor tão verdadeiro. Podem contar conosco para sempre!',
-    date: '01/08/2026'
-  }
-];
+const INITIAL_GUESTBOOK: GuestbookMessage[] = [];
 
 export default function AdminPage() {
   const router = useRouter();
@@ -106,12 +84,13 @@ export default function AdminPage() {
     const storedGuestbook = localStorage.getItem('guestbook_messages');
     if (storedGuestbook) {
       try {
-        setGuestbookMessages(JSON.parse(storedGuestbook));
+        const parsed: GuestbookMessage[] = JSON.parse(storedGuestbook);
+        const filtered = parsed.filter(m => m.id !== '1' && m.id !== '2' && m.id !== '3');
+        setGuestbookMessages(filtered);
+        localStorage.setItem('guestbook_messages', JSON.stringify(filtered));
       } catch (e) {
         console.error(e);
       }
-    } else {
-      localStorage.setItem('guestbook_messages', JSON.stringify(INITIAL_GUESTBOOK));
     }
 
     // Load Padrinho Replies

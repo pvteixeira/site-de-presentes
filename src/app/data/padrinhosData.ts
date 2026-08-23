@@ -30,27 +30,27 @@ export interface ScheduleItem {
 export const INITIAL_SCHEDULE: ScheduleItem[] = [
   {
     id: 'sch-1',
-    time: '18h00',
-    title: 'Chegada do Cortejo (Padrinhos, Madrinhas e Daminhas)',
-    description: 'Chegada antecipada ao local da celebração para alinhamento do cortejo, organização e fotos oficiais com os noivos.'
+    time: '18:30',
+    title: 'Chegada dos Padrinhos e Madrinhas',
+    description: ''
   },
   {
     id: 'sch-2',
-    time: '19h00',
-    title: 'Início Solene da Cerimônia Religiosa',
-    description: 'Momento sagrado da celebração do casamento e troca de votos de Aline e Klécio.'
+    time: '19:00',
+    title: 'Início da Cerimônia',
+    description: ''
   },
   {
     id: 'sch-3',
-    time: '20h15',
-    title: 'Sessão de Fotos Oficiais no Altar',
-    description: 'Registro de fotos carinhosas no altar com padrinhos, madrinhas, daminhas e familiares.'
+    time: '20:30',
+    title: 'Sessão de Fotos na Igreja',
+    description: ''
   },
   {
     id: 'sch-4',
-    time: '22h00 em diante',
-    title: 'Recepção, Brinde e Festa',
-    description: 'Abertura da pista de dança, buffet e celebração inesquecível da nossa união!'
+    time: '21:00',
+    title: 'Recepção',
+    description: ''
   }
 ];
 
@@ -198,24 +198,7 @@ export const PADRINHOS_ACCOUNTS: PadrinhoAccount[] = [
   }
 ];
 
-export const INITIAL_ANNOUNCEMENTS: PadrinhoMessage[] = [
-  {
-    id: 'msg-welcome',
-    date: '2026-07-23',
-    title: 'Bem-vindos à Área Exclusiva do Nosso Cortejo!',
-    content: 'Queridos padrinhos, madrinhas, pajens e daminhas! Preparamos este espaço exclusivo para compartilharmos todas as orientações sobre o nosso grande dia, detalhes das vestimentas e comunicados importantes ao longo dos preparativos.',
-    author: 'Aline e Klécio',
-    isImportant: false,
-  },
-  {
-    id: 'msg-dresscode',
-    date: '2026-07-23',
-    title: 'Orientações das Vestimentas e Dress Code',
-    content: 'Confiram no Guia de Trajes todas as orientações: Padrinhos usarão terno preto, gravata prata, sapato preto e camisa branca. Madrinhas têm paleta de cores livre em vestidos longos (exceto branco, off-white e champanhe).',
-    author: 'Aline e Klécio',
-    isImportant: false,
-  }
-];
+export const INITIAL_ANNOUNCEMENTS: PadrinhoMessage[] = [];
 
 export const DRESS_CODE_INFO = {
   madrinhas: {

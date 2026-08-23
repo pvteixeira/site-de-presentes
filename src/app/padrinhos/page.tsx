@@ -90,7 +90,10 @@ export default function PadrinhosPortal() {
     const savedAnnouncements = localStorage.getItem('padrinho_announcements');
     if (savedAnnouncements) {
       try {
-        setAnnouncements(JSON.parse(savedAnnouncements));
+        const parsed: PadrinhoMessage[] = JSON.parse(savedAnnouncements);
+        const filtered = parsed.filter(a => a.id !== 'msg-welcome' && a.id !== 'msg-dresscode');
+        setAnnouncements(filtered);
+        localStorage.setItem('padrinho_announcements', JSON.stringify(filtered));
       } catch (e) {
         console.error(e);
       }
@@ -99,7 +102,13 @@ export default function PadrinhosPortal() {
     const savedSchedule = localStorage.getItem('wedding_schedule_items');
     if (savedSchedule) {
       try {
-        setSchedule(JSON.parse(savedSchedule));
+        const parsed: ScheduleItem[] = JSON.parse(savedSchedule);
+        if (parsed.some(s => s.time === '18h00' || s.title?.includes('Início Solene') || s.description?.length > 0)) {
+          setSchedule(INITIAL_SCHEDULE);
+          localStorage.setItem('wedding_schedule_items', JSON.stringify(INITIAL_SCHEDULE));
+        } else {
+          setSchedule(parsed);
+        }
       } catch (e) {
         console.error(e);
       }
@@ -524,7 +533,7 @@ export default function PadrinhosPortal() {
               : 'border-transparent text-gray-400 hover:text-[var(--foreground)]'
               }`}
           >
-            <Calendar size={18} /> Cronograma do Dia
+            <Calendar size={18} /> Cronograma
           </button>
         </div>
 
@@ -543,17 +552,45 @@ export default function PadrinhosPortal() {
               {/* Daminha Alert */}
               {loggedUser.daminha && (
                 <div className="bg-gradient-to-r from-rose-50/80 to-purple-50/80 dark:from-zinc-800/60 dark:to-zinc-800/40 p-6 rounded-3xl border border-rose-200/80 dark:border-zinc-700/80 shadow-xs">
-                  <div className="flex items-center gap-3.5">
-                    <div className="w-10 h-10 rounded-2xl bg-rose-100 dark:bg-zinc-700 text-rose-600 dark:text-rose-300 flex items-center justify-center shrink-0">
+                  <div className="flex items-start sm:items-center gap-3.5">
+                    <div className="w-10 h-10 rounded-2xl bg-rose-100 dark:bg-zinc-700 text-rose-600 dark:text-rose-300 flex items-center justify-center shrink-0 mt-0.5 sm:mt-0">
                       <Flower2 size={20} />
                     </div>
-                    <div>
+                    <div className="space-y-1.5">
                       <h4 className="font-serif text-lg font-medium text-[var(--foreground)]">
-                        Orientações Especiais para a Daminha ({loggedUser.daminha})
+                        Para a Daminha {loggedUser.daminha}
                       </h4>
-                      <p className="text-gray-600 dark:text-gray-300 text-xs md:text-sm mt-0.5 leading-relaxed text-justified-elegant font-sans">
-                        Vestido infantil em tom suave (off-white ou bege claro) com laço e calçado confortável para conduzir as alianças com graciosidade.
-                      </p>
+                      {loggedUser.daminha.toLowerCase().includes('julia') ? (
+                        <>
+                          <p className="text-gray-700 dark:text-gray-200 text-xs md:text-sm leading-relaxed font-sans">
+                            A nossa menina Julia terá a linda missão de entrar levando o buquê de flores.
+                          </p>
+                          <p className="text-gray-600 dark:text-gray-300 text-xs md:text-sm leading-relaxed font-sans">
+                            O vestido será escolhido com todo carinho, para que ela se sinta linda e confortável nesse dia tão importante para nós.
+                          </p>
+                          <p className="text-gray-600 dark:text-gray-300 text-xs md:text-sm leading-relaxed font-sans">
+                            Na semana do casamento, teremos um ensaio para o cortejo, e os detalhes de horário e local serão combinados mais próximo da data.
+                          </p>
+                          <p className="text-gray-600 dark:text-gray-300 text-xs md:text-sm leading-relaxed font-sans pt-0.5">
+                            Te amamos, Julia! 🤍
+                          </p>
+                        </>
+                      ) : (
+                        <>
+                          <p className="text-gray-700 dark:text-gray-200 text-xs md:text-sm leading-relaxed font-sans">
+                            A nossa menina {loggedUser.daminha} terá a linda missão de levar as alianças até o altar.
+                          </p>
+                          <p className="text-gray-600 dark:text-gray-300 text-xs md:text-sm leading-relaxed font-sans">
+                            O vestido será escolhido junto com ela, com todo carinho, para que se sinta linda e confortável nesse dia tão importante para nós.
+                          </p>
+                          <p className="text-gray-600 dark:text-gray-300 text-xs md:text-sm leading-relaxed font-sans">
+                            Na semana do casamento, teremos um ensaio para o cortejo, e os detalhes de horário e local serão combinados mais próximo da data.
+                          </p>
+                          <p className="text-gray-600 dark:text-gray-300 text-xs md:text-sm leading-relaxed font-sans pt-0.5">
+                            Te amamos, {loggedUser.daminha}! 🤍
+                          </p>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -562,16 +599,27 @@ export default function PadrinhosPortal() {
               {/* Pajem Alert */}
               {loggedUser.pajem && (
                 <div className="bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-zinc-800/60 dark:to-zinc-800/40 p-6 rounded-3xl border border-blue-200/80 dark:border-zinc-700/80 shadow-xs">
-                  <div className="flex items-center gap-3.5">
-                    <div className="w-10 h-10 rounded-2xl bg-blue-100 dark:bg-zinc-700 text-blue-600 dark:text-blue-300 flex items-center justify-center shrink-0">
-                      <Sparkles size={20} />
+                  <div className="flex items-start sm:items-center gap-3.5">
+                    <div className="w-10 h-10 rounded-2xl bg-blue-100 dark:bg-zinc-700 text-blue-600 dark:text-blue-300 flex items-center justify-center shrink-0 mt-0.5 sm:mt-0">
+                      {/* Little Boy (Menininho) Icon */}
+                      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="7" r="4" />
+                        <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
+                        <path d="M9 4c1.5-1 4.5-1 6 0" />
+                      </svg>
                     </div>
-                    <div>
+                    <div className="space-y-1">
                       <h4 className="font-serif text-lg font-medium text-[var(--foreground)]">
-                        Orientações Especiais para o Pajem ({loggedUser.pajem})
+                        Para o Pajem {loggedUser.pajem}
                       </h4>
-                      <p className="text-gray-600 dark:text-gray-300 text-xs md:text-sm mt-0.5 leading-relaxed text-justified-elegant font-sans">
-                        Como pais do nosso querido pajem <strong>{loggedUser.pajem}</strong>: traje social infantil em <strong className="text-[var(--foreground)]">Azul Marinho ou Preto</strong> com camisa social branca e calçado confortável para conduzir esse momento especial até o altar.
+                      <p className="text-gray-700 dark:text-gray-200 text-xs md:text-sm leading-relaxed font-sans">
+                        O pajem deverá utilizar terno preto, camisa social branca de manga longa, gravata prata e sapato social preto.
+                      </p>
+                      <p className="text-gray-600 dark:text-gray-300 text-xs md:text-sm leading-relaxed font-sans">
+                        Tudo foi pensado com carinho para tornar esse momento ainda mais especial.
+                      </p>
+                      <p className="text-gray-600 dark:text-gray-300 text-xs md:text-sm leading-relaxed font-sans">
+                        Te amamos, {loggedUser.pajem}! 🤍
                       </p>
                     </div>
                   </div>
@@ -588,7 +636,6 @@ export default function PadrinhosPortal() {
                       M
                     </div>
                     <div>
-                      <span className="text-xs uppercase tracking-widest text-gray-400 font-sans font-medium">Orientações Femininas</span>
                       <h3 className="text-2xl md:text-3xl font-serif text-[var(--foreground)] font-medium leading-tight">
                         {DRESS_CODE_INFO.madrinhas.title}
                       </h3>
@@ -598,27 +645,29 @@ export default function PadrinhosPortal() {
                   {/* Mensagem Inicial */}
                   <div className="bg-gray-50/80 dark:bg-zinc-800/40 p-5 rounded-2xl border-l-3 border-gray-400 dark:border-zinc-600">
                     <p className="text-gray-700 dark:text-gray-200 text-sm md:text-base leading-relaxed text-justified-elegant font-sans">
-                      {DRESS_CODE_INFO.madrinhas.description} A paleta de cores será livre, para que possam escolher o tom e estilo que mais combinem com vocês, com vestidos longos e elegantes para a cerimônia.
+                      {DRESS_CODE_INFO.madrinhas.description} A paleta de cores será <strong>livre</strong>, para que possam escolher o tom e estilo que mais combinem com vocês, com vestidos longos e elegantes para a cerimônia.
                     </p>
                   </div>
 
                   {/* Diretrizes Principais */}
                   <div className="space-y-3.5">
                     <h4 className="font-serif text-lg font-medium text-[var(--foreground)] flex items-center gap-2 pb-1 border-b border-gray-100 dark:border-zinc-800">
-                      <Sparkles size={16} className="text-gray-400" /> Diretrizes das Madrinhas
+                      <Sparkles size={16} className="text-gray-400" /> Orientações para as Madrinhas
                     </h4>
 
                     <div className="space-y-3 font-sans text-sm">
-                      {/* Guideline 1 */}
+                      {/* Guideline 1: Vestidos Longos */}
                       <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800">
                         <div className="w-8 h-8 rounded-xl bg-gray-100 dark:bg-zinc-800 text-[var(--foreground)] flex items-center justify-center shrink-0 mt-0.5 border border-gray-200 dark:border-zinc-700">
-                          <Scissors size={15} />
+                          {/* Evening Gown / Long Dress Icon */}
+                          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M9 2l-1 5 2 4-4 11h12l-4-11 2-4-1-5H9z" />
+                            <path d="M9 2a3 3 0 0 0 6 0" />
+                            <path d="M10 11h4" />
+                          </svg>
                         </div>
                         <div>
-                          <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Comprimento Obrigatório</span>
-                          <p className="text-gray-600 dark:text-gray-300 mt-0.5 leading-relaxed text-justified-elegant">
-                            Vestidos estritamente <strong className="text-[var(--foreground)]">LONGOS</strong> e sofisticados, adequados à solenidade da celebração às 19h.
-                          </p>
+                          <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Vestidos Longos</span>
                         </div>
                       </div>
 
@@ -628,10 +677,7 @@ export default function PadrinhosPortal() {
                           <Palette size={15} />
                         </div>
                         <div>
-                          <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Paleta Livre</span>
-                          <p className="text-gray-600 dark:text-gray-300 mt-0.5 leading-relaxed text-justified-elegant">
-                            Cores inteiramente <strong className="text-[var(--foreground)]">LIVRES</strong> — escolha a tonalidade que faz você se sentir mais linda e confiante.
-                          </p>
+                          <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Cor Livre</span>
                         </div>
                       </div>
                     </div>
@@ -641,10 +687,10 @@ export default function PadrinhosPortal() {
                   <div className="bg-amber-500/10 dark:bg-amber-950/20 border-l-3 border-amber-500 rounded-2xl p-4.5 space-y-1.5">
                     <div className="flex items-center gap-2 text-amber-700 dark:text-amber-400 font-semibold font-serif text-sm">
                       <AlertTriangle size={16} className="shrink-0" />
-                      <span>Atenção Exclusiva</span>
+                      <span>Atenção</span>
                     </div>
                     <p className="text-xs md:text-sm text-amber-900/90 dark:text-amber-200/90 font-sans leading-relaxed text-justified-elegant">
-                      Não será permitido o uso de vestidos nas cores <strong>branco, off-white e champanhe</strong> (reservadas exclusivamente à noiva).
+                      Não recomendamos o uso de vestidos nas cores <strong>branco, off-white e champanhe</strong>.
                     </p>
                   </div>
 
@@ -679,7 +725,6 @@ export default function PadrinhosPortal() {
                       P
                     </div>
                     <div>
-                      <span className="text-xs uppercase tracking-widest text-gray-400 font-sans font-medium">Orientações Masculinas</span>
                       <h3 className="text-2xl md:text-3xl font-serif text-[var(--foreground)] font-medium leading-tight">
                         {DRESS_CODE_INFO.padrinhos.title}
                       </h3>
@@ -696,59 +741,75 @@ export default function PadrinhosPortal() {
                   {/* Diretrizes Principais dos Padrinhos */}
                   <div className="space-y-3.5">
                     <h4 className="font-serif text-lg font-medium text-[var(--foreground)] flex items-center gap-2 pb-1 border-b border-gray-100 dark:border-zinc-800">
-                      <CheckCircle2 size={16} className="text-gray-400" /> Diretrizes dos Padrinhos
+                      <CheckCircle2 size={16} className="text-gray-400" /> Orientações para os Padrinhos
                     </h4>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-sans text-sm">
                       {/* Guideline 1: Terno */}
-                      <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800">
-                        <div className="w-8 h-8 rounded-xl bg-black text-white flex items-center justify-center shrink-0 mt-0.5">
-                          <Shirt size={15} />
+                      <div className="flex items-center gap-3.5 p-4 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800 min-h-[72px] transition-all hover:bg-gray-100/50 dark:hover:bg-zinc-800/40">
+                        <div className="w-9 h-9 rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center shrink-0 shadow-xs">
+                          {/* Blazer / Tuxedo / Suit Icon */}
+                          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M6 3h12l2 18H4L6 3z" />
+                            <path d="M6 3l6 9 6-9" />
+                            <path d="M9 15l3-3 3 3" />
+                            <path d="M12 12v9" />
+                          </svg>
                         </div>
                         <div>
-                          <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Terno Preto</span>
-                          <p className="text-gray-600 dark:text-gray-300 text-xs mt-0.5 leading-relaxed">
-                            Social completo clássico (paletó e calça pretos).
-                          </p>
+                          <span className="font-serif font-semibold text-sm md:text-base text-[var(--foreground)] block leading-snug">
+                            Terno Preto
+                          </span>
                         </div>
                       </div>
 
-                      {/* Guideline 2: Gravata */}
-                      <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800">
-                        <div className="w-8 h-8 rounded-xl bg-slate-300 text-slate-800 flex items-center justify-center shrink-0 mt-0.5 border border-slate-400/50">
-                          <Sparkles size={15} />
+                      {/* Guideline 2: Camisa */}
+                      <div className="flex items-center gap-3.5 p-4 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800 min-h-[72px] transition-all hover:bg-gray-100/50 dark:hover:bg-zinc-800/40">
+                        <div className="w-9 h-9 rounded-xl bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 flex items-center justify-center shrink-0 border border-gray-200 dark:border-zinc-700 shadow-xs">
+                          <Shirt size={16} />
                         </div>
                         <div>
-                          <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Gravata Prata</span>
-                          <p className="text-gray-600 dark:text-gray-300 text-xs mt-0.5 leading-relaxed">
-                            Gravata social clássica na cor prata.
-                          </p>
+                          <span className="font-serif font-semibold text-sm md:text-base text-[var(--foreground)] block leading-snug">
+                            Camisa Social Branca
+                          </span>
+                          <span className="text-[11px] text-gray-500 dark:text-gray-400 font-sans block mt-0.5">
+                            manga longa
+                          </span>
                         </div>
                       </div>
 
-                      {/* Guideline 3: Sapato */}
-                      <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800">
-                        <div className="w-8 h-8 rounded-xl bg-black text-white flex items-center justify-center shrink-0 mt-0.5">
-                          <CheckCircle2 size={15} />
+                      {/* Guideline 3: Gravata */}
+                      <div className="flex items-center gap-3.5 p-4 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800 min-h-[72px] transition-all hover:bg-gray-100/50 dark:hover:bg-zinc-800/40">
+                        <div className="w-9 h-9 rounded-xl bg-slate-200 dark:bg-zinc-700 text-slate-800 dark:text-slate-200 flex items-center justify-center shrink-0 border border-slate-300 dark:border-zinc-600 shadow-xs">
+                          {/* Necktie Icon */}
+                          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M10 2h4l1 3-3 2-3-2 1-3z" />
+                            <path d="M10 5l-2 10 4 6 4-6-2-10" />
+                            <line x1="12" y1="9" x2="12" y2="14" />
+                          </svg>
                         </div>
                         <div>
-                          <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Sapato Preto</span>
-                          <p className="text-gray-600 dark:text-gray-300 text-xs mt-0.5 leading-relaxed">
-                            Sapato social preto com meias pretas.
-                          </p>
+                          <span className="font-serif font-semibold text-sm md:text-base text-[var(--foreground)] block leading-snug">
+                            Gravata Prata
+                          </span>
                         </div>
                       </div>
 
-                      {/* Guideline 4: Camisa */}
-                      <div className="flex items-start gap-3.5 p-3.5 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800">
-                        <div className="w-8 h-8 rounded-xl bg-white text-black flex items-center justify-center shrink-0 mt-0.5 border border-gray-300">
-                          <CheckCircle2 size={15} />
+                      {/* Guideline 4: Sapato */}
+                      <div className="flex items-center gap-3.5 p-4 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800 min-h-[72px] transition-all hover:bg-gray-100/50 dark:hover:bg-zinc-800/40">
+                        <div className="w-9 h-9 rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center shrink-0 shadow-xs">
+                          {/* Classic Dress Shoe / Oxford Icon */}
+                          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M2 17h20v2H2z" />
+                            <path d="M2 17v-3c0-1.1.9-2 2-2h4l4-5h4a3 3 0 0 1 3 3v3l3 2a2 2 0 0 1 2 2" />
+                            <line x1="11" y1="9" x2="14" y2="9" />
+                            <line x1="12" y1="12" x2="15" y2="12" />
+                          </svg>
                         </div>
                         <div>
-                          <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Camisa Branca</span>
-                          <p className="text-gray-600 dark:text-gray-300 text-xs mt-0.5 leading-relaxed">
-                            Social branca de manga longa tradicional.
-                          </p>
+                          <span className="font-serif font-semibold text-sm md:text-base text-[var(--foreground)] block leading-snug">
+                            Sapato Social Preto
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -868,36 +929,44 @@ export default function PadrinhosPortal() {
                   </div>
                 </div>
 
-                <div className="space-y-4">
-                  {announcements.map((ann) => (
-                    <div
-                      key={ann.id}
-                      className="p-6 rounded-2xl border transition-all bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800"
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-semibold uppercase tracking-wider text-[var(--foreground)] font-sans">
-                          {ann.author}
-                        </span>
-                        <div className="flex items-center gap-3">
-                          <span className="text-xs text-gray-400 font-sans">{ann.date}</span>
-                          {isNoivos && (
-                            <button
-                              onClick={() => handleDeleteAnnouncement(ann.id)}
-                              className="p-1.5 text-red-500 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer"
-                              title="Excluir comunicado"
-                            >
-                              <Trash2 size={15} />
-                            </button>
-                          )}
+                {announcements.length === 0 ? (
+                  <div className="text-center py-10 px-4 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800/60">
+                    <p className="text-sm text-gray-500 dark:text-gray-400 font-sans">
+                      Nenhum comunicado publicado no momento. Novos avisos dos noivos aparecerão aqui.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {announcements.map((ann) => (
+                      <div
+                        key={ann.id}
+                        className="p-6 rounded-2xl border transition-all bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800"
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-xs font-semibold uppercase tracking-wider text-[var(--foreground)] font-sans">
+                            {ann.author}
+                          </span>
+                          <div className="flex items-center gap-3">
+                            <span className="text-xs text-gray-400 font-sans">{ann.date}</span>
+                            {isNoivos && (
+                              <button
+                                onClick={() => handleDeleteAnnouncement(ann.id)}
+                                className="p-1.5 text-red-500 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer"
+                                title="Excluir comunicado"
+                              >
+                                <Trash2 size={15} />
+                              </button>
+                            )}
+                          </div>
                         </div>
+                        <h3 className="text-xl font-serif text-[var(--foreground)] mb-2 font-medium">{ann.title}</h3>
+                        <p className="text-gray-600 dark:text-gray-300 font-sans text-sm md:text-base leading-relaxed text-justified-elegant">
+                          {ann.content}
+                        </p>
                       </div>
-                      <h3 className="text-xl font-serif text-[var(--foreground)] mb-2 font-medium">{ann.title}</h3>
-                      <p className="text-gray-600 dark:text-gray-300 font-sans text-sm md:text-base leading-relaxed text-justified-elegant">
-                        {ann.content}
-                      </p>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
 
                 {/* Reply Section */}
                 <div className="mt-12 pt-8 border-t border-gray-100 dark:border-zinc-800">
@@ -975,14 +1044,10 @@ export default function PadrinhosPortal() {
               className="bg-white dark:bg-zinc-900 rounded-3xl p-6 md:p-8 shadow-sm border border-gray-200 dark:border-zinc-800 space-y-6"
             >
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-gray-100 dark:border-zinc-800">
-                <div className="space-y-1">
-                  <span className="text-xs uppercase tracking-widest text-gray-400 font-sans font-semibold">Organização</span>
+                <div>
                   <h2 className="text-2xl md:text-3xl font-serif text-[var(--foreground)] font-medium flex items-center gap-2">
-                    <Calendar size={20} className="text-gray-400" /> Cronograma do Grande Dia
+                    <Calendar size={20} className="text-gray-400" /> Cronograma
                   </h2>
-                  <p className="text-xs text-gray-500 font-sans">
-                    Horários planejados com carinho para aproveitarmos juntos cada instante da celebração.
-                  </p>
                 </div>
 
                 {isNoivos && (
@@ -1009,7 +1074,7 @@ export default function PadrinhosPortal() {
                 {schedule.map((item) => (
                   <div key={item.id} className="relative group">
                     <div className="absolute -left-[31px] md:-left-[39px] top-1 w-4 h-4 rounded-full bg-black dark:bg-white border-4 border-white dark:border-zinc-900 shadow-xs"></div>
-                    
+
                     <div className="flex items-start justify-between gap-4">
                       <div className="space-y-1">
                         <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider block font-sans">

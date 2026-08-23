@@ -12,29 +12,7 @@ interface MessageItem {
   date: string;
 }
 
-const INITIAL_GUESTBOOK: MessageItem[] = [
-  {
-    id: '1',
-    author: 'Maria Clara e João',
-    relation: 'Amigos dos Noivos',
-    text: 'Que a união de vocês seja sempre guiada pelo amor, cumplicidade e muitas alegrias. Estamos ansiosos para celebrar este dia tão inesquecível ao lado de vocês!',
-    date: '28/07/2026'
-  },
-  {
-    id: '2',
-    author: 'Tia Luciana e Família',
-    relation: 'Família',
-    text: 'Aline e Klécio, acompanhar essa trajetória linda enche nosso coração de orgulho. Que Deus abençoe ricamente essa nova família que se inicia.',
-    date: '30/07/2026'
-  },
-  {
-    id: '3',
-    author: 'Carlos e Débora',
-    relation: 'Padrinhos',
-    text: 'É uma honra imensa sermos padrinhos deste amor tão verdadeiro. Podem contar conosco para sempre!',
-    date: '01/08/2026'
-  }
-];
+const INITIAL_GUESTBOOK: MessageItem[] = [];
 
 export default function GuestbookSection() {
   const [messages, setMessages] = useState<MessageItem[]>(INITIAL_GUESTBOOK);
@@ -50,12 +28,13 @@ export default function GuestbookSection() {
     const stored = localStorage.getItem('guestbook_messages');
     if (stored) {
       try {
-        setMessages(JSON.parse(stored));
+        const parsed: MessageItem[] = JSON.parse(stored);
+        const filtered = parsed.filter(m => m.id !== '1' && m.id !== '2' && m.id !== '3');
+        setMessages(filtered);
+        localStorage.setItem('guestbook_messages', JSON.stringify(filtered));
       } catch (e) {
         console.error(e);
       }
-    } else {
-      localStorage.setItem('guestbook_messages', JSON.stringify(INITIAL_GUESTBOOK));
     }
   }, []);
 
@@ -165,35 +144,43 @@ export default function GuestbookSection() {
 
           {/* Messages Feed */}
           <div className="lg:col-span-7 space-y-4 max-h-[600px] overflow-y-auto pr-2 hide-scrollbar">
-            {messages.map((item) => (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-gray-200 dark:border-zinc-800 shadow-sm hover:border-gray-400 transition-colors"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <div>
-                    <h4 className="font-serif text-lg text-[var(--foreground)] font-medium">{item.author}</h4>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs text-gray-400 font-mono">{item.date}</span>
-                    {isAdmin && (
-                      <button
-                        onClick={() => handleDeleteMessage(item.id)}
-                        className="p-1.5 text-red-500 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer"
-                        title="Excluir mensagem (Administrador)"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    )}
-                  </div>
-                </div>
-                <p className="text-sm text-gray-600 dark:text-gray-300 font-sans leading-relaxed text-justified-elegant">
-                  "{item.text}"
+            {messages.length === 0 ? (
+              <div className="text-center py-12 px-6 rounded-2xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800">
+                <p className="text-sm text-gray-500 dark:text-gray-400 font-sans">
+                  Seja o primeiro a deixar uma mensagem de carinho para os noivos!
                 </p>
-              </motion.div>
-            ))}
+              </div>
+            ) : (
+              messages.map((item) => (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-gray-200 dark:border-zinc-800 shadow-sm hover:border-gray-400 transition-colors"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div>
+                      <h4 className="font-serif text-lg text-[var(--foreground)] font-medium">{item.author}</h4>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs text-gray-400 font-mono">{item.date}</span>
+                      {isAdmin && (
+                        <button
+                          onClick={() => handleDeleteMessage(item.id)}
+                          className="p-1.5 text-red-500 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer"
+                          title="Excluir mensagem (Administrador)"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 font-sans leading-relaxed text-justified-elegant">
+                    "{item.text}"
+                  </p>
+                </motion.div>
+              ))
+            )}
           </div>
 
         </div>

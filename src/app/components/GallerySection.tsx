@@ -2,61 +2,61 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Image as ImageIcon, X, ChevronLeft, ChevronRight, Heart, Sparkles, Users, ChevronDown, ChevronUp } from 'lucide-react';
+import { Image as ImageIcon, X, ChevronLeft, ChevronRight, Heart, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface GalleryImage {
   id: number;
   src: string;
   title: string;
   subtitle: string;
-  category: 'casal' | 'infancia' | 'familia';
+  category: 'casal' | 'infancia';
   objectPosition?: string;
 }
 
 const GALLERY_IMAGES: GalleryImage[] = [
   {
     id: 1,
-    src: '/img/Galeria/ALINEEKLECIOCHUVA.jpeg',
-    title: 'Romance sob a Chuva',
-    subtitle: 'Amor e cumplicidade em todo clima',
-    category: 'casal',
-    objectPosition: 'object-top'
+    src: '/img/Galeria/01.jpg',
+    title: 'Klécio 1 Aninho',
+    subtitle: 'Primeiro aniversário do noivo',
+    category: 'infancia',
+    objectPosition: 'object-center'
   },
   {
     id: 2,
-    src: '/img/Galeria/ALINEEKLECIOFLORESTA.jpeg',
-    title: 'Ensaio na Floresta',
-    subtitle: 'Conexão e leveza em meio à natureza',
+    src: '/img/Galeria/02.jpg',
+    title: 'Aline 1 Aninho',
+    subtitle: 'Primeiros sorrisos da noiva',
+    category: 'infancia',
+    objectPosition: 'object-center'
+  },
+  {
+    id: 3,
+    src: '/img/Galeria/03.jpg',
+    title: 'Momento Especial',
+    subtitle: 'Mais um capítulo da nossa história',
     category: 'casal',
     objectPosition: 'object-top'
   },
   {
-    id: 3,
-    src: '/img/Galeria/ALINEEKLECIOFORMAL.jpeg',
+    id: 4,
+    src: '/img/Galeria/04.jpg',
+    title: 'Celebração de Ano Novo',
+    subtitle: 'Brindando ao nosso futuro juntos',
+    category: 'casal',
+    objectPosition: 'object-top'
+  },
+  {
+    id: 5,
+    src: '/img/Galeria/05.jpeg',
     title: 'Elegância e Celebração',
     subtitle: 'Par perfeito prontos para comemorar',
     category: 'casal',
     objectPosition: 'object-top'
   },
   {
-    id: 4,
-    src: '/img/Galeria/ALINEEKLECIOTORRE.jpeg',
-    title: 'Registros de Viagem',
-    subtitle: 'Colecionando memórias pelo mundo',
-    category: 'casal',
-    objectPosition: 'object-center'
-  },
-  {
-    id: 5,
-    src: '/img/Galeria/Fotos Studio.jpg',
-    title: 'Ensaio em Estúdio',
-    subtitle: 'Olhares e sorrisos inesquecíveis',
-    category: 'casal',
-    objectPosition: 'object-top'
-  },
-  {
     id: 6,
-    src: '/img/Galeria/Gratava.jpg',
+    src: '/img/Galeria/06.jpg',
     title: 'Passeio em Gravatá',
     subtitle: 'Viagens e momentos de lazer',
     category: 'casal',
@@ -64,107 +64,43 @@ const GALLERY_IMAGES: GalleryImage[] = [
   },
   {
     id: 7,
-    src: '/img/Galeria/Ano novo.jpg',
-    title: 'Celebração de Ano Novo',
-    subtitle: 'Brindando ao nosso futuro juntos',
+    src: '/img/Galeria/07.jpg',
+    title: 'Passeio no Estádio',
+    subtitle: 'Momentos inesquecíveis a dois',
     category: 'casal',
-    objectPosition: 'object-top'
+    objectPosition: 'object-center'
   },
   {
     id: 8,
-    src: '/img/Galeria/1 foto.jpg',
-    title: 'Momento Especial',
-    subtitle: 'Mais um capítulo da nossa história',
+    src: '/img/Galeria/08.jpeg',
+    title: 'Ensaio na Floresta',
+    subtitle: 'Conexão e leveza em meio à natureza',
     category: 'casal',
     objectPosition: 'object-top'
   },
   {
     id: 9,
-    src: '/img/Galeria/Consegue melhorar essa foto_.jpg',
-    title: 'Registro de Carinho',
-    subtitle: 'Memórias guardadas no coração',
+    src: '/img/Galeria/09.jpeg',
+    title: 'Registros de Viagem',
+    subtitle: 'Colecionando memórias pelo mundo',
+    category: 'casal',
+    objectPosition: 'object-center'
+  },
+  {
+    id: 10,
+    src: '/img/Galeria/10.jpeg',
+    title: 'Romance sob a Chuva',
+    subtitle: 'Amor e cumplicidade em todo clima',
     category: 'casal',
     objectPosition: 'object-top'
   },
   {
-    id: 10,
-    src: '/img/Galeria/ALINEEKLECIOBB.jpeg',
-    title: 'Aline e Klécio Pequeninos',
-    subtitle: 'Nossas infâncias e os primeiros passos',
-    category: 'infancia',
-    objectPosition: 'object-center'
-  },
-  {
     id: 11,
-    src: '/img/Galeria/Aline 1 ano.jpg',
-    title: 'Aline 1 Aninho',
-    subtitle: 'Primeiros sorrisos da noiva',
-    category: 'infancia',
+    src: '/img/Galeria/11.jpeg',
+    title: 'Passeio Histórico',
+    subtitle: 'Descobrindo novos lugares juntos',
+    category: 'casal',
     objectPosition: 'object-center'
-  },
-  {
-    id: 12,
-    src: '/img/Galeria/KLECIOBB.jpeg',
-    title: 'Klécio Bebê',
-    subtitle: 'Infância inesquecível do noivo',
-    category: 'infancia',
-    objectPosition: 'object-top'
-  },
-  {
-    id: 13,
-    src: '/img/Galeria/Klecio 1 Ano foto presentes.jpg',
-    title: 'Klécio 1 Aninho',
-    subtitle: 'Primeiro aniversário do noivo',
-    category: 'infancia',
-    objectPosition: 'object-center'
-  },
-  {
-    id: 14,
-    src: '/img/Galeria/Klecio baby.jpg',
-    title: 'Klécio Pequenino',
-    subtitle: 'Fofura dos primeiros anos',
-    category: 'infancia',
-    objectPosition: 'object-center'
-  },
-  {
-    id: 15,
-    src: '/img/Galeria/Klecio rosa papel.jpg',
-    title: 'Klécio na Infância',
-    subtitle: 'Lembranças da infância',
-    category: 'infancia',
-    objectPosition: 'object-top'
-  },
-  {
-    id: 16,
-    src: '/img/Galeria/Carlos e Débora crianças.jpg',
-    title: 'Carlos e Débora Crianças',
-    subtitle: 'Recordações especiais da família',
-    category: 'infancia',
-    objectPosition: 'object-center'
-  },
-  {
-    id: 17,
-    src: '/img/Galeria/Carlos e Débora.jpg',
-    title: 'Carlos e Débora',
-    subtitle: 'Momentos especiais em família',
-    category: 'familia',
-    objectPosition: 'object-top'
-  },
-  {
-    id: 18,
-    src: '/img/Galeria/Kassio é Lu.jpg',
-    title: 'Kássio e Lu',
-    subtitle: 'Pessoas queridas ao nosso lado',
-    category: 'familia',
-    objectPosition: 'object-top'
-  },
-  {
-    id: 19,
-    src: '/img/Galeria/Mauri e Íris.jpg',
-    title: 'Mauri e Íris',
-    subtitle: 'Amor e inspiração para nossa união',
-    category: 'familia',
-    objectPosition: 'object-top'
   },
 ];
 
@@ -172,11 +108,10 @@ const CATEGORIES = [
   { id: 'todas', label: 'Todas as Fotos', icon: ImageIcon },
   { id: 'casal', label: 'O Casal', icon: Heart },
   { id: 'infancia', label: 'Nossa Infância', icon: Sparkles },
-  { id: 'familia', label: 'Família & Padrinhos', icon: Users },
 ] as const;
 
 export default function GallerySection() {
-  const [activeCategory, setActiveCategory] = useState<'todas' | 'casal' | 'infancia' | 'familia'>('todas');
+  const [activeCategory, setActiveCategory] = useState<'todas' | 'casal' | 'infancia'>('todas');
   const [visibleCount, setVisibleCount] = useState<number>(6);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
@@ -235,7 +170,7 @@ export default function GallerySection() {
             <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
           </div>
           <p className="text-sm md:text-base text-[var(--foreground)]/80 font-sans leading-relaxed text-justified-elegant text-center max-w-2xl mx-auto">
-            Registros inesquecíveis da nossa caminhada, infância, família e cumplicidade ao longo dos anos.
+            Registros inesquecíveis da nossa caminhada, infância e cumplicidade ao longo dos anos.
           </p>
         </motion.div>
 
