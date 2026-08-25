@@ -55,9 +55,24 @@ export default function GuestbookSection() {
 
   useEffect(() => {
     setIsAdmin(localStorage.getItem('admin_logged_in') === 'true');
+
+    // 1. Carregamento instantâneo (0ms) a partir do cache local
+    const cached = localStorage.getItem('guestbook_messages');
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setMessages(parsed);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    // 2. Busca os dados mais recentes do Supabase em segundo plano
     fetchMessages();
 
-    // Inscrição em tempo real com Supabase
+    // 3. Inscrição em tempo real com Supabase
     if (supabase) {
       const client = supabase;
       const channel = client
