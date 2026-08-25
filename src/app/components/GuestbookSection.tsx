@@ -28,19 +28,23 @@ export default function GuestbookSection() {
     try {
       const res = await fetch('/api/guestbook');
       const data = await res.json();
-      if (data.success && Array.isArray(data.messages) && data.messages.length > 0) {
-        setMessages(data.messages);
-        localStorage.setItem('guestbook_messages', JSON.stringify(data.messages));
-      } else {
-        // Fallback local se a API estiver vazia ou offline
-        const stored = localStorage.getItem('guestbook_messages');
-        if (stored) {
-          try {
-            const parsed: MessageItem[] = JSON.parse(stored);
-            const filtered = parsed.filter(m => m.id !== '1' && m.id !== '2' && m.id !== '3');
-            setMessages(filtered);
-          } catch (e) {
-            console.error(e);
+      if (data.success && Array.isArray(data.messages)) {
+        if (data.isConfigured) {
+          setMessages(data.messages);
+          localStorage.setItem('guestbook_messages', JSON.stringify(data.messages));
+        } else if (data.messages.length > 0) {
+          setMessages(data.messages);
+          localStorage.setItem('guestbook_messages', JSON.stringify(data.messages));
+        } else {
+          const stored = localStorage.getItem('guestbook_messages');
+          if (stored) {
+            try {
+              const parsed: MessageItem[] = JSON.parse(stored);
+              const filtered = parsed.filter(m => m.id !== '1' && m.id !== '2' && m.id !== '3');
+              setMessages(filtered);
+            } catch (e) {
+              console.error(e);
+            }
           }
         }
       }
