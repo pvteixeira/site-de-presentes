@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { MessageSquare, Send, Heart, CheckCircle2, Trash2 } from 'lucide-react';
+import { MessageSquare, Send, Heart, CheckCircle2, Trash2, ChevronDown } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 
 interface MessageItem {
@@ -14,9 +14,12 @@ interface MessageItem {
 }
 
 const INITIAL_GUESTBOOK: MessageItem[] = [];
+const INITIAL_VISIBLE_MESSAGES = 5;
+const MESSAGES_PER_LOAD = 5;
 
 export default function GuestbookSection() {
   const [messages, setMessages] = useState<MessageItem[]>(INITIAL_GUESTBOOK);
+  const [visibleCount, setVisibleCount] = useState<number>(INITIAL_VISIBLE_MESSAGES);
   const [author, setAuthor] = useState('');
   const [relation, setRelation] = useState('');
   const [text, setText] = useState('');
@@ -240,35 +243,49 @@ export default function GuestbookSection() {
                 </p>
               </div>
             ) : (
-              messages.map((item) => (
-                <motion.div
-                  key={item.id}
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-gray-200 dark:border-zinc-800 shadow-sm hover:border-gray-400 transition-colors"
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <div>
-                      <h4 className="font-serif text-lg text-[var(--foreground)] font-medium">{item.author}</h4>
+              <>
+                {messages.slice(0, visibleCount).map((item) => (
+                  <motion.div
+                    key={item.id}
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-gray-200 dark:border-zinc-800 shadow-sm hover:border-gray-400 transition-colors"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <div>
+                        <h4 className="font-serif text-lg text-[var(--foreground)] font-medium">{item.author}</h4>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="text-xs text-gray-400 font-mono">{item.date}</span>
+                        {isAdmin && (
+                          <button
+                            onClick={() => handleDeleteMessage(item.id)}
+                            className="p-1.5 text-red-500 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer"
+                            title="Excluir mensagem (Administrador)"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        )}
+                      </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <span className="text-xs text-gray-400 font-mono">{item.date}</span>
-                      {isAdmin && (
-                        <button
-                          onClick={() => handleDeleteMessage(item.id)}
-                          className="p-1.5 text-red-500 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer"
-                          title="Excluir mensagem (Administrador)"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      )}
-                    </div>
+                    <p className="text-sm text-gray-600 dark:text-gray-300 font-sans leading-relaxed text-justified-elegant">
+                      "{item.text}"
+                    </p>
+                  </motion.div>
+                ))}
+
+                {visibleCount < messages.length && (
+                  <div className="pt-2 text-center">
+                    <button
+                      onClick={() => setVisibleCount((prev) => prev + MESSAGES_PER_LOAD)}
+                      className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-xl font-sans text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 text-[var(--foreground)] border border-gray-200 dark:border-zinc-700 shadow-sm hover:scale-102 cursor-pointer"
+                    >
+                      <span>Ver mais mensagens ({messages.length - visibleCount} restantes)</span>
+                      <ChevronDown size={15} />
+                    </button>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 font-sans leading-relaxed text-justified-elegant">
-                    "{item.text}"
-                  </p>
-                </motion.div>
-              ))
+                )}
+              </>
             )}
           </div>
 
