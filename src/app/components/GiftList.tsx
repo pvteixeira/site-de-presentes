@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Search, ArrowUpDown, Gift as GiftIcon, ChevronDown } from 'lucide-react';
 import GiftCard from './GiftCard';
 import ContributionModal from './ContributionModal';
 import { triggerConfetti } from './Confetti';
 import type { Gift } from '../types';
-
 import { GIFTS_DATA } from '../utils/giftsData';
+import { supabase } from '@/lib/supabase';
 
 const CATEGORIES = ['Todas', 'Cozinha', 'Cama e Banho', 'Eletrodomésticos', 'Experiências', 'Outros'];
 const INITIAL_ITEMS_COUNT = 12;
@@ -20,6 +20,41 @@ export default function GiftList() {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | 'default'>('default');
   const [selectedGift, setSelectedGift] = useState<Gift | null>(null);
   const [visibleCount, setVisibleCount] = useState<number>(INITIAL_ITEMS_COUNT);
+
+  const fetchGifts = useCallback(async () => {
+    try {
+      const res = await fetch('/api/gifts');
+      const data = await res.json();
+      if (data.success && Array.isArray(data.gifts) && data.gifts.length > 0) {
+        setGifts(data.gifts);
+      }
+    } catch (err) {
+      console.error('Erro ao buscar presentes:', err);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchGifts();
+
+    // Supabase Realtime para sincronizar presentes em tempo real
+    if (supabase) {
+      const client = supabase;
+      const channel = client
+        .channel('realtime_gifts')
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'gifts' },
+          () => {
+            fetchGifts();
+          }
+        )
+        .subscribe();
+
+      return () => {
+        client.removeChannel(channel);
+      };
+    }
+  }, [fetchGifts]);
 
   // Reset pagination when filters or sort change
   useEffect(() => {
@@ -52,7 +87,7 @@ export default function GiftList() {
 
   const handleSuccess = (amount: number) => {
     if (selectedGift) {
-      setGifts(gifts.map(g =>
+      setGifts(prev => prev.map(g =>
         g.id === selectedGift.id
           ? { ...g, currentAmount: g.currentAmount + amount }
           : g
@@ -60,6 +95,7 @@ export default function GiftList() {
     }
     setSelectedGift(null);
     triggerConfetti();
+    fetchGifts();
   };
 
   return (

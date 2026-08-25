@@ -64,6 +64,7 @@ export default function AdminPage() {
   const [editingGift, setEditingGift] = useState<Gift | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [isSyncingGifts, setIsSyncingGifts] = useState(false);
 
   // Messages, Pix & Padrinhos state
   const [guestbookMessages, setGuestbookMessages] = useState<GuestbookMessage[]>(INITIAL_GUESTBOOK);
@@ -72,7 +73,71 @@ export default function AdminPage() {
   const [selectedReceipt, setSelectedReceipt] = useState<PixContribution | null>(null);
   const [padrinhosAccounts, setPadrinhosAccounts] = useState<PadrinhoAccount[]>([]);
 
-  // Check login & Load localStorage state
+  const loadAllAdminData = async () => {
+    // 1. Load Gifts
+    try {
+      const res = await fetch('/api/gifts');
+      const data = await res.json();
+      if (data.success && Array.isArray(data.gifts) && data.gifts.length > 0) {
+        setGifts(data.gifts);
+      }
+    } catch (e) {
+      console.error('Erro ao buscar presentes:', e);
+    }
+
+    // 2. Load Guestbook Messages
+    try {
+      const res = await fetch('/api/guestbook');
+      const data = await res.json();
+      if (data.success && Array.isArray(data.messages)) {
+        setGuestbookMessages(data.messages);
+        localStorage.setItem('guestbook_messages', JSON.stringify(data.messages));
+      }
+    } catch (e) {
+      console.error('Erro ao buscar mensagens do mural:', e);
+    }
+
+    // 3. Load Pix Contributions
+    try {
+      const res = await fetch('/api/pix');
+      const data = await res.json();
+      if (data.success && Array.isArray(data.contributions)) {
+        setPixContributions(data.contributions);
+        localStorage.setItem('pix_contributions', JSON.stringify(data.contributions));
+      }
+    } catch (e) {
+      console.error('Erro ao buscar comprovantes PIX:', e);
+    }
+
+    // 4. Load Padrinho Replies
+    try {
+      const res = await fetch('/api/padrinhos/mural');
+      const data = await res.json();
+      if (data.success && Array.isArray(data.replies)) {
+        setPadrinhoReplies(data.replies);
+        localStorage.setItem('padrinho_replies', JSON.stringify(data.replies));
+      }
+    } catch (e) {
+      console.error('Erro ao buscar recados dos padrinhos:', e);
+    }
+
+    // 5. Load Padrinhos Accounts via Secure Server API
+    try {
+      const res = await fetch('/api/admin/padrinhos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ adminSecret: 'Linocaeklecio2026' })
+      });
+      const data = await res.json();
+      if (data.success && data.accounts) {
+        setPadrinhosAccounts(data.accounts);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // Check login & Load data
   useEffect(() => {
     const isLogged = localStorage.getItem('admin_logged_in') === 'true';
     if (!isLogged) {
@@ -80,119 +145,160 @@ export default function AdminPage() {
       return;
     }
     setIsAuthenticated(true);
-
-    // Load Guestbook Messages
-    const storedGuestbook = localStorage.getItem('guestbook_messages');
-    if (storedGuestbook) {
-      try {
-        const parsed: GuestbookMessage[] = JSON.parse(storedGuestbook);
-        const filtered = parsed.filter(m => m.id !== '1' && m.id !== '2' && m.id !== '3');
-        setGuestbookMessages(filtered);
-        localStorage.setItem('guestbook_messages', JSON.stringify(filtered));
-      } catch (e) {
-        console.error(e);
-      }
-    }
-
-    // Load Padrinho Replies
-    const storedReplies = localStorage.getItem('padrinho_replies');
-    if (storedReplies) {
-      try {
-        setPadrinhoReplies(JSON.parse(storedReplies));
-      } catch (e) {
-        console.error(e);
-      }
-    }
-
-    // Load Pix Contributions
-    const storedPix = localStorage.getItem('pix_contributions');
-    if (storedPix) {
-      try {
-        setPixContributions(JSON.parse(storedPix));
-      } catch (e) {
-        console.error(e);
-      }
-    }
-
-    // Load Padrinhos Accounts via Secure Server API
-    fetch('/api/admin/padrinhos', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ adminSecret: 'Linocaeklecio2026' })
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success && data.accounts) {
-          setPadrinhosAccounts(data.accounts);
-        }
-      })
-      .catch(console.error);
+    loadAllAdminData();
   }, [router]);
 
   const totalArrecadado = gifts.reduce((acc, gift) => acc + gift.currentAmount, 0);
   const totalMeta = gifts.reduce((acc, gift) => acc + gift.totalAmount, 0);
   const totalPixValor = pixContributions.reduce((acc, item) => acc + (item.amount || 0), 0);
 
-  const handleSave = (gift: Gift) => {
+  const handleSyncGiftsToSupabase = async () => {
+    if (!confirm('Deseja sincronizar a lista padrão completa de presentes para o Supabase?')) return;
+    setIsSyncingGifts(true);
+    try {
+      const res = await fetch('/api/gifts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'seed', giftsList: GIFTS_DATA })
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert('Presentes sincronizados com sucesso no banco de dados!');
+        loadAllAdminData();
+      } else {
+        alert('Aviso: ' + (data.message || 'Erro ao sincronizar presentes.'));
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Erro de conexão ao sincronizar presentes.');
+    } finally {
+      setIsSyncingGifts(false);
+    }
+  };
+
+  const handleSave = async (gift: Gift) => {
     if (editingGift || isAdding) {
+      const targetGift = isAdding
+        ? { ...gift, id: Date.now().toString() }
+        : gift;
+
       if (isAdding) {
-        setGifts([...gifts, { ...gift, id: Date.now().toString() }]);
+        setGifts([...gifts, targetGift]);
         setIsAdding(false);
       } else {
-        setGifts(gifts.map((g) => (g.id === gift.id ? gift : g)));
+        setGifts(gifts.map((g) => (g.id === gift.id ? targetGift : g)));
         setEditingGift(null);
+      }
+
+      try {
+        await fetch('/api/gifts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ gift: targetGift })
+        });
+        loadAllAdminData();
+      } catch (err) {
+        console.error('Erro ao salvar presente no Supabase:', err);
       }
     }
   };
 
-  const handleDeleteGift = (id: string) => {
+  const handleDeleteGift = async (id: string) => {
     if (confirm('Tem certeza que deseja excluir este presente da lista?')) {
       setGifts(gifts.filter((g) => g.id !== id));
+      try {
+        await fetch(`/api/gifts?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+        loadAllAdminData();
+      } catch (err) {
+        console.error('Erro ao excluir presente:', err);
+      }
     }
   };
 
-  const handleDeletePixContribution = (id: string) => {
+  const handleDeletePixContribution = async (id: string) => {
     if (confirm('Tem certeza que deseja excluir este comprovante PIX?')) {
       const updated = pixContributions.filter((p) => p.id !== id);
       setPixContributions(updated);
       localStorage.setItem('pix_contributions', JSON.stringify(updated));
+
+      try {
+        await fetch(`/api/pix?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+        loadAllAdminData();
+      } catch (err) {
+        console.error('Erro ao excluir comprovante:', err);
+      }
     }
   };
 
-  const handleDeleteAllPixContributions = () => {
+  const handleDeleteAllPixContributions = async () => {
     if (confirm('ATENÇÃO: Tem certeza que deseja apagar TODOS os comprovantes PIX recebidos?')) {
       setPixContributions([]);
       localStorage.setItem('pix_contributions', JSON.stringify([]));
+
+      try {
+        await fetch('/api/pix?all=true', { method: 'DELETE' });
+        loadAllAdminData();
+      } catch (err) {
+        console.error('Erro ao limpar comprovantes:', err);
+      }
     }
   };
 
-  const handleDeleteGuestbookMessage = (id: string) => {
+  const handleDeleteGuestbookMessage = async (id: string) => {
     if (confirm('Tem certeza que deseja excluir esta mensagem do mural aos noivos?')) {
       const updated = guestbookMessages.filter((m) => m.id !== id);
       setGuestbookMessages(updated);
       localStorage.setItem('guestbook_messages', JSON.stringify(updated));
+
+      try {
+        await fetch(`/api/guestbook?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+        loadAllAdminData();
+      } catch (err) {
+        console.error('Erro ao excluir mensagem:', err);
+      }
     }
   };
 
-  const handleDeleteAllGuestbookMessages = () => {
+  const handleDeleteAllGuestbookMessages = async () => {
     if (confirm('ATENÇÃO: Tem certeza que deseja apagar TODAS as mensagens enviadas aos noivos?')) {
       setGuestbookMessages([]);
       localStorage.setItem('guestbook_messages', JSON.stringify([]));
+
+      for (const msg of guestbookMessages) {
+        try {
+          await fetch(`/api/guestbook?id=${encodeURIComponent(msg.id)}`, { method: 'DELETE' });
+        } catch (e) {}
+      }
+      loadAllAdminData();
     }
   };
 
-  const handleDeletePadrinhoReply = (id: string) => {
+  const handleDeletePadrinhoReply = async (id: string) => {
     if (confirm('Tem certeza que deseja excluir este recado dos padrinhos?')) {
       const updated = padrinhoReplies.filter((r) => r.id !== id);
       setPadrinhoReplies(updated);
       localStorage.setItem('padrinho_replies', JSON.stringify(updated));
+
+      try {
+        await fetch(`/api/padrinhos/mural?type=reply&id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+        loadAllAdminData();
+      } catch (err) {
+        console.error('Erro ao excluir recado:', err);
+      }
     }
   };
 
-  const handleDeleteAllPadrinhoReplies = () => {
+  const handleDeleteAllPadrinhoReplies = async () => {
     if (confirm('ATENÇÃO: Tem certeza que deseja apagar TODOS os recados dos padrinhos?')) {
       setPadrinhoReplies([]);
       localStorage.setItem('padrinho_replies', JSON.stringify([]));
+
+      try {
+        await fetch('/api/padrinhos/mural?type=reply&all=true', { method: 'DELETE' });
+        loadAllAdminData();
+      } catch (err) {
+        console.error('Erro ao limpar recados:', err);
+      }
     }
   };
 
@@ -248,12 +354,23 @@ export default function AdminPage() {
             </button>
 
             {activeTab === 'gifts' && (
-              <button
-                onClick={() => setIsAdding(true)}
-                className="flex items-center gap-2 bg-black dark:bg-white text-white dark:text-black border border-gray-800 dark:border-gray-200 px-4 py-2 rounded-xl text-sm hover:opacity-90 transition-colors shadow-sm cursor-pointer"
-              >
-                <Plus size={18} /> Adicionar Presente
-              </button>
+              <>
+                <button
+                  onClick={handleSyncGiftsToSupabase}
+                  disabled={isSyncingGifts}
+                  className="flex items-center gap-2 bg-slate-100 dark:bg-zinc-800 text-[var(--foreground)] border border-gray-300 dark:border-zinc-700 px-4 py-2 rounded-xl text-sm hover:bg-slate-200 dark:hover:bg-zinc-700 transition-colors shadow-sm cursor-pointer disabled:opacity-50"
+                  title="Enviar lista padrão de presentes para o Supabase"
+                >
+                  <Save size={16} /> {isSyncingGifts ? 'Sincronizando...' : 'Sincronizar com Supabase'}
+                </button>
+
+                <button
+                  onClick={() => setIsAdding(true)}
+                  className="flex items-center gap-2 bg-black dark:bg-white text-white dark:text-black border border-gray-800 dark:border-gray-200 px-4 py-2 rounded-xl text-sm hover:opacity-90 transition-colors shadow-sm cursor-pointer"
+                >
+                  <Plus size={18} /> Adicionar Presente
+                </button>
+              </>
             )}
           </div>
         </div>

@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { MessageSquare, Send, Heart, CheckCircle2, Trash2 } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 interface MessageItem {
   id: string;
@@ -19,36 +20,78 @@ export default function GuestbookSection() {
   const [author, setAuthor] = useState('');
   const [relation, setRelation] = useState('');
   const [text, setText] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 
-  useEffect(() => {
-    setIsAdmin(localStorage.getItem('admin_logged_in') === 'true');
-
-    const stored = localStorage.getItem('guestbook_messages');
-    if (stored) {
-      try {
-        const parsed: MessageItem[] = JSON.parse(stored);
-        const filtered = parsed.filter(m => m.id !== '1' && m.id !== '2' && m.id !== '3');
-        setMessages(filtered);
-        localStorage.setItem('guestbook_messages', JSON.stringify(filtered));
-      } catch (e) {
-        console.error(e);
+  const fetchMessages = useCallback(async () => {
+    try {
+      const res = await fetch('/api/guestbook');
+      const data = await res.json();
+      if (data.success && Array.isArray(data.messages) && data.messages.length > 0) {
+        setMessages(data.messages);
+        localStorage.setItem('guestbook_messages', JSON.stringify(data.messages));
+      } else {
+        // Fallback local se a API estiver vazia ou offline
+        const stored = localStorage.getItem('guestbook_messages');
+        if (stored) {
+          try {
+            const parsed: MessageItem[] = JSON.parse(stored);
+            const filtered = parsed.filter(m => m.id !== '1' && m.id !== '2' && m.id !== '3');
+            setMessages(filtered);
+          } catch (e) {
+            console.error(e);
+          }
+        }
       }
+    } catch (err) {
+      console.error('Erro ao carregar mensagens:', err);
     }
   }, []);
 
-  const handleDeleteMessage = (id: string) => {
+  useEffect(() => {
+    setIsAdmin(localStorage.getItem('admin_logged_in') === 'true');
+    fetchMessages();
+
+    // Inscrição em tempo real com Supabase
+    if (supabase) {
+      const client = supabase;
+      const channel = client
+        .channel('realtime_guestbook')
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'guestbook_messages' },
+          () => {
+            fetchMessages();
+          }
+        )
+        .subscribe();
+
+      return () => {
+        client.removeChannel(channel);
+      };
+    }
+  }, [fetchMessages]);
+
+  const handleDeleteMessage = async (id: string) => {
     if (confirm('Tem certeza que deseja excluir esta mensagem?')) {
       const updated = messages.filter(m => m.id !== id);
       setMessages(updated);
       localStorage.setItem('guestbook_messages', JSON.stringify(updated));
+
+      try {
+        await fetch(`/api/guestbook?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+      } catch (err) {
+        console.error('Erro ao excluir mensagem via API:', err);
+      }
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!author.trim() || !text.trim()) return;
+    if (!author.trim() || !text.trim() || isSubmitting) return;
+
+    setIsSubmitting(true);
 
     const newMsg: MessageItem = {
       id: Date.now().toString(),
@@ -58,15 +101,32 @@ export default function GuestbookSection() {
       date: new Date().toLocaleDateString('pt-BR')
     };
 
+    // Atualização otimista imediata na UI
     const updated = [newMsg, ...messages];
     setMessages(updated);
     localStorage.setItem('guestbook_messages', JSON.stringify(updated));
 
-    setAuthor('');
-    setRelation('');
-    setText('');
-    setSuccess(true);
-    setTimeout(() => setSuccess(false), 4000);
+    try {
+      await fetch('/api/guestbook', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          author: author.trim(),
+          relation: relation.trim() || 'Convidado Especial',
+          text: text.trim()
+        })
+      });
+      fetchMessages();
+    } catch (err) {
+      console.error('Erro ao salvar mensagem no servidor:', err);
+    } finally {
+      setIsSubmitting(false);
+      setAuthor('');
+      setRelation('');
+      setText('');
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 4000);
+    }
   };
 
   return (
@@ -99,7 +159,7 @@ export default function GuestbookSection() {
               <Heart size={20} className="text-gray-400" /> Escreva sua Mensagem
             </h3>
             <p className="text-xs text-gray-500 font-sans mb-6">
-              Sua mensagem aparecerá em tempo real no mural abaixo!
+              Sua mensagem aparecerá em tempo real no mural ao lado para todos os convidados e noivos!
             </p>
 
             {success && (
@@ -135,9 +195,19 @@ export default function GuestbookSection() {
 
               <button
                 type="submit"
-                className="w-full bg-black dark:bg-white text-white dark:text-black py-3.5 rounded-xl font-semibold uppercase tracking-wider text-xs shadow-sm border border-gray-800 dark:border-gray-200 hover:opacity-90 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                disabled={isSubmitting}
+                className="w-full bg-black dark:bg-white text-white dark:text-black py-3.5 rounded-xl font-semibold uppercase tracking-wider text-xs shadow-sm border border-gray-800 dark:border-gray-200 hover:opacity-90 disabled:opacity-50 transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
-                <Send size={16} /> Publicar Mensagem
+                {isSubmitting ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                    Publicando...
+                  </>
+                ) : (
+                  <>
+                    <Send size={16} /> Publicar Mensagem
+                  </>
+                )}
               </button>
             </form>
           </div>

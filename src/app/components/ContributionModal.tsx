@@ -18,6 +18,7 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
   const [pixString, setPixString] = useState('');
   const [copiedPayload, setCopiedPayload] = useState(false);
   const [copiedKey, setCopiedKey] = useState(false);
+  const [isSending, setIsSending] = useState(false);
   
   // Form state
   const [guestName, setGuestName] = useState('');
@@ -62,9 +63,11 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
 
   const handleSubmitForm = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!guestName.trim()) return;
+    if (!guestName.trim() || isSending) return;
 
-    const saveContribution = (receiptDataUrl?: string) => {
+    setIsSending(true);
+
+    const saveContribution = async (receiptDataUrl?: string) => {
       const newContrib = {
         id: Date.now().toString(),
         giftId: gift.id,
@@ -76,13 +79,34 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
         receiptName: receiptFile?.name || 'Comprovante_PIX.png'
       };
 
+      // 1. Gravar localmente como fallback
       try {
         const stored = JSON.parse(localStorage.getItem('pix_contributions') || '[]');
         localStorage.setItem('pix_contributions', JSON.stringify([newContrib, ...stored]));
       } catch (err) {
         console.error(err);
       }
-      setStep('success');
+
+      // 2. Gravar no servidor / Supabase
+      try {
+        await fetch('/api/pix', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            giftId: gift.id,
+            giftName: gift.name,
+            guestName: guestName.trim(),
+            amount: gift.totalAmount,
+            receiptUrl: receiptDataUrl || '',
+            receiptName: receiptFile?.name || 'Comprovante_PIX.png'
+          })
+        });
+      } catch (err) {
+        console.error('Erro ao enviar comprovante para o servidor:', err);
+      } finally {
+        setIsSending(false);
+        setStep('success');
+      }
     };
 
     if (receiptFile) {
@@ -286,9 +310,17 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
 
                 <button
                   type="submit"
-                  className="w-full py-3.5 mt-4 bg-black dark:bg-white text-white dark:text-black rounded-xl font-semibold uppercase tracking-wider text-xs hover:opacity-90 transition-colors border border-gray-800 dark:border-gray-200 cursor-pointer"
+                  disabled={isSending}
+                  className="w-full py-3.5 mt-4 bg-black dark:bg-white text-white dark:text-black rounded-xl font-semibold uppercase tracking-wider text-xs hover:opacity-90 disabled:opacity-50 transition-colors border border-gray-800 dark:border-gray-200 cursor-pointer flex items-center justify-center gap-2"
                 >
-                  Enviar Comprovante
+                  {isSending ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                      Enviando Comprovante...
+                    </>
+                  ) : (
+                    'Enviar Comprovante'
+                  )}
                 </button>
               </motion.form>
             )}

@@ -45,6 +45,7 @@ import {
   ScheduleItem,
   DRESS_CODE_INFO
 } from '../data/padrinhosData';
+import { supabase } from '@/lib/supabase';
 
 function WhatsAppIcon({ className = "w-5 h-5" }: { className?: string }) {
   return (
@@ -86,33 +87,68 @@ export default function PadrinhosPortal() {
   // Strict check: only true if the logged user is Aline e Klécio (role: 'noivos')
   const isNoivos = loggedUser?.role === 'noivos';
 
+  const fetchMuralData = async () => {
+    try {
+      const res = await fetch('/api/padrinhos/mural');
+      const data = await res.json();
+      if (data.success) {
+        if (Array.isArray(data.announcements)) {
+          setAnnouncements(data.announcements);
+          localStorage.setItem('padrinho_announcements', JSON.stringify(data.announcements));
+        }
+        if (Array.isArray(data.replies)) {
+          setPadrinhoReplies(data.replies);
+          localStorage.setItem('padrinho_replies', JSON.stringify(data.replies));
+        }
+      }
+    } catch (err) {
+      console.error('Erro ao buscar mural dos padrinhos:', err);
+    }
+  };
+
+  const fetchScheduleData = async () => {
+    try {
+      const res = await fetch('/api/padrinhos/schedule');
+      const data = await res.json();
+      if (data.success && Array.isArray(data.schedule)) {
+        setSchedule(data.schedule);
+        localStorage.setItem('wedding_schedule_items', JSON.stringify(data.schedule));
+      }
+    } catch (err) {
+      console.error('Erro ao buscar cronograma:', err);
+    }
+  };
+
   // Check stored session and data on mount
   useEffect(() => {
-    const savedAnnouncements = localStorage.getItem('padrinho_announcements');
-    if (savedAnnouncements) {
-      try {
-        const parsed: PadrinhoMessage[] = JSON.parse(savedAnnouncements);
-        const filtered = parsed.filter(a => a.id !== 'msg-welcome' && a.id !== 'msg-dresscode');
-        setAnnouncements(filtered);
-        localStorage.setItem('padrinho_announcements', JSON.stringify(filtered));
-      } catch (e) {
-        console.error(e);
-      }
-    }
+    fetchMuralData();
+    fetchScheduleData();
 
-    const savedSchedule = localStorage.getItem('wedding_schedule_items');
-    if (savedSchedule) {
-      try {
-        const parsed: ScheduleItem[] = JSON.parse(savedSchedule);
-        if (parsed.some(s => s.time === '18h00' || s.title?.includes('Início Solene') || s.description?.length > 0)) {
-          setSchedule(INITIAL_SCHEDULE);
-          localStorage.setItem('wedding_schedule_items', JSON.stringify(INITIAL_SCHEDULE));
-        } else {
-          setSchedule(parsed);
-        }
-      } catch (e) {
-        console.error(e);
-      }
+    // Inscrição Realtime no Supabase
+    if (supabase) {
+      const client = supabase;
+      const channel = client
+        .channel('realtime_padrinhos')
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'padrinho_announcements' },
+          () => fetchMuralData()
+        )
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'padrinho_replies' },
+          () => fetchMuralData()
+        )
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'wedding_schedule' },
+          () => fetchScheduleData()
+        )
+        .subscribe();
+
+      return () => {
+        client.removeChannel(channel);
+      };
     }
 
     const savedUser = localStorage.getItem('padrinho_session');
@@ -136,18 +172,9 @@ export default function PadrinhosPortal() {
     } else {
       setIsAdmin(false);
     }
-
-    const savedReplies = localStorage.getItem('padrinho_replies');
-    if (savedReplies) {
-      try {
-        setPadrinhoReplies(JSON.parse(savedReplies));
-      } catch (e) {
-        console.error(e);
-      }
-    }
   }, []);
 
-  const handleAddAnnouncement = (e: React.FormEvent) => {
+  const handleAddAnnouncement = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!annTitle.trim() || !annContent.trim()) return;
 
@@ -167,13 +194,31 @@ export default function PadrinhosPortal() {
     setAnnContent('');
     setAnnImportant(false);
     setShowAddAnnouncement(false);
+
+    try {
+      await fetch('/api/padrinhos/mural', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'announcement', announcement: newAnn })
+      });
+      fetchMuralData();
+    } catch (err) {
+      console.error('Erro ao salvar anúncio:', err);
+    }
   };
 
-  const handleDeleteAnnouncement = (id: string) => {
+  const handleDeleteAnnouncement = async (id: string) => {
     if (confirm('Deseja realmente remover este comunicado do mural?')) {
       const updated = announcements.filter(a => a.id !== id);
       setAnnouncements(updated);
       localStorage.setItem('padrinho_announcements', JSON.stringify(updated));
+
+      try {
+        await fetch(`/api/padrinhos/mural?type=announcement&id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+        fetchMuralData();
+      } catch (err) {
+        console.error('Erro ao deletar anúncio:', err);
+      }
     }
   };
 
@@ -193,26 +238,28 @@ export default function PadrinhosPortal() {
     setShowScheduleModal(true);
   };
 
-  const handleSaveScheduleItem = (e: React.FormEvent) => {
+  const handleSaveScheduleItem = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!schTime.trim() || !schTitle.trim()) return;
 
+    let targetItem: ScheduleItem;
     let updated: ScheduleItem[];
     if (editingScheduleItem) {
-      updated = schedule.map(item => item.id === editingScheduleItem.id ? {
-        ...item,
+      targetItem = {
+        ...editingScheduleItem,
         time: schTime.trim(),
         title: schTitle.trim(),
         description: schDescription.trim()
-      } : item);
+      };
+      updated = schedule.map(item => item.id === editingScheduleItem.id ? targetItem : item);
     } else {
-      const newItem: ScheduleItem = {
+      targetItem = {
         id: 'sch-' + Date.now(),
         time: schTime.trim(),
         title: schTitle.trim(),
         description: schDescription.trim()
       };
-      updated = [...schedule, newItem];
+      updated = [...schedule, targetItem];
     }
 
     setSchedule(updated);
@@ -222,28 +269,64 @@ export default function PadrinhosPortal() {
     setSchTime('');
     setSchTitle('');
     setSchDescription('');
+
+    try {
+      await fetch('/api/padrinhos/schedule', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ item: targetItem })
+      });
+      fetchScheduleData();
+    } catch (err) {
+      console.error('Erro ao salvar item do cronograma:', err);
+    }
   };
 
-  const handleDeleteScheduleItem = (id: string) => {
+  const handleDeleteScheduleItem = async (id: string) => {
     if (confirm('Deseja realmente excluir este horário do cronograma?')) {
       const updated = schedule.filter(s => s.id !== id);
       setSchedule(updated);
       localStorage.setItem('wedding_schedule_items', JSON.stringify(updated));
+
+      try {
+        await fetch(`/api/padrinhos/schedule?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+        fetchScheduleData();
+      } catch (err) {
+        console.error('Erro ao deletar cronograma:', err);
+      }
     }
   };
 
-  const handleResetSchedule = () => {
+  const handleResetSchedule = async () => {
     if (confirm('Deseja restaurar o cronograma padrão original?')) {
       setSchedule(INITIAL_SCHEDULE);
       localStorage.setItem('wedding_schedule_items', JSON.stringify(INITIAL_SCHEDULE));
+
+      try {
+        await fetch('/api/padrinhos/schedule', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'reset' })
+        });
+        fetchScheduleData();
+      } catch (err) {
+        console.error('Erro ao resetar cronograma:', err);
+      }
     }
   };
 
-  const handleDeleteReply = (id: string) => {
+  const handleDeleteReply = async (id: string) => {
     if (confirm('Tem certeza que deseja excluir este recado?')) {
       const updated = padrinhoReplies.filter(r => r.id !== id);
       setPadrinhoReplies(updated);
       localStorage.setItem('padrinho_replies', JSON.stringify(updated));
+
+      try {
+        await fetch(`/api/padrinhos/mural?type=reply&id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+        fetchMuralData();
+      } catch (err) {
+        console.error('Erro ao excluir recado:', err);
+      }
     }
   };
 
@@ -290,7 +373,7 @@ export default function PadrinhosPortal() {
     localStorage.removeItem('admin_logged_in');
   };
 
-  const handleSendReply = (e: React.FormEvent) => {
+  const handleSendReply = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newReply.trim() || !loggedUser) return;
 
@@ -307,6 +390,17 @@ export default function PadrinhosPortal() {
     setNewReply('');
     setReplySuccess(true);
     setTimeout(() => setReplySuccess(false), 4000);
+
+    try {
+      await fetch('/api/padrinhos/mural', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'reply', reply: replyObj })
+      });
+      fetchMuralData();
+    } catch (err) {
+      console.error('Erro ao enviar recado:', err);
+    }
   };
 
   // If not logged in, show luxury authentication view
