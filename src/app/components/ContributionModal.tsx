@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Copy, CheckCircle2, UploadCloud, User, Mail, DollarSign, Sparkles } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { generatePixPayload, OFFICIAL_PIX_KEY, BENEFICIARY_NAME } from '../utils/pix';
+import { compressReceiptImage } from '../utils/imageCompressor';
 import type { Gift } from '../types';
 
 interface ContributionModalProps {
@@ -61,13 +62,19 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
     setStep('form');
   };
 
-  const handleSubmitForm = (e: React.FormEvent) => {
+  const handleSubmitForm = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!guestName.trim() || isSending) return;
 
     setIsSending(true);
 
-    const saveContribution = async (receiptDataUrl?: string) => {
+    try {
+      let receiptDataUrl = '';
+      if (receiptFile) {
+        // Comprime a imagem de forma inteligente para ~120KB mantendo texto 100% nítido
+        receiptDataUrl = await compressReceiptImage(receiptFile, 1200, 0.75);
+      }
+
       const newContrib = {
         id: Date.now().toString(),
         giftId: gift.id,
@@ -75,7 +82,7 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
         guestName: guestName.trim(),
         amount: gift.totalAmount,
         date: new Date().toLocaleString('pt-BR'),
-        receiptUrl: receiptDataUrl || '',
+        receiptUrl: receiptDataUrl,
         receiptName: receiptFile?.name || 'Comprovante_PIX.png'
       };
 
@@ -97,26 +104,19 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
             giftName: gift.name,
             guestName: guestName.trim(),
             amount: gift.totalAmount,
-            receiptUrl: receiptDataUrl || '',
+            receiptUrl: receiptDataUrl,
             receiptName: receiptFile?.name || 'Comprovante_PIX.png'
           })
         });
       } catch (err) {
         console.error('Erro ao enviar comprovante para o servidor:', err);
-      } finally {
-        setIsSending(false);
-        setStep('success');
       }
-    };
 
-    if (receiptFile) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        saveContribution(reader.result as string);
-      };
-      reader.readAsDataURL(receiptFile);
-    } else {
-      saveContribution();
+      setStep('success');
+    } catch (error) {
+      console.error('Erro ao processar formulário:', error);
+    } finally {
+      setIsSending(false);
     }
   };
 
