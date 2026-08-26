@@ -147,13 +147,13 @@ export const SERVER_PADRINHOS_ACCOUNTS: PadrinhoAccountServer[] = [
     customMessage: 'No dia mais importante das nossas vidas, queremos estar cercados por aqueles que amamos e que fazem parte da nossa história. É uma alegria imensa poder dividir com vocês a nossa felicidade. E neste momento tão especial, não poderia ser diferente: desejamos ter vocês ao nosso lado, caminhando conosco, fortalecendo a nossa fé, compartilhando sonhos e construindo memórias inesquecíveis.'
   },
   {
-    id: 'camylla-cristian',
-    name: 'Camylla e Cristian',
-    username: 'camylla.cristian',
-    alternateUsernames: ['camylla', 'cristian'],
+    id: 'camylla-cristiano',
+    name: 'Camylla e Cristiano',
+    username: 'camylla.cristiano',
+    alternateUsernames: ['camylla', 'cristiano'],
     password: '5829',
     role: 'casal',
-    members: ['Camylla', 'Cristian'],
+    members: ['Camylla', 'Cristiano'],
     customMessage: 'No dia mais importante das nossas vidas, queremos estar cercados por aqueles que amamos e que fazem parte da nossa história. É uma alegria imensa poder dividir com vocês a nossa felicidade. E neste momento tão especial, não poderia ser diferente: desejamos ter vocês ao nosso lado, caminhando conosco, fortalecendo a nossa fé, compartilhando sonhos e construindo memórias inesquecíveis.'
   },
   {
