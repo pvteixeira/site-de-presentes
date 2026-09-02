@@ -6,7 +6,7 @@ export interface PadrinhoAccountServer {
   username: string;
   alternateUsernames?: string[];
   password: string;
-  role: 'casal' | 'madrinha' | 'padrinho' | 'noivos';
+  role: 'casal' | 'madrinha' | 'padrinho' | 'noivos' | 'demoiselle';
   members: string[];
   customMessage?: string;
   daminha?: string;
@@ -164,6 +164,31 @@ export const SERVER_PADRINHOS_ACCOUNTS: PadrinhoAccountServer[] = [
     role: 'madrinha',
     members: ['Elaine'],
     customMessage: 'No dia mais importante das nossas vidas, queremos estar cercados por aqueles que amamos e que fazem parte da nossa história. É uma alegria imensa poder dividir com vocês a nossa felicidade. E neste momento tão especial, não poderia ser diferente: desejamos ter vocês ao nosso lado, caminhando conosco, fortalecendo a nossa fé, compartilhando sonhos e construindo memórias inesquecíveis.'
+  },
+  {
+    id: 'simone-bruno',
+    name: 'Tia Simone',
+    username: 'simone.bruno',
+    alternateUsernames: ['simone', 'tiasimone', 'simonebruno'],
+    password: '3951',
+    role: 'demoiselle',
+    members: ['Tia Simone'],
+    customMessage: `Aceita viver conosco essa missão tão especial?
+
+No dia 09 de janeiro de 2027, queremos confiar à senhora uma missão repleta de amor, fé e significado: conduzir a imagem de Nossa Senhora da Conceição até o altar, representando a nossa devoção e as bênçãos que pedimos para a toda a família.
+
+Que alegria poder viver todas as etapas que antecedem o nosso grande dia ao seu lado! Sempre presente em todos os momentos, cuidando de cada detalhe e, claro, com aquele olhar peculiar, atento e bem exigente que já conhecemos! 😂
+
+Para Aline Bruno, a senhora é tia-mãe: aquela que cuida, aconselha, puxa as orelhas quando é preciso e está sempre lado a lado. A senhora cultivou no meu coração memórias afetivas que nunca serão esquecidas! Me lembro bem da dedicação nos preparativos para os meus aniversários, na confecção das sacolinhas, lembranças e etc; a confeiteira oficial da família Bruno, você arrasa no seu pudim!!! Esperamos 3 unidades deles no casamento 🤭; a mais brava, criteriosa e perfeccionista (não posso negar 😂) mas que demonstra seu amor justamente no cuidado e na dedicação com todos nós.
+
+É Tia Simone, são tantas histórias e lembranças construídas ao longo desses anos que seria impossível imaginar um momento tão importante sem a sua presença.
+
+Por tudo o que a senhora representa, não poderíamos deixar de lhe confiar uma participação tão significativa em nosso casamento.
+
+Amamos você! Obrigada por ser intensidade, amor e carinho nas nossas vidas ❤️
+
+Com amor e carinho 
+Aline e Klécio`
   }
 ];
 

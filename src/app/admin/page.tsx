@@ -623,7 +623,7 @@ export default function AdminPage() {
                       <td className="p-4">
                         <p className="font-medium font-serif text-[var(--foreground)] text-sm">{acc.name}</p>
                         <span className="inline-block px-2.5 py-0.5 text-[10px] font-semibold rounded-full bg-gray-100 dark:bg-zinc-800 text-[var(--foreground)] border border-gray-200 dark:border-zinc-700 capitalize mt-1">
-                          {acc.role === 'casal' ? 'Casal de Padrinhos' : acc.role}
+                          {acc.role === 'casal' ? 'Casal de Padrinhos' : acc.role === 'demoiselle' ? 'Demoiselle' : acc.role}
                         </span>
                       </td>
                       <td className="p-4 font-mono text-sm text-gray-700 dark:text-gray-300">
