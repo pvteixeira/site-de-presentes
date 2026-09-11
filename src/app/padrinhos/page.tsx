@@ -59,7 +59,9 @@ function WhatsAppIcon({ className = "w-5 h-5" }: { className?: string }) {
 const DEMOISELLE_PHOTOS = [
   { src: '/img/Demoiselle/01.jpg', alt: 'Simone Bruno' },
   { src: '/img/Demoiselle/02.jpg', alt: 'Simone Bruno' },
-  { src: '/img/Demoiselle/03.jpg', alt: 'Simone Bruno' }
+  { src: '/img/Demoiselle/03.jpg', alt: 'Simone Bruno' },
+  { src: '/img/Demoiselle/04.jpg', alt: 'Simone Bruno' },
+  { src: '/img/Demoiselle/05.jpg', alt: 'Simone Bruno' }
 ];
 
 export default function PadrinhosPortal() {
@@ -874,7 +876,7 @@ export default function PadrinhosPortal() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 md:gap-6">
                       {DEMOISELLE_PHOTOS.map((photo, index) => (
                         <div
                           key={index}
