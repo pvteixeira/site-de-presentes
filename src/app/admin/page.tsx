@@ -460,8 +460,8 @@ export default function AdminPage() {
               </div>
             </div>
 
-            <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-200 dark:border-zinc-800 overflow-hidden">
-              <table className="w-full text-left border-collapse">
+            <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-200 dark:border-zinc-800 overflow-x-auto">
+              <table className="w-full text-left border-collapse min-w-[550px]">
                 <thead>
                   <tr className="bg-gray-50 dark:bg-zinc-800/50 border-b border-gray-200 dark:border-zinc-800">
                     <th className="p-4 font-medium text-xs uppercase tracking-wider text-gray-500">Item</th>

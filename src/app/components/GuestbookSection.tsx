@@ -152,7 +152,7 @@ export default function GuestbookSection() {
   };
 
   return (
-    <section id="mensagens-noivos" className="py-24 bg-[var(--background)] border-t border-gray-200 dark:border-zinc-800">
+    <section id="mensagens-noivos" className="py-16 sm:py-24 bg-[var(--background)] border-t border-gray-200 dark:border-zinc-800">
       <div className="max-w-6xl mx-auto px-4">
 
         {/* Header */}
@@ -161,9 +161,9 @@ export default function GuestbookSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center max-w-3xl mx-auto mb-12"
+          className="text-center max-w-3xl mx-auto mb-8 sm:mb-12"
         >
-          <h2 className="text-4xl md:text-5xl font-serif text-[var(--foreground)] mb-4 font-medium">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-[var(--foreground)] mb-4 font-medium">
             Mensagens aos Noivos
           </h2>
           <div className="flex items-center justify-center gap-3">
@@ -173,12 +173,12 @@ export default function GuestbookSection() {
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
 
           {/* Message Form */}
-          <div className="lg:col-span-5 bg-white dark:bg-zinc-900 p-8 rounded-2xl border border-gray-200 dark:border-zinc-800 shadow-sm">
-            <h3 className="text-xl font-serif text-[var(--foreground)] font-medium mb-2 flex items-center gap-2">
-              <Heart size={20} className="text-gray-400" /> Escreva sua Mensagem
+          <div className="lg:col-span-5 bg-white dark:bg-zinc-900 p-5 sm:p-8 rounded-2xl border border-gray-200 dark:border-zinc-800 shadow-sm">
+            <h3 className="text-lg sm:text-xl font-serif text-[var(--foreground)] font-medium mb-2 flex items-center gap-2">
+              <Heart size={20} className="text-gray-400 shrink-0" /> Escreva sua Mensagem
             </h3>
             <p className="text-xs text-gray-500 font-sans mb-6">
               Sua mensagem aparecerá em tempo real no mural ao lado para todos os convidados e noivos!
@@ -186,7 +186,7 @@ export default function GuestbookSection() {
 
             {success && (
               <div className="bg-green-500/10 border border-green-500/30 text-green-600 dark:text-green-400 p-3 rounded-xl text-xs mb-4 flex items-center gap-2">
-                <CheckCircle2 size={16} /> Mensagem enviada com sucesso! Obrigado pelo carinho.
+                <CheckCircle2 size={16} className="shrink-0" /> Mensagem enviada com sucesso! Obrigado pelo carinho.
               </div>
             )}
 
@@ -235,7 +235,7 @@ export default function GuestbookSection() {
           </div>
 
           {/* Messages Feed */}
-          <div className="lg:col-span-7 space-y-4 max-h-[600px] overflow-y-auto pr-2 hide-scrollbar">
+          <div className="lg:col-span-7 space-y-4 max-h-[600px] overflow-y-auto pr-1 sm:pr-2 hide-scrollbar">
             {messages.length === 0 ? (
               <div className="text-center py-12 px-6 rounded-2xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800">
                 <p className="text-sm text-gray-500 dark:text-gray-400 font-sans">
@@ -249,14 +249,14 @@ export default function GuestbookSection() {
                     key={item.id}
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-gray-200 dark:border-zinc-800 shadow-sm hover:border-gray-400 transition-colors"
+                    className="bg-white dark:bg-zinc-900 p-4 sm:p-6 rounded-2xl border border-gray-200 dark:border-zinc-800 shadow-sm hover:border-gray-400 transition-colors"
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <div>
-                        <h4 className="font-serif text-lg text-[var(--foreground)] font-medium">{item.author}</h4>
+                    <div className="flex items-start sm:items-center justify-between gap-2 mb-2">
+                      <div className="min-w-0">
+                        <h4 className="font-serif text-base sm:text-lg text-[var(--foreground)] font-medium truncate">{item.author}</h4>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <span className="text-xs text-gray-400 font-mono">{item.date}</span>
+                      <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                        <span className="text-[11px] sm:text-xs text-gray-400 font-mono">{item.date}</span>
                         {isAdmin && (
                           <button
                             onClick={() => handleDeleteMessage(item.id)}
@@ -268,7 +268,7 @@ export default function GuestbookSection() {
                         )}
                       </div>
                     </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-300 font-sans leading-relaxed text-justified-elegant">
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 font-sans leading-relaxed text-justified-elegant">
                       "{item.text}"
                     </p>
                   </motion.div>
@@ -278,10 +278,10 @@ export default function GuestbookSection() {
                   <div className="pt-2 text-center">
                     <button
                       onClick={() => setVisibleCount((prev) => prev + MESSAGES_PER_LOAD)}
-                      className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-xl font-sans text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 text-[var(--foreground)] border border-gray-200 dark:border-zinc-700 shadow-sm hover:scale-102 cursor-pointer"
+                      className="inline-flex items-center justify-center gap-2 px-5 sm:px-8 py-3 rounded-xl font-sans text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 text-[var(--foreground)] border border-gray-200 dark:border-zinc-700 shadow-sm hover:scale-102 cursor-pointer max-w-full"
                     >
-                      <span>Ver mais mensagens ({messages.length - visibleCount} restantes)</span>
-                      <ChevronDown size={15} />
+                      <span className="truncate">Ver mais mensagens ({messages.length - visibleCount} restantes)</span>
+                      <ChevronDown size={15} className="shrink-0" />
                     </button>
                   </div>
                 )}

@@ -25,16 +25,16 @@ function PaperRoseIcon({ className = "w-5 h-5" }: { className?: string }) {
 
 export default function WeddingDetails() {
   return (
-    <section id="o-grande-dia" className="py-24 bg-[var(--background)] border-t border-gray-200 dark:border-zinc-800">
+    <section id="o-grande-dia" className="py-16 sm:py-24 bg-[var(--background)] border-t border-gray-200 dark:border-zinc-800">
       <div className="container mx-auto px-4 max-w-5xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16 flex flex-col items-center"
+          className="text-center mb-10 sm:mb-16 flex flex-col items-center"
         >
-          <h2 className="text-4xl md:text-5xl font-serif text-[var(--foreground)] mb-4 font-medium">
-          Cerimônia Religiosa e Recepção
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-[var(--foreground)] mb-4 font-medium">
+            Cerimônia Religiosa e Recepção
           </h2>
 
           <div className="flex items-center justify-center gap-3">
@@ -44,27 +44,27 @@ export default function WeddingDetails() {
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
           {/* Card Cerimônia */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="glass-card bg-white dark:bg-zinc-900/90 p-8 md:p-10 flex flex-col justify-between h-full border border-gray-200 dark:border-zinc-800 shadow-sm rounded-2xl"
+            className="glass-card bg-white dark:bg-zinc-900/90 p-5 sm:p-8 md:p-10 flex flex-col justify-between h-full border border-gray-200 dark:border-zinc-800 shadow-sm rounded-2xl"
           >
             <div>
-              <h3 className="text-2xl font-serif text-[var(--foreground)] mb-6 pb-2 border-b border-gray-200 dark:border-zinc-800 font-semibold text-center">
+              <h3 className="text-xl sm:text-2xl font-serif text-[var(--foreground)] mb-4 sm:mb-6 pb-2 border-b border-gray-200 dark:border-zinc-800 font-semibold text-center">
                 Cerimônia Religiosa
               </h3>
-              <h4 className="text-xl font-sans font-semibold text-[var(--foreground)] mb-6 text-center">
+              <h4 className="text-lg sm:text-xl font-sans font-semibold text-[var(--foreground)] mb-6 text-center">
                 Igreja do Bom Jesus do Bonfim
               </h4>
 
-              <ul className="space-y-4 font-sans text-base text-[var(--foreground)]/80 mb-8">
+              <ul className="space-y-4 font-sans text-sm sm:text-base text-[var(--foreground)]/80 mb-8">
                 <li className="flex items-center gap-3">
                   <Clock className="w-5 h-5 text-gray-400 shrink-0" />
                   <div>
-                    <span className="font-semibold text-[var(--foreground)] text-lg">19h</span>
+                    <span className="font-semibold text-[var(--foreground)] text-base sm:text-lg">19h</span>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
@@ -92,21 +92,21 @@ export default function WeddingDetails() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="glass-card bg-white dark:bg-zinc-900/90 p-8 md:p-10 flex flex-col justify-between h-full border border-gray-200 dark:border-zinc-800 shadow-sm rounded-2xl"
+            className="glass-card bg-white dark:bg-zinc-900/90 p-5 sm:p-8 md:p-10 flex flex-col justify-between h-full border border-gray-200 dark:border-zinc-800 shadow-sm rounded-2xl"
           >
             <div>
-              <h3 className="text-2xl font-serif text-[var(--foreground)] mb-6 pb-2 border-b border-gray-200 dark:border-zinc-800 font-semibold text-center">
+              <h3 className="text-xl sm:text-2xl font-serif text-[var(--foreground)] mb-4 sm:mb-6 pb-2 border-b border-gray-200 dark:border-zinc-800 font-semibold text-center">
                 Recepção
               </h3>
-              <h4 className="text-xl font-sans font-semibold text-[var(--foreground)] mb-6 text-center">
+              <h4 className="text-lg sm:text-xl font-sans font-semibold text-[var(--foreground)] mb-6 text-center">
                 Dayse Nogueira Recepções
               </h4>
 
-              <ul className="space-y-4 font-sans text-base text-[var(--foreground)]/80 mb-8">
+              <ul className="space-y-4 font-sans text-sm sm:text-base text-[var(--foreground)]/80 mb-8">
                 <li className="flex items-center gap-3">
                   <Clock className="w-5 h-5 text-gray-400 shrink-0" />
                   <div>
-                    <span className="font-semibold text-[var(--foreground)] text-lg">21h</span>
+                    <span className="font-semibold text-[var(--foreground)] text-base sm:text-lg">21h</span>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">

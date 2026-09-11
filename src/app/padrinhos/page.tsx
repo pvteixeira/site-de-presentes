@@ -61,7 +61,10 @@ const DEMOISELLE_PHOTOS = [
   { src: '/img/Demoiselle/02.jpg', alt: 'Simone Bruno' },
   { src: '/img/Demoiselle/03.jpg', alt: 'Simone Bruno' },
   { src: '/img/Demoiselle/04.jpg', alt: 'Simone Bruno' },
-  { src: '/img/Demoiselle/05.jpg', alt: 'Simone Bruno' }
+  { src: '/img/Demoiselle/05.jpg', alt: 'Simone Bruno' },
+  { src: '/img/Demoiselle/06.jpg', alt: 'Simone Bruno' },
+  { src: '/img/Demoiselle/07.jpg', alt: 'Simone Bruno' },
+  { src: '/img/Demoiselle/08.jpg', alt: 'Simone Bruno' }
 ];
 
 export default function PadrinhosPortal() {
@@ -456,13 +459,14 @@ export default function PadrinhosPortal() {
         <div className="absolute -top-32 -left-32 w-96 h-96 bg-slate-100 dark:bg-zinc-900 rounded-full blur-3xl pointer-events-none opacity-60"></div>
         <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-slate-100 dark:bg-zinc-900 rounded-full blur-3xl pointer-events-none opacity-60"></div>
 
-        <header className="max-w-6xl w-full mx-auto flex items-center justify-between z-10 py-3">
-          <Link href="/" className="flex items-center gap-2 text-xs md:text-sm text-[var(--foreground)]/70 hover:text-[var(--foreground)] transition-colors">
-            <ArrowLeft size={16} /> Voltar ao site principal
+        <header className="max-w-6xl w-full mx-auto flex items-center justify-between z-10 py-3 gap-2">
+          <Link href="/" className="flex items-center gap-1.5 sm:gap-2 text-xs md:text-sm text-[var(--foreground)]/70 hover:text-[var(--foreground)] transition-colors shrink-0">
+            <ArrowLeft size={16} className="shrink-0" />
+            <span>Voltar <span className="hidden sm:inline">ao site principal</span></span>
           </Link>
-          <div className="flex items-center gap-2.5">
-            <img src="/img/LOGO_MARCA.png" alt="Logo Marca Aline e Klécio" className="w-8 h-8 rounded-full border border-gray-200 dark:border-zinc-700 object-contain shadow-xs" />
-            <span className="font-signature text-2xl md:text-3xl text-[var(--foreground)]">Aline e Klécio</span>
+          <div className="flex items-center gap-2 shrink-0">
+            <img src="/img/LOGO_MARCA.png" alt="Logo Marca Aline e Klécio" className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-gray-200 dark:border-zinc-700 object-contain shadow-xs" />
+            <span className="font-signature text-xl sm:text-2xl md:text-3xl text-[var(--foreground)]">Aline e Klécio</span>
           </div>
         </header>
 
@@ -576,11 +580,11 @@ export default function PadrinhosPortal() {
             <Link href="/" className="text-gray-400 hover:text-[var(--foreground)] transition-colors p-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-zinc-800" title="Voltar à Home">
               <ArrowLeft size={18} />
             </Link>
-            <div className="flex items-center gap-2.5">
-              <img src="/img/LOGO_MARCA.png" alt="Logo" className="w-8 h-8 rounded-full border border-gray-200 dark:border-zinc-700 object-contain" />
-              <div>
+            <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+              <img src="/img/LOGO_MARCA.png" alt="Logo" className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-gray-200 dark:border-zinc-700 object-contain shrink-0" />
+              <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="font-serif font-medium text-base md:text-lg text-[var(--foreground)] block leading-tight">
+                  <span className="font-serif font-medium text-sm sm:text-base md:text-lg text-[var(--foreground)] block leading-tight truncate">
                     {loggedUser.role === 'demoiselle' ? 'Área da Demoiselle' : 'Padrinhos e Madrinhas'}
                   </span>
                   {isNoivos && (
@@ -876,7 +880,7 @@ export default function PadrinhosPortal() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 md:gap-6">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
                       {DEMOISELLE_PHOTOS.map((photo, index) => (
                         <div
                           key={index}

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Sparkles, Lock, Users, Flower2, BookOpen } from "lucide-react";
+import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Countdown from "./components/Countdown";
 import CoupleCards from "./components/CoupleCards";
@@ -11,18 +12,8 @@ import GallerySection from "./components/GallerySection";
 export default function Home() {
   return (
     <main className="min-h-screen bg-[var(--background)] relative">
-      {/* Top Navbar Header */}
-      <header className="absolute top-0 left-0 right-0 z-30 p-4 max-w-7xl mx-auto flex justify-end items-center">
-        <div className="flex items-center gap-3">
-          <Link
-            href="/padrinhos"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-slate-200 via-gray-200 to-slate-300 dark:from-zinc-800 dark:via-zinc-700 dark:to-zinc-800 hover:from-slate-300 hover:to-slate-400 text-slate-900 dark:text-slate-100 transition-all hover:scale-105 shadow-sm text-xs md:text-sm font-medium tracking-wide border border-slate-300 dark:border-zinc-600"
-          >
-            <Sparkles size={16} className="text-slate-600 dark:text-slate-300" />
-            <span>Padrinhos e Madrinhas</span>
-          </Link>
-        </div>
-      </header>
+      {/* Top Responsive Navbar Header */}
+      <Navbar />
 
       {/* 1. Aline e Klécio (Início) */}
       <Hero />

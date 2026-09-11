@@ -99,10 +99,10 @@ export default function GiftList() {
   };
 
   return (
-    <section id="lista-presentes" className="py-24 bg-[var(--background)]">
+    <section id="lista-presentes" className="py-16 sm:py-24 bg-[var(--background)]">
       <div className="container mx-auto px-4 max-w-6xl">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-serif text-[var(--foreground)] mb-4 font-medium">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-[var(--foreground)] mb-4 font-medium">
             Lista de Presentes
           </h2>
           <div className="flex items-center justify-center gap-3">
@@ -113,7 +113,7 @@ export default function GiftList() {
         </div>
 
         {/* Search & Sort Bar */}
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
           <div className="relative w-full sm:w-80">
             <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
@@ -121,32 +121,30 @@ export default function GiftList() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Buscar presente..."
-              className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-sm focus:outline-none focus:border-black dark:focus:border-white transition-all font-sans"
+              className="w-full pl-11 pr-4 py-2.5 sm:py-3 rounded-xl border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-sm focus:outline-none focus:border-black dark:focus:border-white transition-all font-sans"
             />
           </div>
 
-          <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
-            <span className="text-xs text-gray-400 font-sans font-medium">
-              Mostrando {visibleGifts.length} de {filteredGifts.length} {filteredGifts.length === 1 ? 'item' : 'itens'}
+          <div className="flex flex-row items-center justify-between sm:justify-end gap-2 sm:gap-3">
+            <span className="text-xs text-gray-400 font-sans font-medium shrink-0">
+              {visibleGifts.length} de {filteredGifts.length} {filteredGifts.length === 1 ? 'item' : 'itens'}
             </span>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc')}
-                className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-xs font-semibold uppercase tracking-wider text-[var(--foreground)] hover:border-gray-400 transition-colors cursor-pointer"
-              >
-                <ArrowUpDown size={14} /> {sortOrder === 'asc' ? 'Menor Valor' : sortOrder === 'desc' ? 'Maior Valor' : 'Ordenar Por Valor'}
-              </button>
-            </div>
+            <button
+              onClick={() => setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc')}
+              className="flex items-center gap-1.5 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--foreground)] hover:border-gray-400 transition-colors cursor-pointer shrink-0"
+            >
+              <ArrowUpDown size={14} /> {sortOrder === 'asc' ? 'Menor Valor' : sortOrder === 'desc' ? 'Maior Valor' : 'Ordenar'}
+            </button>
           </div>
         </div>
 
         {/* Category Pills */}
-        <div className="flex flex-wrap justify-center gap-2.5 mb-12">
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-2.5 mb-8 sm:mb-12">
           {CATEGORIES.map(category => (
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
-              className={`px-5 py-2 rounded-xl font-sans text-xs font-semibold tracking-wider uppercase transition-all duration-300 cursor-pointer ${
+              className={`px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-xl font-sans text-[11px] sm:text-xs font-semibold tracking-wider uppercase transition-all duration-300 cursor-pointer ${
                 selectedCategory === category
                   ? 'bg-black dark:bg-white text-white dark:text-black shadow-sm border border-gray-800 dark:border-gray-200'
                   : 'bg-gray-50 dark:bg-zinc-800/60 text-[var(--foreground)]/80 hover:bg-gray-100 dark:hover:bg-zinc-700 border border-gray-200 dark:border-zinc-700/60'

@@ -210,26 +210,26 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
                   </button>
 
                   {/* Detalhes para conferência */}
-                  <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-zinc-800/60 border border-gray-200 dark:border-zinc-700/60 space-y-2 text-xs">
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-500 flex items-center gap-1.5">
+                  <div className="p-3 sm:p-3.5 rounded-xl bg-gray-50 dark:bg-zinc-800/60 border border-gray-200 dark:border-zinc-700/60 space-y-2.5 text-xs">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1">
+                      <span className="text-gray-500 flex items-center gap-1.5 shrink-0">
                         <Mail size={13} /> Chave (E-mail):
                       </span>
-                      <div className="flex items-center gap-1.5 font-medium text-[var(--foreground)]">
-                        <span className="font-mono text-[11px]">{OFFICIAL_PIX_KEY}</span>
+                      <div className="flex items-center gap-1.5 font-medium text-[var(--foreground)] min-w-0">
+                        <span className="font-mono text-[11px] break-all">{OFFICIAL_PIX_KEY}</span>
                         <button
                           type="button"
                           onClick={handleCopyKey}
                           title="Copiar e-mail"
-                          className="p-1 hover:bg-gray-200 dark:hover:bg-zinc-700 rounded transition-colors text-gray-500"
+                          className="p-1 hover:bg-gray-200 dark:hover:bg-zinc-700 rounded transition-colors text-gray-500 shrink-0"
                         >
                           {copiedKey ? <CheckCircle2 size={13} className="text-green-500" /> : <Copy size={13} />}
                         </button>
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-500 flex items-center gap-1.5">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1">
+                      <span className="text-gray-500 flex items-center gap-1.5 shrink-0">
                         <User size={13} /> Beneficiária:
                       </span>
                       <span className="font-medium text-[var(--foreground)]">{BENEFICIARY_NAME}</span>

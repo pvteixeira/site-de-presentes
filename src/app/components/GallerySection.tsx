@@ -248,7 +248,7 @@ export default function GallerySection() {
         {/* Gallery Grid */}
         <motion.div
           layout
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
         >
           <AnimatePresence>
             {displayedImages.map((img, index) => (
@@ -263,7 +263,7 @@ export default function GallerySection() {
                   const realIndex = filteredImages.findIndex(f => f.id === img.id);
                   setSelectedIndex(realIndex !== -1 ? realIndex : index);
                 }}
-                className="group relative h-[420px] rounded-2xl overflow-hidden cursor-pointer border border-gray-200 dark:border-zinc-800 shadow-md bg-zinc-900"
+                className="group relative h-[300px] sm:h-[380px] md:h-[420px] rounded-2xl overflow-hidden cursor-pointer border border-gray-200 dark:border-zinc-800 shadow-md bg-zinc-900"
               >
                 <Image
                   src={img.src}
@@ -285,7 +285,7 @@ export default function GallerySection() {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex justify-center mt-12"
+            className="flex justify-center mt-8 sm:mt-12"
           >
             <button
               onClick={() => {
@@ -296,7 +296,7 @@ export default function GallerySection() {
                   document.getElementById('galeria')?.scrollIntoView({ behavior: 'smooth' });
                 }
               }}
-              className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-gradient-to-r from-slate-200 via-gray-100 to-slate-200 dark:from-zinc-800 dark:via-zinc-850 dark:to-zinc-800 text-slate-800 dark:text-slate-100 font-sans text-xs md:text-sm font-semibold uppercase tracking-wider shadow-md hover:shadow-lg border border-slate-300 dark:border-zinc-700 hover:scale-105 transition-all duration-300 cursor-pointer"
+              className="group inline-flex items-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 rounded-2xl bg-gradient-to-r from-slate-200 via-gray-100 to-slate-200 dark:from-zinc-800 dark:via-zinc-850 dark:to-zinc-800 text-slate-800 dark:text-slate-100 font-sans text-xs md:text-sm font-semibold uppercase tracking-wider shadow-md hover:shadow-lg border border-slate-300 dark:border-zinc-700 hover:scale-105 transition-all duration-300 cursor-pointer"
             >
               <span>{hasMore ? 'Ver Mais Fotos' : 'Ver Menos Fotos'}</span>
               {hasMore ? (
@@ -317,24 +317,24 @@ export default function GallerySection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4"
+            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-2 sm:p-4"
           >
             <button
               onClick={() => setSelectedIndex(null)}
-              className="absolute top-6 right-6 text-white/80 hover:text-white p-2 rounded-full bg-white/10 backdrop-blur-md cursor-pointer z-10"
+              className="absolute top-4 right-4 sm:top-6 sm:right-6 text-white/80 hover:text-white p-2 sm:p-2.5 rounded-full bg-white/10 backdrop-blur-md cursor-pointer z-20"
             >
-              <X size={24} />
+              <X size={20} className="sm:w-6 sm:h-6" />
             </button>
 
             <button
               onClick={handlePrev}
-              className="absolute left-4 md:left-6 text-white/80 hover:text-white p-3 rounded-full bg-white/10 backdrop-blur-md cursor-pointer z-10"
+              className="absolute left-2 sm:left-4 md:left-6 text-white/80 hover:text-white p-2 sm:p-3 rounded-full bg-white/10 backdrop-blur-md cursor-pointer z-20"
             >
-              <ChevronLeft size={28} />
+              <ChevronLeft size={22} className="sm:w-7 sm:h-7" />
             </button>
 
-            <div className="w-full max-w-4xl flex flex-col items-center text-center">
-              <div className="relative w-full h-[70vh] md:h-[80vh]">
+            <div className="w-full max-w-4xl flex flex-col items-center text-center px-8 sm:px-12">
+              <div className="relative w-full h-[65vh] sm:h-[75vh] md:h-[80vh]">
                 <Image
                   src={filteredImages[selectedIndex].src}
                   alt={`Foto ${filteredImages[selectedIndex].id}`}
@@ -352,9 +352,9 @@ export default function GallerySection() {
 
             <button
               onClick={handleNext}
-              className="absolute right-6 text-white/80 hover:text-white p-3 rounded-full bg-white/10 backdrop-blur-md cursor-pointer"
+              className="absolute right-2 sm:right-4 md:right-6 text-white/80 hover:text-white p-2 sm:p-3 rounded-full bg-white/10 backdrop-blur-md cursor-pointer z-20"
             >
-              <ChevronRight size={28} />
+              <ChevronRight size={22} className="sm:w-7 sm:h-7" />
             </button>
           </motion.div>
         )}

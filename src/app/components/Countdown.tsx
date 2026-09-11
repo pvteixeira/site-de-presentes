@@ -63,16 +63,16 @@ export default function Countdown() {
             <Clock className="w-5 h-5 text-gray-400 dark:text-zinc-500" />
             <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
           </div>
-          <div className="flex flex-wrap justify-center gap-4 md:gap-8">
+          <div className="grid grid-cols-4 gap-2 sm:gap-4 md:gap-8 max-w-xs sm:max-w-md md:max-w-2xl mx-auto">
             {timeUnits.map((unit) => (
               <div
                 key={unit.label}
-                className="flex flex-col items-center justify-center w-24 h-24 md:w-32 md:h-32 rounded-full border border-slate-300 dark:border-zinc-700 bg-white/90 dark:bg-zinc-800/90 shadow-md backdrop-blur-sm"
+                className="flex flex-col items-center justify-center aspect-square rounded-full border border-slate-300 dark:border-zinc-700 bg-white/90 dark:bg-zinc-800/90 shadow-md backdrop-blur-sm p-1.5 sm:p-2"
               >
-                <span className="text-3xl md:text-5xl font-serif text-[var(--foreground)] font-medium mb-1">
+                <span className="text-2xl sm:text-3xl md:text-5xl font-serif text-[var(--foreground)] font-medium mb-0.5 sm:mb-1 leading-tight">
                   {mounted ? unit.value.toString().padStart(2, '0') : '--'}
                 </span>
-                <span className="text-[10px] md:text-xs font-sans uppercase tracking-widest text-gray-500 font-medium">
+                <span className="text-[9px] sm:text-[10px] md:text-xs font-sans uppercase tracking-widest text-gray-500 font-medium">
                   {unit.label}
                 </span>
               </div>
