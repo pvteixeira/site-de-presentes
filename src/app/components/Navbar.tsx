@@ -95,17 +95,16 @@ export default function Navbar() {
 
           {/* Right Action Buttons */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0 xl:absolute xl:right-6">
-            {/* Direct Padrinhos Button (Desktop & Tablet) */}
+            {/* Direct Padrinhos Button (Apenas Desktop) */}
             <Link
               href="/padrinhos"
-              className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl bg-gradient-to-r from-slate-200 via-gray-200 to-slate-300 dark:from-zinc-800 dark:via-zinc-700 dark:to-zinc-800 hover:from-slate-300 hover:to-slate-400 text-slate-900 dark:text-slate-100 transition-all hover:scale-105 shadow-xs text-xs font-medium tracking-wide border border-slate-300 dark:border-zinc-600"
+              className="hidden xl:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-slate-200 via-gray-200 to-slate-300 dark:from-zinc-800 dark:via-zinc-700 dark:to-zinc-800 hover:from-slate-300 hover:to-slate-400 text-slate-900 dark:text-slate-100 transition-all hover:scale-105 shadow-xs text-xs font-medium tracking-wide border border-slate-300 dark:border-zinc-600"
             >
               <Sparkles size={14} className="text-slate-600 dark:text-slate-300 shrink-0" />
-              <span className="hidden sm:inline">Padrinhos e Madrinhas</span>
-              <span className="sm:hidden text-[11px]">Padrinhos</span>
+              <span>Padrinhos e Madrinhas</span>
             </Link>
 
-            {/* Mobile / Tablet Menu Button (touch target min 44x44) */}
+            {/* Mobile / Tablet Menu Button (3 tracinhos) */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="xl:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-white/90 dark:bg-zinc-900/90 border border-gray-200 dark:border-zinc-700 text-[var(--foreground)] hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer shadow-xs"
@@ -177,6 +176,23 @@ export default function Navbar() {
                     )}
                   </a>
                 ))}
+
+                {/* Área dos Padrinhos dentro do menu hambúrguer */}
+                <div className="pt-3 mt-2 border-t border-gray-100 dark:border-zinc-800">
+                  <Link
+                    href="/padrinhos"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-sans font-medium bg-gradient-to-r from-slate-100 via-gray-100 to-slate-200 dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-900 hover:from-slate-200 hover:to-slate-300 text-slate-900 dark:text-slate-100 transition-all border border-slate-300 dark:border-zinc-700 shadow-xs group"
+                  >
+                    <span className="flex items-center gap-2.5">
+                      <Sparkles size={16} className="text-slate-600 dark:text-slate-300 shrink-0 group-hover:rotate-12 transition-transform" />
+                      <span>Área dos Padrinhos</span>
+                    </span>
+                    <span className="text-[10px] uppercase font-semibold px-2 py-0.5 rounded-full bg-slate-200 dark:bg-zinc-700 text-slate-800 dark:text-slate-200 border border-slate-300/50 dark:border-zinc-600">
+                      Entrar
+                    </span>
+                  </Link>
+                </div>
               </nav>
             </motion.div>
           </>
