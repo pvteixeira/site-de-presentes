@@ -6,7 +6,7 @@ export interface PadrinhoAccountServer {
   username: string;
   alternateUsernames?: string[];
   password: string;
-  role: 'casal' | 'madrinha' | 'padrinho' | 'noivos' | 'demoiselle';
+  role: 'casal' | 'madrinha' | 'padrinho' | 'noivos' | 'demoiselle' | 'pais';
   members: string[];
   customMessage?: string;
   daminha?: string;
@@ -188,6 +188,27 @@ Por tudo o que a senhora representa, não poderíamos deixar de lhe confiar uma 
 Amamos você! Obrigada por ser intensidade, amor e carinho nas nossas vidas ❤️
 
 Com amor e carinho 
+Aline e Klécio`
+  },
+  {
+    id: 'anapaula-abdias',
+    name: 'Ana Paula e Abdias Silva',
+    username: 'anapaula.abdias',
+    alternateUsernames: ['anapaula', 'abdias', 'anapaulaeabdias', 'anapaula.silva', 'abdias.silva', 'paisdanoiva'],
+    password: '2027',
+    role: 'pais',
+    members: ['Ana Paula', 'Abdias Silva'],
+    customMessage: `Pai e Mãe,
+
+Não existem palavras suficientes para expressar nossa eterna gratidão por todo o amor, dedicação, carinho e valores que vocês nos transmitiram. Vocês são a nossa base, o nosso exemplo mais lindo de vida, respeito, fé e união familiar.
+
+Ter a bênção, o abraço e a presença de vocês ao nosso lado no altar, celebrando o início do nosso novo lar, é a realização do nosso maior sonho.
+
+Preparamos este espaço exclusivo com todo o amor para que vocês acompanhem cada detalhe, recado e momento do nosso grande dia!
+
+Amamos vocês infinitamente! ❤️
+
+Com todo o nosso amor e carinho,
 Aline e Klécio`
   }
 ];

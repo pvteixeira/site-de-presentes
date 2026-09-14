@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -67,6 +67,14 @@ const DEMOISELLE_PHOTOS = [
   { src: '/img/Demoiselle/08.jpg', alt: 'Simone Bruno' }
 ];
 
+const PAIS_PHOTOS = [
+  { src: '/img/Pais/01.jpg', alt: 'Aline aos 2 anos', caption: 'Aline aos 2 anos' },
+  { src: '/img/Pais/02.jpg', alt: 'Aline aos 4 anos', caption: 'Aline aos 4 anos' },
+  { src: '/img/Pais/03.jpg', alt: 'Aline aos 5 anos', caption: 'Aline aos 5 anos' },
+  { src: '/img/Pais/04.jpg', alt: 'Aline aos 5 anos', caption: 'Aline aos 5 anos' },
+  { src: '/img/Pais/05.jpg', alt: 'Aline aos 6 anos', caption: 'Aline aos 6 anos' }
+];
+
 export default function PadrinhosPortal() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -75,6 +83,7 @@ export default function PadrinhosPortal() {
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [activeTab, setActiveTab] = useState<'padrinhos' | 'mensagens' | 'cronograma'>('padrinhos');
   const [selectedDemoisellePhotoIndex, setSelectedDemoisellePhotoIndex] = useState<number | null>(null);
+  const [selectedPaisPhotoIndex, setSelectedPaisPhotoIndex] = useState<number | null>(null);
 
   // Messages & Announcements state
   const [announcements, setAnnouncements] = useState<PadrinhoMessage[]>(INITIAL_ANNOUNCEMENTS);
@@ -187,26 +196,41 @@ export default function PadrinhosPortal() {
     }
   }, []);
 
-  // Keyboard navigation for Demoiselle Lightbox modal
+  // Keyboard navigation for Demoiselle & Pais Lightbox modals
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (selectedDemoisellePhotoIndex === null) return;
-      if (e.key === 'ArrowLeft') {
-        setSelectedDemoisellePhotoIndex((prev) =>
-          prev !== null ? (prev - 1 + DEMOISELLE_PHOTOS.length) % DEMOISELLE_PHOTOS.length : 0
-        );
-      } else if (e.key === 'ArrowRight') {
-        setSelectedDemoisellePhotoIndex((prev) =>
-          prev !== null ? (prev + 1) % DEMOISELLE_PHOTOS.length : 0
-        );
-      } else if (e.key === 'Escape') {
-        setSelectedDemoisellePhotoIndex(null);
+      if (selectedDemoisellePhotoIndex !== null) {
+        if (e.key === 'ArrowLeft') {
+          setSelectedDemoisellePhotoIndex((prev) =>
+            prev !== null ? (prev - 1 + DEMOISELLE_PHOTOS.length) % DEMOISELLE_PHOTOS.length : 0
+          );
+        } else if (e.key === 'ArrowRight') {
+          setSelectedDemoisellePhotoIndex((prev) =>
+            prev !== null ? (prev + 1) % DEMOISELLE_PHOTOS.length : 0
+          );
+        } else if (e.key === 'Escape') {
+          setSelectedDemoisellePhotoIndex(null);
+        }
+      }
+
+      if (selectedPaisPhotoIndex !== null) {
+        if (e.key === 'ArrowLeft') {
+          setSelectedPaisPhotoIndex((prev) =>
+            prev !== null ? (prev - 1 + PAIS_PHOTOS.length) % PAIS_PHOTOS.length : 0
+          );
+        } else if (e.key === 'ArrowRight') {
+          setSelectedPaisPhotoIndex((prev) =>
+            prev !== null ? (prev + 1) % PAIS_PHOTOS.length : 0
+          );
+        } else if (e.key === 'Escape') {
+          setSelectedPaisPhotoIndex(null);
+        }
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedDemoisellePhotoIndex]);
+  }, [selectedDemoisellePhotoIndex, selectedPaisPhotoIndex]);
 
   const handlePrevPhoto = (e?: React.MouseEvent) => {
     e?.stopPropagation();
@@ -220,6 +244,57 @@ export default function PadrinhosPortal() {
     setSelectedDemoisellePhotoIndex((prev) =>
       prev !== null ? (prev + 1) % DEMOISELLE_PHOTOS.length : 0
     );
+  };
+
+  const handlePrevPaisPhoto = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setSelectedPaisPhotoIndex((prev) =>
+      prev !== null ? (prev - 1 + PAIS_PHOTOS.length) % PAIS_PHOTOS.length : 0
+    );
+  };
+
+  const handleNextPaisPhoto = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setSelectedPaisPhotoIndex((prev) =>
+      prev !== null ? (prev + 1) % PAIS_PHOTOS.length : 0
+    );
+  };
+
+  const padrinhosTouchStartX = useRef<number | null>(null);
+  const padrinhosTouchStartY = useRef<number | null>(null);
+
+  const handleDemoiselleTouchStart = (e: React.TouchEvent) => {
+    padrinhosTouchStartX.current = e.touches[0].clientX;
+    padrinhosTouchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleDemoiselleTouchEnd = (e: React.TouchEvent) => {
+    if (padrinhosTouchStartX.current === null || padrinhosTouchStartY.current === null) return;
+    const diffX = padrinhosTouchStartX.current - e.changedTouches[0].clientX;
+    const diffY = padrinhosTouchStartY.current - e.changedTouches[0].clientY;
+    if (Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY)) {
+      if (diffX > 0) handleNextPhoto();
+      else handlePrevPhoto();
+    }
+    padrinhosTouchStartX.current = null;
+    padrinhosTouchStartY.current = null;
+  };
+
+  const handlePaisTouchStart = (e: React.TouchEvent) => {
+    padrinhosTouchStartX.current = e.touches[0].clientX;
+    padrinhosTouchStartY.current = e.touches[0].clientY;
+  };
+
+  const handlePaisTouchEnd = (e: React.TouchEvent) => {
+    if (padrinhosTouchStartX.current === null || padrinhosTouchStartY.current === null) return;
+    const diffX = padrinhosTouchStartX.current - e.changedTouches[0].clientX;
+    const diffY = padrinhosTouchStartY.current - e.changedTouches[0].clientY;
+    if (Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY)) {
+      if (diffX > 0) handleNextPaisPhoto();
+      else handlePrevPaisPhoto();
+    }
+    padrinhosTouchStartX.current = null;
+    padrinhosTouchStartY.current = null;
   };
 
   const handleAddAnnouncement = async (e: React.FormEvent) => {
@@ -585,7 +660,7 @@ export default function PadrinhosPortal() {
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
                   <span className="font-serif font-medium text-sm sm:text-base md:text-lg text-[var(--foreground)] block leading-tight truncate">
-                    {loggedUser.role === 'demoiselle' ? 'Área da Demoiselle' : 'Padrinhos e Madrinhas'}
+                    {loggedUser.role === 'demoiselle' ? 'Área da Demoiselle' : loggedUser.role === 'pais' ? 'Espaço dos Pais' : 'Padrinhos e Madrinhas'}
                   </span>
                   {isNoivos && (
                     <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-sans font-semibold bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">
@@ -595,6 +670,11 @@ export default function PadrinhosPortal() {
                   {loggedUser.role === 'demoiselle' && (
                     <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-sans font-semibold bg-rose-500/15 text-rose-700 dark:text-rose-300 border border-rose-500/30">
                       <Sparkles size={11} /> Demoiselle
+                    </span>
+                  )}
+                  {loggedUser.role === 'pais' && (
+                    <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-sans font-semibold bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-500/30">
+                      <Heart size={11} /> Pais da Noiva
                     </span>
                   )}
                 </div>
@@ -654,6 +734,11 @@ export default function PadrinhosPortal() {
                   <Sparkles size={13} /> Demoiselle de Honra
                 </span>
               )}
+              {loggedUser.role === 'pais' && (
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-sans font-semibold bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-500/30">
+                  <Heart size={13} /> Pais da Noiva
+                </span>
+              )}
             </div>
 
             <div className="text-gray-700 dark:text-gray-300 text-base md:text-lg font-sans leading-relaxed whitespace-pre-line text-justified-elegant space-y-3">
@@ -671,8 +756,8 @@ export default function PadrinhosPortal() {
               : 'border-transparent text-gray-400 hover:text-[var(--foreground)]'
               }`}
           >
-            {loggedUser.role === 'demoiselle' ? <Sparkles size={18} /> : <Users size={18} />}
-            {loggedUser.role === 'demoiselle' ? 'Orientações da Demoiselle' : 'Padrinhos e Madrinhas'}
+            {loggedUser.role === 'demoiselle' ? <Sparkles size={18} /> : loggedUser.role === 'pais' ? <Heart size={18} /> : <Users size={18} />}
+            {loggedUser.role === 'demoiselle' ? 'Orientações da Demoiselle' : loggedUser.role === 'pais' ? 'Orientações dos Pais' : 'Padrinhos e Madrinhas'}
           </button>
 
           <button
@@ -880,12 +965,12 @@ export default function PadrinhosPortal() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+                    <div className="flex sm:grid sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 overflow-x-auto sm:overflow-visible pb-3 sm:pb-0 snap-x snap-mandatory scrollbar-none -mx-2 px-2 sm:mx-0 sm:px-0">
                       {DEMOISELLE_PHOTOS.map((photo, index) => (
                         <div
                           key={index}
                           onClick={() => setSelectedDemoisellePhotoIndex(index)}
-                          className="group relative rounded-2xl overflow-hidden aspect-[4/5] bg-gray-100 dark:bg-zinc-800 cursor-pointer border border-gray-200/80 dark:border-zinc-700/80 shadow-xs hover:shadow-md transition-all duration-300 hover:scale-[1.02]"
+                          className="w-[72vw] max-w-[260px] sm:w-auto sm:max-w-none snap-center shrink-0 sm:shrink group relative rounded-2xl overflow-hidden aspect-[4/5] bg-gray-100 dark:bg-zinc-800 cursor-pointer border border-gray-200/80 dark:border-zinc-700/80 shadow-xs hover:shadow-md transition-all duration-300 hover:scale-[1.02]"
                         >
                           <img
                             src={photo.src}
@@ -895,6 +980,213 @@ export default function PadrinhosPortal() {
                           />
                         </div>
                       ))}
+                    </div>
+
+                    <div className="sm:hidden flex items-center justify-center gap-1.5 text-[11px] text-gray-400 font-sans pt-1">
+                      <span>👉 Deslize com o dedo para ver mais fotos</span>
+                    </div>
+                  </div>
+                </div>
+              ) : loggedUser.role === 'pais' ? (
+                /* Dedicated Pais da Noiva Section (estilo VIP Demoiselle com fotos grandes) */
+                <div className="space-y-8 max-w-4xl mx-auto">
+                  {/* Card 1: Traje & Orientações dos Pais da Noiva */}
+                  <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 md:p-9 shadow-sm border border-gray-200 dark:border-zinc-800 space-y-7">
+                    {/* Header Block */}
+                    <div className="flex items-center gap-3.5 pb-5 border-b border-gray-100 dark:border-zinc-800">
+                      <div className="w-11 h-11 rounded-2xl bg-purple-50 dark:bg-purple-950/30 text-purple-700 dark:text-purple-300 flex items-center justify-center font-serif font-semibold text-xl border border-purple-200 dark:border-purple-900/40 shrink-0">
+                        <Heart size={20} />
+                      </div>
+                      <div>
+                        <h3 className="text-2xl md:text-3xl font-serif text-[var(--foreground)] font-medium leading-tight">
+                          Para os Pais da Noiva
+                        </h3>
+                        <span className="text-xs text-purple-600 dark:text-purple-400 font-sans font-medium">
+                          Ana Paula e Abdias Silva
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Mensagem Inicial */}
+                    <div className="bg-gray-50/80 dark:bg-zinc-800/40 p-5 rounded-2xl border-l-3 border-purple-400 dark:border-purple-600">
+                      <p className="text-gray-700 dark:text-gray-200 text-sm md:text-base leading-relaxed text-justified-elegant font-sans">
+                        Queridos pais, preparamos com todo o carinho as orientações para que vocês estejam radiantes e confortáveis ao nosso lado no altar, celebrando o início do nosso novo lar.
+                      </p>
+                    </div>
+
+                    {/* 1. SEÇÃO MÃE DA NOIVA */}
+                    <div className="space-y-4 pt-2">
+                      <h4 className="font-serif text-lg font-medium text-[var(--foreground)] flex items-center gap-2 pb-1 border-b border-gray-100 dark:border-zinc-800">
+                        <Sparkles size={16} className="text-purple-500" /> Para a Mãe da Noiva (Ana Paula)
+                      </h4>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-sans text-sm">
+                        {/* Guideline 1: Vestidos Longos */}
+                        <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800">
+                          <div className="w-8 h-8 rounded-xl bg-gray-100 dark:bg-zinc-800 text-[var(--foreground)] flex items-center justify-center shrink-0 mt-0.5 border border-gray-200 dark:border-zinc-700">
+                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M9 2l-1 5 2 4-4 11h12l-4-11 2-4-1-5H9z" />
+                              <path d="M9 2a3 3 0 0 0 6 0" />
+                              <path d="M10 11h4" />
+                            </svg>
+                          </div>
+                          <div>
+                            <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Vestido Longo</span>
+                            <span className="text-xs text-gray-500 dark:text-gray-400 block mt-0.5">Modelo elegante para a cerimônia</span>
+                          </div>
+                        </div>
+
+                        {/* Guideline 2: Cor Livre */}
+                        <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800">
+                          <div className="w-8 h-8 rounded-xl bg-gray-100 dark:bg-zinc-800 text-[var(--foreground)] flex items-center justify-center shrink-0 mt-0.5 border border-gray-200 dark:border-zinc-700">
+                            <Palette size={15} />
+                          </div>
+                          <div>
+                            <span className="font-serif font-semibold text-base text-[var(--foreground)] block">Paleta de Cores Livre</span>
+                            <span className="text-xs text-gray-500 dark:text-gray-400 block mt-0.5">Escolha a cor de sua preferência</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Restricted Alert */}
+                      <div className="bg-amber-500/10 dark:bg-amber-950/20 border-l-3 border-amber-500 rounded-2xl p-4.5 space-y-1.5">
+                        <div className="flex items-center gap-2 text-amber-700 dark:text-amber-400 font-semibold font-serif text-sm">
+                          <AlertTriangle size={16} className="shrink-0" />
+                          <span>Atenção às Cores</span>
+                        </div>
+                        <p className="text-xs md:text-sm text-amber-900/90 dark:text-amber-200/90 font-sans leading-relaxed text-justified-elegant">
+                          Não recomendamos o uso de vestidos nas cores <strong>branco, off-white e champanhe</strong>.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* 2. SEÇÃO PAI DA NOIVA */}
+                    <div className="space-y-4 pt-4 border-t border-gray-100 dark:border-zinc-800">
+                      <h4 className="font-serif text-lg font-medium text-[var(--foreground)] flex items-center gap-2 pb-1 border-b border-gray-100 dark:border-zinc-800">
+                        <CheckCircle2 size={16} className="text-purple-500" /> Para o Pai da Noiva (Abdias Silva)
+                      </h4>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-sans text-sm">
+                        {/* Guideline 1: Terno */}
+                        <div className="flex items-center gap-3.5 p-4 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800 min-h-[72px]">
+                          <div className="w-9 h-9 rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center shrink-0 shadow-xs">
+                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M6 3h12l2 18H4L6 3z" />
+                              <path d="M6 3l6 9 6-9" />
+                              <path d="M9 15l3-3 3 3" />
+                              <path d="M12 12v9" />
+                            </svg>
+                          </div>
+                          <div>
+                            <span className="font-serif font-semibold text-sm md:text-base text-[var(--foreground)] block leading-snug">
+                              Terno Preto Completo
+                            </span>
+                            <span className="text-[11px] text-gray-500 dark:text-gray-400 font-sans block mt-0.5">
+                              Paletó e calça pretos clássicos
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Guideline 2: Camisa */}
+                        <div className="flex items-center gap-3.5 p-4 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800 min-h-[72px]">
+                          <div className="w-9 h-9 rounded-xl bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 flex items-center justify-center shrink-0 border border-gray-200 dark:border-zinc-700 shadow-xs">
+                            <Shirt size={16} />
+                          </div>
+                          <div>
+                            <span className="font-serif font-semibold text-sm md:text-base text-[var(--foreground)] block leading-snug">
+                              Camisa Social Branca
+                            </span>
+                            <span className="text-[11px] text-gray-500 dark:text-gray-400 font-sans block mt-0.5">
+                              Manga longa tradicional
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Guideline 3: Gravata */}
+                        <div className="flex items-center gap-3.5 p-4 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800 min-h-[72px]">
+                          <div className="w-9 h-9 rounded-xl bg-slate-200 dark:bg-zinc-700 text-slate-800 dark:text-slate-200 flex items-center justify-center shrink-0 border border-slate-300 dark:border-zinc-600 shadow-xs">
+                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M10 2h4l1 3-3 2-3-2 1-3z" />
+                              <path d="M10 5l-2 10 4 6 4-6-2-10" />
+                              <line x1="12" y1="9" x2="12" y2="14" />
+                            </svg>
+                          </div>
+                          <div>
+                            <span className="font-serif font-semibold text-sm md:text-base text-[var(--foreground)] block leading-snug">
+                              Gravata Prata
+                            </span>
+                            <span className="text-[11px] text-gray-500 dark:text-gray-400 font-sans block mt-0.5">
+                              Clássica para o cortejo
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Guideline 4: Sapato */}
+                        <div className="flex items-center gap-3.5 p-4 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/20 border border-gray-100 dark:border-zinc-800 min-h-[72px]">
+                          <div className="w-9 h-9 rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center shrink-0 shadow-xs">
+                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M2 17h20v2H2z" />
+                              <path d="M2 17v-3c0-1.1.9-2 2-2h4l4-5h4a3 3 0 0 1 3 3v3l3 2a2 2 0 0 1 2 2" />
+                              <line x1="11" y1="9" x2="14" y2="9" />
+                              <line x1="12" y1="12" x2="15" y2="12" />
+                            </svg>
+                          </div>
+                          <div>
+                            <span className="font-serif font-semibold text-sm md:text-base text-[var(--foreground)] block leading-snug">
+                              Sapato Social Preto
+                            </span>
+                            <span className="text-[11px] text-gray-500 dark:text-gray-400 font-sans block mt-0.5">
+                              Modelo social clássico
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Card 2: Galeria de Fotos Grandes (Igual à Demoiselle) */}
+                  <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 md:p-9 shadow-sm border border-gray-200 dark:border-zinc-800 space-y-6">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-gray-100 dark:border-zinc-800">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-2xl bg-purple-50 dark:bg-purple-950/30 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+                          <Camera size={18} />
+                        </div>
+                        <div>
+                          <h3 className="text-xl md:text-2xl font-serif text-[var(--foreground)] font-medium">
+                            Nossas Memórias Especiais
+                          </h3>
+                          <p className="text-xs text-gray-500 font-sans">
+                            Momentos inesquecíveis que guardamos com muito carinho
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Grid com fotos grandes com suporte a arrastar com o dedo no celular */}
+                    <div className="flex sm:grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 overflow-x-auto sm:overflow-visible pb-3 sm:pb-0 snap-x snap-mandatory scrollbar-none -mx-2 px-2 sm:mx-0 sm:px-0">
+                      {PAIS_PHOTOS.map((photo, index) => (
+                        <div
+                          key={index}
+                          onClick={() => setSelectedPaisPhotoIndex(index)}
+                          className="w-[82vw] max-w-[320px] sm:w-auto sm:max-w-none snap-center shrink-0 sm:shrink group relative rounded-2xl overflow-hidden aspect-[4/5] bg-gray-100 dark:bg-zinc-800 cursor-pointer border border-gray-200/80 dark:border-zinc-700/80 shadow-sm hover:shadow-xl transition-all duration-300 hover:scale-[1.02]"
+                        >
+                          <img
+                            src={photo.src}
+                            alt={photo.alt}
+                            className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                            loading="lazy"
+                          />
+                          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent p-3.5 text-center">
+                            <span className="text-xs sm:text-sm font-sans font-medium text-white/95 drop-shadow-md block">
+                              {photo.caption}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="sm:hidden flex items-center justify-center gap-1.5 text-[11px] text-gray-400 font-sans pt-1">
+                      <span>👉 Deslize com o dedo para ver mais fotos</span>
                     </div>
                   </div>
                 </div>
@@ -1514,7 +1806,9 @@ export default function PadrinhosPortal() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSelectedDemoisellePhotoIndex(null)}
-              className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md cursor-pointer select-none"
+              onTouchStart={handleDemoiselleTouchStart}
+              onTouchEnd={handleDemoiselleTouchEnd}
+              className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md cursor-pointer select-none touch-pan-y"
             >
               {/* Botão Fechar */}
               <button
@@ -1543,26 +1837,113 @@ export default function PadrinhosPortal() {
                 <ChevronRight size={28} />
               </button>
 
-              {/* Container da Foto */}
+              {/* Container da Foto com suporte a arrastar com o dedo no celular */}
               <motion.div
                 key={selectedDemoisellePhotoIndex}
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.2 }}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.5}
+                onDragEnd={(_, info) => {
+                  if (info.offset.x < -40 || info.velocity.x < -300) {
+                    handleNextPhoto();
+                  } else if (info.offset.x > 40 || info.velocity.x > 300) {
+                    handlePrevPhoto();
+                  }
+                }}
                 onClick={(e) => e.stopPropagation()}
-                className="relative max-w-4xl max-h-[85vh] bg-transparent rounded-3xl overflow-hidden cursor-default flex items-center justify-center"
+                className="relative max-w-4xl max-h-[85vh] bg-transparent rounded-3xl overflow-hidden cursor-grab active:cursor-grabbing flex items-center justify-center touch-pan-y"
               >
                 <img
                   src={DEMOISELLE_PHOTOS[selectedDemoisellePhotoIndex].src}
                   alt={DEMOISELLE_PHOTOS[selectedDemoisellePhotoIndex].alt}
-                  className="max-h-[85vh] max-w-full rounded-2xl object-contain shadow-2xl border border-white/10"
+                  className="max-h-[85vh] max-w-full rounded-2xl object-contain shadow-2xl border border-white/10 pointer-events-none"
                 />
               </motion.div>
 
               {/* Indicador de Foto */}
               <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-30 px-3.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-xs font-sans font-medium border border-white/10">
                 {selectedDemoisellePhotoIndex + 1} / {DEMOISELLE_PHOTOS.length}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Modal Lightbox Foto Pais com Navegação */}
+        <AnimatePresence>
+          {selectedPaisPhotoIndex !== null && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedPaisPhotoIndex(null)}
+              onTouchStart={handlePaisTouchStart}
+              onTouchEnd={handlePaisTouchEnd}
+              className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md cursor-pointer select-none touch-pan-y"
+            >
+              {/* Botão Fechar */}
+              <button
+                onClick={() => setSelectedPaisPhotoIndex(null)}
+                className="absolute top-4 right-4 z-30 p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all shadow-md cursor-pointer backdrop-blur-md"
+                title="Fechar (Esc)"
+              >
+                <X size={22} />
+              </button>
+
+              {/* Botão Anterior */}
+              <button
+                onClick={handlePrevPaisPhoto}
+                className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/10 hover:bg-white/25 text-white transition-all shadow-lg hover:scale-110 cursor-pointer backdrop-blur-md"
+                title="Foto anterior (Seta esquerda)"
+              >
+                <ChevronLeft size={28} />
+              </button>
+
+              {/* Botão Próximo */}
+              <button
+                onClick={handleNextPaisPhoto}
+                className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/10 hover:bg-white/25 text-white transition-all shadow-lg hover:scale-110 cursor-pointer backdrop-blur-md"
+                title="Próxima foto (Seta direita)"
+              >
+                <ChevronRight size={28} />
+              </button>
+
+              {/* Container da Foto com suporte a arrastar com o dedo no celular */}
+              <motion.div
+                key={selectedPaisPhotoIndex}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.5}
+                onDragEnd={(_, info) => {
+                  if (info.offset.x < -40 || info.velocity.x < -300) {
+                    handleNextPaisPhoto();
+                  } else if (info.offset.x > 40 || info.velocity.x > 300) {
+                    handlePrevPaisPhoto();
+                  }
+                }}
+                onClick={(e) => e.stopPropagation()}
+                className="relative max-w-4xl max-h-[85vh] bg-transparent rounded-3xl overflow-hidden cursor-grab active:cursor-grabbing flex flex-col items-center justify-center touch-pan-y"
+              >
+                <img
+                  src={PAIS_PHOTOS[selectedPaisPhotoIndex].src}
+                  alt={PAIS_PHOTOS[selectedPaisPhotoIndex].alt}
+                  className="max-h-[80vh] max-w-full rounded-2xl object-contain shadow-2xl border border-white/10 pointer-events-none"
+                />
+                <p className="text-white/90 text-sm font-sans font-medium mt-3 bg-black/60 px-4 py-1.5 rounded-full backdrop-blur-md border border-white/10">
+                  {PAIS_PHOTOS[selectedPaisPhotoIndex].caption}
+                </p>
+              </motion.div>
+
+              {/* Indicador de Foto */}
+              <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-30 px-3.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-xs font-sans font-medium border border-white/10">
+                {selectedPaisPhotoIndex + 1} / {PAIS_PHOTOS.length}
               </div>
             </motion.div>
           )}

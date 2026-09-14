@@ -16,7 +16,6 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Os Noivos', href: '#os-noivos' },
   { label: 'História', href: '#historia' },
   { label: 'Local', href: '#o-grande-dia' },
-  { label: 'Confirmar Presença', href: '#confirmar-presenca', highlight: true },
   { label: 'Mensagens', href: '#mensagens-noivos' },
   { label: 'Lista de Presentes', href: '#lista-presentes' },
   { label: 'Galeria', href: '#galeria' },
@@ -75,39 +74,34 @@ export default function Navbar() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-end xl:justify-center relative">
-          {/* Desktop Navigation Links (Centralizados) */}
-          <nav className="hidden xl:flex items-center justify-center gap-7">
+          {/* Desktop Navigation Links (Centralizados com Padrinhos bem afastado da Galeria) */}
+          <nav className="hidden xl:flex items-center justify-center gap-5 2xl:gap-6">
             {navItems.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
                 onClick={(e) => handleNavClick(e, item.href)}
-                className={`text-xs font-sans font-medium uppercase tracking-wider transition-colors cursor-pointer ${
-                  item.highlight
-                    ? 'text-emerald-600 dark:text-emerald-400 font-semibold hover:text-emerald-700'
-                    : 'text-[var(--foreground)]/70 hover:text-[var(--foreground)]'
-                }`}
+                className="text-xs font-sans font-medium uppercase tracking-wider text-[var(--foreground)]/70 hover:text-[var(--foreground)] transition-all cursor-pointer whitespace-nowrap"
               >
                 {item.label}
               </a>
             ))}
-          </nav>
 
-          {/* Right Action Buttons */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0 xl:absolute xl:right-6">
-            {/* Direct Padrinhos Button (Apenas Desktop) */}
+            {/* Direct Padrinhos Button com espaçamento equilibrado em relação à Galeria */}
             <Link
               href="/padrinhos"
-              className="hidden xl:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-slate-200 via-gray-200 to-slate-300 dark:from-zinc-800 dark:via-zinc-700 dark:to-zinc-800 hover:from-slate-300 hover:to-slate-400 text-slate-900 dark:text-slate-100 transition-all hover:scale-105 shadow-xs text-xs font-medium tracking-wide border border-slate-300 dark:border-zinc-600"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-slate-200 via-gray-200 to-slate-300 dark:from-zinc-800 dark:via-zinc-700 dark:to-zinc-800 hover:from-slate-300 hover:to-slate-400 text-slate-900 dark:text-slate-100 transition-all hover:scale-105 shadow-xs text-xs font-medium tracking-wide border border-slate-300 dark:border-zinc-600 cursor-pointer shrink-0 ml-3 xl:ml-4 whitespace-nowrap"
             >
               <Sparkles size={14} className="text-slate-600 dark:text-slate-300 shrink-0" />
               <span>Padrinhos e Madrinhas</span>
             </Link>
+          </nav>
 
-            {/* Mobile / Tablet Menu Button (3 tracinhos) */}
+          {/* Mobile / Tablet Menu Button (3 tracinhos) */}
+          <div className="xl:hidden flex items-center">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="xl:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-white/90 dark:bg-zinc-900/90 border border-gray-200 dark:border-zinc-700 text-[var(--foreground)] hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer shadow-xs"
+              className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/90 dark:bg-zinc-900/90 border border-gray-200 dark:border-zinc-700 text-[var(--foreground)] hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer shadow-xs"
               aria-label={mobileMenuOpen ? 'Fechar menu de navegação' : 'Abrir menu de navegação'}
             >
               {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -164,13 +158,13 @@ export default function Navbar() {
                     onClick={(e) => handleNavClick(e, item.href)}
                     className={`flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-sans font-medium transition-all cursor-pointer ${
                       item.highlight
-                        ? 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300 font-semibold border border-emerald-200 dark:border-emerald-800/40'
+                        ? 'bg-slate-100 dark:bg-zinc-800 text-[var(--foreground)] font-semibold border border-slate-300 dark:border-zinc-700'
                         : 'text-[var(--foreground)] hover:bg-gray-50 dark:hover:bg-zinc-900'
                     }`}
                   >
                     <span>{item.label}</span>
                     {item.highlight && (
-                      <span className="text-[10px] uppercase font-semibold px-2 py-0.5 rounded-full bg-emerald-600 text-white">
+                      <span className="text-[10px] uppercase font-semibold px-2 py-0.5 rounded-full bg-slate-800 dark:bg-slate-200 text-white dark:text-black">
                         Confirmar
                       </span>
                     )}

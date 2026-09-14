@@ -68,6 +68,20 @@ CREATE TABLE IF NOT EXISTS public.wedding_schedule (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
+-- 7. Tabela de Confirmações de Presença (RSVP)
+CREATE TABLE IF NOT EXISTS public.rsvp_confirmations (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    email TEXT,
+    phone TEXT,
+    status TEXT NOT NULL, -- 'confirmed' | 'declined'
+    guest_count INT DEFAULT 1,
+    companion_names TEXT,
+    notes TEXT,
+    date TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
 -- ==============================================================================
 -- POLÍTICAS DE SEGURANÇA (Row Level Security - RLS)
 -- Permite leitura e escrita públicas necessárias para o site funcionar fluidamente
@@ -79,6 +93,7 @@ ALTER TABLE public.pix_contributions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.padrinho_announcements ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.padrinho_replies ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.wedding_schedule ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.rsvp_confirmations ENABLE ROW LEVEL SECURITY;
 
 -- Políticas de Acesso:
 CREATE POLICY "Permitir leitura pública de mensagens" ON public.guestbook_messages FOR SELECT USING (true);
@@ -105,6 +120,10 @@ CREATE POLICY "Permitir exclusão de recados dos padrinhos" ON public.padrinho_r
 CREATE POLICY "Permitir leitura de cronograma" ON public.wedding_schedule FOR SELECT USING (true);
 CREATE POLICY "Permitir gerenciamento de cronograma" ON public.wedding_schedule FOR ALL USING (true);
 
+CREATE POLICY "Permitir leitura de confirmações de presença" ON public.rsvp_confirmations FOR SELECT USING (true);
+CREATE POLICY "Permitir envio de confirmação de presença" ON public.rsvp_confirmations FOR INSERT WITH CHECK (true);
+CREATE POLICY "Permitir exclusão de confirmação de presença" ON public.rsvp_confirmations FOR DELETE USING (true);
+
 -- Habilitar Realtime para as tabelas principais
 ALTER PUBLICATION supabase_realtime ADD TABLE public.guestbook_messages;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.gifts;
@@ -112,3 +131,4 @@ ALTER PUBLICATION supabase_realtime ADD TABLE public.pix_contributions;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.padrinho_announcements;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.padrinho_replies;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.wedding_schedule;
+ALTER PUBLICATION supabase_realtime ADD TABLE public.rsvp_confirmations;
