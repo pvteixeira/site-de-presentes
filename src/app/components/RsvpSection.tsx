@@ -147,7 +147,20 @@ export default function RsvpSection() {
       if (data.success) {
         // Salva backup local
         const localList = JSON.parse(localStorage.getItem('rsvp_local_backup') || '[]');
-        localList.unshift(data.data || payload);
+        const savedEntry = {
+          id: data?.data?.id || ('rsvp-' + Date.now() + '-' + Math.random().toString(36).substring(2, 7)),
+          name: cleanName,
+          email: cleanEmail,
+          phone: rawPhone ? phone.trim() : '',
+          status,
+          guest_count: status === 'confirmed' ? guestCount : 0,
+          companion_names: finalCompanionNames,
+          notes: notes.trim(),
+          date: new Date().toLocaleDateString('pt-BR'),
+          created_at: new Date().toISOString(),
+          ...(data?.data || {}),
+        };
+        localList.unshift(savedEntry);
         localStorage.setItem('rsvp_local_backup', JSON.stringify(localList));
 
         setSubmitted(true);

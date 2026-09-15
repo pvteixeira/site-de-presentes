@@ -157,20 +157,31 @@ export default function AdminPage() {
     try {
       const res = await fetch('/api/rsvp');
       const data = await res.json();
-      if (data.success && Array.isArray(data.confirmations) && data.confirmations.length > 0) {
+      if (data.success && data.isConfigured && Array.isArray(data.confirmations)) {
         setRsvpList(data.confirmations);
         localStorage.setItem('admin_rsvp_list', JSON.stringify(data.confirmations));
+        localStorage.setItem('rsvp_local_backup', JSON.stringify(data.confirmations));
+      } else if (data.success && Array.isArray(data.confirmations) && data.confirmations.length > 0) {
+        setRsvpList(data.confirmations);
+        localStorage.setItem('admin_rsvp_list', JSON.stringify(data.confirmations));
+        localStorage.setItem('rsvp_local_backup', JSON.stringify(data.confirmations));
       } else {
-        const stored = localStorage.getItem('rsvp_local_backup');
+        const stored = localStorage.getItem('rsvp_local_backup') || localStorage.getItem('admin_rsvp_list');
         if (stored) {
-          setRsvpList(JSON.parse(stored));
+          try {
+            setRsvpList(JSON.parse(stored));
+          } catch (_) {
+            setRsvpList([]);
+          }
         }
       }
     } catch (e) {
       console.error('Erro ao buscar RSVPs:', e);
-      const stored = localStorage.getItem('rsvp_local_backup');
+      const stored = localStorage.getItem('rsvp_local_backup') || localStorage.getItem('admin_rsvp_list');
       if (stored) {
-        setRsvpList(JSON.parse(stored));
+        try {
+          setRsvpList(JSON.parse(stored));
+        } catch (_) {}
       }
     }
   };
@@ -345,15 +356,38 @@ export default function AdminPage() {
     router.push('/admin/login');
   };
 
-  const handleDeleteRsvp = async (id: string) => {
-    if (confirm('Tem certeza que deseja excluir esta confirmação?')) {
-      const updated = rsvpList.filter((r) => r.id !== id);
+  const handleDeleteRsvp = async (item: RsvpItem) => {
+    if (confirm(`Tem certeza que deseja excluir a confirmação de "${item.name}"?`)) {
+      const updated = rsvpList.filter((r) => {
+        if (item.id && r.id) return r.id !== item.id;
+        return !(r.name === item.name && r.phone === item.phone);
+      });
       setRsvpList(updated);
+      localStorage.setItem('admin_rsvp_list', JSON.stringify(updated));
+      localStorage.setItem('rsvp_local_backup', JSON.stringify(updated));
+
       try {
-        await fetch(`/api/rsvp?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
-        loadAllAdminData();
+        const queryParams = new URLSearchParams();
+        if (item.id) queryParams.set('id', item.id);
+        if (item.name) queryParams.set('name', item.name);
+        if (item.phone) queryParams.set('phone', item.phone);
+        await fetch(`/api/rsvp?${queryParams.toString()}`, { method: 'DELETE' });
       } catch (err) {
         console.error('Erro ao excluir RSVP:', err);
+      }
+    }
+  };
+
+  const handleDeleteAllRsvp = async () => {
+    if (confirm('ATENÇÃO: Deseja realmente excluir TODAS as confirmações de presença da lista?')) {
+      setRsvpList([]);
+      localStorage.setItem('admin_rsvp_list', JSON.stringify([]));
+      localStorage.setItem('rsvp_local_backup', JSON.stringify([]));
+
+      try {
+        await fetch('/api/rsvp?all=true', { method: 'DELETE' });
+      } catch (err) {
+        console.error('Erro ao excluir todos os RSVPs:', err);
       }
     }
   };
@@ -750,12 +784,21 @@ export default function AdminPage() {
               </div>
 
               {rsvpList.length > 0 && (
-                <button
-                  onClick={copyRsvpSummary}
-                  className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer shadow-sm"
-                >
-                  <Copy size={15} /> Copiar Lista no WhatsApp
-                </button>
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    onClick={handleDeleteAllRsvp}
+                    className="flex items-center gap-1.5 text-xs text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 px-3 py-2 rounded-xl border border-red-200 dark:border-red-900/50 transition-colors cursor-pointer"
+                    title="Apagar todas as confirmações da lista"
+                  >
+                    <Trash2 size={14} /> Limpar Lista
+                  </button>
+                  <button
+                    onClick={copyRsvpSummary}
+                    className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer shadow-sm"
+                  >
+                    <Copy size={15} /> Copiar Lista no WhatsApp
+                  </button>
+                </div>
               )}
             </div>
 
@@ -922,7 +965,7 @@ export default function AdminPage() {
                         </td>
                         <td className="p-4 text-right">
                           <button
-                            onClick={() => handleDeleteRsvp(item.id)}
+                            onClick={() => handleDeleteRsvp(item)}
                             className="p-2 text-gray-400 hover:text-red-600 transition-colors rounded-lg hover:bg-red-50 dark:hover:bg-red-950/30 cursor-pointer"
                             title="Excluir confirmação"
                           >

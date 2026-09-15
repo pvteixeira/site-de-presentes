@@ -172,6 +172,8 @@ export async function DELETE(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get('id');
+    const name = searchParams.get('name');
+    const phone = searchParams.get('phone');
     const all = searchParams.get('all') === 'true';
 
     const supabase = getSupabase();
@@ -182,18 +184,28 @@ export async function DELETE(req: NextRequest) {
     if (all) {
       const { error } = await supabase.from('rsvp_confirmations').delete().neq('id', '');
       if (error) {
+        console.error('Erro ao deletar todas as presenças do Supabase:', error);
         return NextResponse.json({ success: false, message: error.message }, { status: 500 });
       }
       return NextResponse.json({ success: true, message: 'Todas as confirmações foram removidas.' });
     }
 
-    if (!id) {
-      return NextResponse.json({ success: false, message: 'ID não fornecido.' }, { status: 400 });
+    if (id) {
+      const { error } = await supabase.from('rsvp_confirmations').delete().eq('id', id);
+      if (error) {
+        console.error('Erro ao deletar RSVP por ID:', error);
+      }
     }
 
-    const { error } = await supabase.from('rsvp_confirmations').delete().eq('id', id);
-    if (error) {
-      return NextResponse.json({ success: false, message: error.message }, { status: 500 });
+    if (name) {
+      let query = supabase.from('rsvp_confirmations').delete().eq('name', name);
+      if (phone) {
+        query = query.eq('phone', phone);
+      }
+      const { error } = await query;
+      if (error) {
+        console.error('Erro ao deletar RSVP por nome/telefone:', error);
+      }
     }
 
     return NextResponse.json({ success: true, message: 'Confirmação excluída com sucesso!' });
