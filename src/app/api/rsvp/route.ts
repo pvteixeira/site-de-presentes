@@ -57,8 +57,7 @@ export async function POST(req: NextRequest) {
 
     const rawPhone = String(phone || '').replace(/\D/g, '');
     const cleanEmail = String(email || '').trim().toLowerCase();
-    const allowedEmailDomains = ['@gmail.com', '@outlook.com', '@icloud.com', '@hotmail.com'];
-    const isAllowedEmail = allowedEmailDomains.some((d) => cleanEmail.endsWith(d));
+    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail);
 
     if (finalStatus === 'confirmed') {
       if (!rawPhone || rawPhone.length < 10 || rawPhone.length > 11) {
@@ -74,16 +73,10 @@ export async function POST(req: NextRequest) {
           message: 'Para confirmar presença na festa, informe o seu e-mail para receber a confirmação.' 
         }, { status: 400 });
       }
-      if (cleanEmail.length < 6 || cleanEmail.length > 80) {
+      if (cleanEmail.length < 6 || cleanEmail.length > 80 || !isValidEmail) {
         return NextResponse.json({ 
           success: false, 
-          message: 'O e-mail deve ter entre 6 e 80 caracteres.' 
-        }, { status: 400 });
-      }
-      if (!isAllowedEmail) {
-        return NextResponse.json({ 
-          success: false, 
-          message: 'E-mail não permitido. Aceitamos apenas contas @gmail.com, @outlook.com ou @icloud.com.' 
+          message: 'Por favor, informe um e-mail válido para receber a confirmação (ex: nome@email.com).' 
         }, { status: 400 });
       }
     } else {
@@ -93,19 +86,11 @@ export async function POST(req: NextRequest) {
           message: 'Telefone inválido (deve conter 10 ou 11 dígitos).' 
         }, { status: 400 });
       }
-      if (cleanEmail) {
-        if (cleanEmail.length < 6 || cleanEmail.length > 80) {
-          return NextResponse.json({ 
-            success: false, 
-            message: 'O e-mail deve ter entre 6 e 80 caracteres.' 
-          }, { status: 400 });
-        }
-        if (!isAllowedEmail) {
-          return NextResponse.json({ 
-            success: false, 
-            message: 'E-mail não permitido. Aceitamos apenas contas @gmail.com, @outlook.com ou @icloud.com.' 
-          }, { status: 400 });
-        }
+      if (cleanEmail && (!isValidEmail || cleanEmail.length < 6 || cleanEmail.length > 80)) {
+        return NextResponse.json({ 
+          success: false, 
+          message: 'Por favor, informe um e-mail válido (ex: nome@email.com).' 
+        }, { status: 400 });
       }
     }
 

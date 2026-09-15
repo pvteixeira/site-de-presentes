@@ -63,8 +63,7 @@ export default function RsvpSection() {
 
     const rawPhone = phone.replace(/\D/g, '');
     const cleanEmail = email.trim().toLowerCase();
-    const allowedEmailDomains = ['@gmail.com', '@outlook.com', '@icloud.com', '@hotmail.com'];
-    const isAllowedEmail = allowedEmailDomains.some((d) => cleanEmail.endsWith(d));
+    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail);
 
     // Regras obrigatórias para quem vai para a festa (status === 'confirmed')
     if (status === 'confirmed') {
@@ -81,12 +80,8 @@ export default function RsvpSection() {
         setErrorMessage('Para confirmar presença na festa, informe o seu e-mail para receber a confirmação.');
         return;
       }
-      if (cleanEmail.length < 6 || cleanEmail.length > 80) {
-        setErrorMessage('O e-mail deve ter entre 6 e 80 caracteres.');
-        return;
-      }
-      if (!isAllowedEmail) {
-        setErrorMessage('E-mail não aceito. Permitidos apenas provedores @gmail.com, @outlook.com ou @icloud.com.');
+      if (cleanEmail.length < 6 || cleanEmail.length > 80 || !isValidEmail) {
+        setErrorMessage('Por favor, informe um e-mail válido para receber a confirmação (ex: nome@email.com).');
         return;
       }
     } else {
@@ -95,15 +90,9 @@ export default function RsvpSection() {
         setErrorMessage('Telefone inválido. Informe o DDD e o número com 10 ou 11 dígitos.');
         return;
       }
-      if (cleanEmail) {
-        if (cleanEmail.length < 6 || cleanEmail.length > 80) {
-          setErrorMessage('O e-mail deve ter entre 6 e 80 caracteres.');
-          return;
-        }
-        if (!isAllowedEmail) {
-          setErrorMessage('E-mail não aceito. Permitidos apenas provedores @gmail.com, @outlook.com ou @icloud.com.');
-          return;
-        }
+      if (cleanEmail && (!isValidEmail || cleanEmail.length < 6 || cleanEmail.length > 80)) {
+        setErrorMessage('Por favor, informe um e-mail válido (ex: nome@email.com).');
+        return;
       }
     }
 
