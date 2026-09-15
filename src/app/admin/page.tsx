@@ -21,7 +21,9 @@ import {
   Eye,
   Download,
   CheckCircle2,
-  FileText
+  FileText,
+  Phone,
+  Mail
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -54,12 +56,24 @@ interface PixContribution {
   receiptName?: string;
 }
 
+interface RsvpItem {
+  id: string;
+  name: string;
+  email?: string;
+  phone?: string;
+  status: 'confirmed' | 'declined';
+  guest_count: number;
+  companion_names?: string;
+  notes?: string;
+  date: string;
+}
+
 const INITIAL_GUESTBOOK: GuestbookMessage[] = [];
 
 export default function AdminPage() {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState<'gifts' | 'pix' | 'padrinhos' | 'guestbook' | 'mural'>('gifts');
+  const [activeTab, setActiveTab] = useState<'gifts' | 'pix' | 'padrinhos' | 'rsvp' | 'guestbook' | 'mural'>('gifts');
   const [gifts, setGifts] = useState<Gift[]>(GIFTS_DATA);
   const [editingGift, setEditingGift] = useState<Gift | null>(null);
   const [isAdding, setIsAdding] = useState(false);
@@ -72,6 +86,9 @@ export default function AdminPage() {
   const [pixContributions, setPixContributions] = useState<PixContribution[]>([]);
   const [selectedReceipt, setSelectedReceipt] = useState<PixContribution | null>(null);
   const [padrinhosAccounts, setPadrinhosAccounts] = useState<PadrinhoAccount[]>([]);
+  const [rsvpList, setRsvpList] = useState<RsvpItem[]>([]);
+  const [rsvpFilter, setRsvpFilter] = useState<'all' | 'confirmed' | 'declined'>('all');
+  const [rsvpSearch, setRsvpSearch] = useState('');
 
   const loadAllAdminData = async () => {
     // 1. Load Gifts
@@ -134,6 +151,27 @@ export default function AdminPage() {
       }
     } catch (e) {
       console.error(e);
+    }
+
+    // 6. Load RSVP Confirmations
+    try {
+      const res = await fetch('/api/rsvp');
+      const data = await res.json();
+      if (data.success && Array.isArray(data.confirmations) && data.confirmations.length > 0) {
+        setRsvpList(data.confirmations);
+        localStorage.setItem('admin_rsvp_list', JSON.stringify(data.confirmations));
+      } else {
+        const stored = localStorage.getItem('rsvp_local_backup');
+        if (stored) {
+          setRsvpList(JSON.parse(stored));
+        }
+      }
+    } catch (e) {
+      console.error('Erro ao buscar RSVPs:', e);
+      const stored = localStorage.getItem('rsvp_local_backup');
+      if (stored) {
+        setRsvpList(JSON.parse(stored));
+      }
     }
   };
 
@@ -307,6 +345,36 @@ export default function AdminPage() {
     router.push('/admin/login');
   };
 
+  const handleDeleteRsvp = async (id: string) => {
+    if (confirm('Tem certeza que deseja excluir esta confirmação?')) {
+      const updated = rsvpList.filter((r) => r.id !== id);
+      setRsvpList(updated);
+      try {
+        await fetch(`/api/rsvp?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+        loadAllAdminData();
+      } catch (err) {
+        console.error('Erro ao excluir RSVP:', err);
+      }
+    }
+  };
+
+  const copyRsvpSummary = () => {
+    const confirmedOnly = rsvpList.filter(r => r.status === 'confirmed');
+    const totalPeople = confirmedOnly.reduce((acc, curr) => acc + (curr.guest_count || 1), 0);
+    let text = `📋 *LISTA DE PRESENÇA - CASAMENTO ALINE & KLÉCIO*\n`;
+    text += `Total de confirmações: ${confirmedOnly.length}\n`;
+    text += `Total estimado de pessoas: ${totalPeople}\n\n`;
+    confirmedOnly.forEach((r, i) => {
+      text += `${i + 1}. *${r.name}* (${r.guest_count} ${r.guest_count > 1 ? 'pessoas' : 'pessoa'})\n`;
+      if (r.companion_names) text += `   Acompanhantes: ${r.companion_names}\n`;
+      if (r.phone) text += `   Contato: ${r.phone}\n`;
+      if (r.notes) text += `   Obs: ${r.notes}\n`;
+      text += `\n`;
+    });
+    navigator.clipboard.writeText(text);
+    alert('Lista de confirmados copiada para a área de transferência!');
+  };
+
   const copyWhatsAppMessage = (name: string, username: string, pass: string, id: string) => {
     const text = `✨ *Convite Especial - Casamento Aline e Klécio* ✨\n\nOlá *${name}*!\nPreparamos a Área VIP do Nosso Cortejo em nosso site com todas as informações das vestimentas, paleta e recados especiais!\n\n🔗 Acesse em: https://site-de-presentes.vercel.app/padrinhos (ou no nosso site)\n👤 *Usuário:* ${username}\n🔑 *Senha:* ${pass}\n\nCom carinho,\nAline e Klécio 💍`;
     navigator.clipboard.writeText(text);
@@ -408,6 +476,17 @@ export default function AdminPage() {
             }`}
           >
             <Users size={18} /> Contas Padrinhos ({padrinhosAccounts.length})
+          </button>
+
+          <button
+            onClick={() => setActiveTab('rsvp')}
+            className={`pb-3 px-4 font-serif text-base md:text-lg flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
+              activeTab === 'rsvp'
+                ? 'border-black dark:border-white text-[var(--foreground)] font-semibold'
+                : 'border-transparent text-gray-500 hover:text-[var(--foreground)]'
+            }`}
+          >
+            <CheckCircle2 size={18} className="text-emerald-600 dark:text-emerald-400" /> Presenças RSVP ({rsvpList.length})
           </button>
 
           <button
@@ -623,7 +702,7 @@ export default function AdminPage() {
                       <td className="p-4">
                         <p className="font-medium font-serif text-[var(--foreground)] text-sm">{acc.name}</p>
                         <span className="inline-block px-2.5 py-0.5 text-[10px] font-semibold rounded-full bg-gray-100 dark:bg-zinc-800 text-[var(--foreground)] border border-gray-200 dark:border-zinc-700 capitalize mt-1">
-                          {acc.role === 'casal' ? 'Casal de Padrinhos' : acc.role === 'demoiselle' ? 'Demoiselle' : acc.role}
+                          {acc.role === 'casal' ? 'Casal de Padrinhos' : acc.role === 'demoiselle' ? 'Demoiselle' : acc.role === 'pais' ? 'Pais da Noiva' : acc.role}
                         </span>
                       </td>
                       <td className="p-4 font-mono text-sm text-gray-700 dark:text-gray-300">
@@ -650,6 +729,216 @@ export default function AdminPage() {
                       </td>
                     </tr>
                   ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 3: CONFIRMAÇÕES DE PRESENÇA (RSVP) */}
+        {activeTab === 'rsvp' && (
+          <div className="space-y-6">
+            {/* Header & Metrics */}
+            <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-gray-200 dark:border-zinc-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <div>
+                <h2 className="text-xl font-serif text-[var(--foreground)] font-medium flex items-center gap-2">
+                  <CheckCircle2 size={20} className="text-emerald-500" /> Confirmações de Presença (RSVP)
+                </h2>
+                <p className="text-xs text-gray-500 font-sans mt-1">
+                  Acompanhe quem confirmou presença no casamento ou informou que não poderá comparecer.
+                </p>
+              </div>
+
+              {rsvpList.length > 0 && (
+                <button
+                  onClick={copyRsvpSummary}
+                  className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer shadow-sm"
+                >
+                  <Copy size={15} /> Copiar Lista no WhatsApp
+                </button>
+              )}
+            </div>
+
+            {/* Metrics Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="bg-white dark:bg-zinc-900 p-5 rounded-2xl border border-gray-200 dark:border-zinc-800 shadow-xs">
+                <span className="text-xs uppercase tracking-wider text-gray-400 font-semibold font-sans block mb-1">
+                  Respostas Confirmadas
+                </span>
+                <p className="text-3xl font-serif font-medium text-emerald-600 dark:text-emerald-400">
+                  {rsvpList.filter(r => r.status === 'confirmed').length}
+                </p>
+                <span className="text-[11px] text-gray-500 font-sans block mt-1">
+                  famílias / convidados confirmados
+                </span>
+              </div>
+
+              <div className="bg-white dark:bg-zinc-900 p-5 rounded-2xl border border-gray-200 dark:border-zinc-800 shadow-xs">
+                <span className="text-xs uppercase tracking-wider text-gray-400 font-semibold font-sans block mb-1">
+                  Total Estimado de Pessoas
+                </span>
+                <p className="text-3xl font-serif font-medium text-[var(--foreground)]">
+                  {rsvpList.filter(r => r.status === 'confirmed').reduce((acc, curr) => acc + (curr.guest_count || 1), 0)}
+                </p>
+                <span className="text-[11px] text-gray-500 font-sans block mt-1">
+                  somando titulares e acompanhantes
+                </span>
+              </div>
+
+              <div className="bg-white dark:bg-zinc-900 p-5 rounded-2xl border border-gray-200 dark:border-zinc-800 shadow-xs">
+                <span className="text-xs uppercase tracking-wider text-gray-400 font-semibold font-sans block mb-1">
+                  Não Poderão Comparecer
+                </span>
+                <p className="text-3xl font-serif font-medium text-rose-600 dark:text-rose-400">
+                  {rsvpList.filter(r => r.status === 'declined').length}
+                </p>
+                <span className="text-[11px] text-gray-500 font-sans block mt-1">
+                  ausências comunicadas
+                </span>
+              </div>
+            </div>
+
+            {/* Filter and Search Bar */}
+            <div className="flex flex-col sm:flex-row justify-between gap-3 items-stretch sm:items-center">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setRsvpFilter('all')}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold font-sans transition-all cursor-pointer ${
+                    rsvpFilter === 'all'
+                      ? 'bg-black dark:bg-white text-white dark:text-black'
+                      : 'bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-zinc-700'
+                  }`}
+                >
+                  Todos ({rsvpList.length})
+                </button>
+                <button
+                  onClick={() => setRsvpFilter('confirmed')}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold font-sans transition-all cursor-pointer ${
+                    rsvpFilter === 'confirmed'
+                      ? 'bg-emerald-600 text-white'
+                      : 'bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-zinc-700'
+                  }`}
+                >
+                  Confirmados ({rsvpList.filter(r => r.status === 'confirmed').length})
+                </button>
+                <button
+                  onClick={() => setRsvpFilter('declined')}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold font-sans transition-all cursor-pointer ${
+                    rsvpFilter === 'declined'
+                      ? 'bg-rose-600 text-white'
+                      : 'bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-zinc-700'
+                  }`}
+                >
+                  Ausências ({rsvpList.filter(r => r.status === 'declined').length})
+                </button>
+              </div>
+
+              <input
+                type="text"
+                value={rsvpSearch}
+                onChange={(e) => setRsvpSearch(e.target.value)}
+                placeholder="Buscar por nome ou telefone..."
+                className="px-3.5 py-2 rounded-xl border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-xs font-sans text-[var(--foreground)] focus:outline-none focus:border-black dark:focus:border-white sm:w-64"
+              />
+            </div>
+
+            {/* RSVPs Table */}
+            <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-200 dark:border-zinc-800 overflow-x-auto">
+              <table className="w-full text-left border-collapse min-w-[750px]">
+                <thead>
+                  <tr className="bg-gray-50 dark:bg-zinc-800/50 border-b border-gray-200 dark:border-zinc-800">
+                    <th className="p-4 font-medium text-xs uppercase tracking-wider text-gray-500">Convidado</th>
+                    <th className="p-4 font-medium text-xs uppercase tracking-wider text-gray-500">Status</th>
+                    <th className="p-4 font-medium text-xs uppercase tracking-wider text-gray-500">Qtd. Pessoas</th>
+                    <th className="p-4 font-medium text-xs uppercase tracking-wider text-gray-500">Contato</th>
+                    <th className="p-4 font-medium text-xs uppercase tracking-wider text-gray-500">Observações / Recado</th>
+                    <th className="p-4 font-medium text-xs uppercase tracking-wider text-gray-500 text-right">Ação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rsvpList
+                    .filter(r => rsvpFilter === 'all' || r.status === rsvpFilter)
+                    .filter(r => !rsvpSearch || r.name.toLowerCase().includes(rsvpSearch.toLowerCase()) || (r.phone && r.phone.includes(rsvpSearch)))
+                    .map((item) => (
+                      <tr key={item.id} className="border-b border-gray-100 dark:border-zinc-800 hover:bg-gray-50/50 dark:hover:bg-zinc-800/20">
+                        <td className="p-4">
+                          <p className="font-medium font-serif text-[var(--foreground)] text-sm">{item.name}</p>
+                          <span className="text-[11px] text-gray-400 font-sans block">{item.date}</span>
+                        </td>
+                        <td className="p-4">
+                          {item.status === 'confirmed' ? (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+                              <CheckCircle2 size={12} /> Confirmado
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/30">
+                              <X size={12} /> Não Comparecerá
+                            </span>
+                          )}
+                        </td>
+                        <td className="p-4 font-sans text-sm">
+                          {item.status === 'confirmed' ? (
+                            <div>
+                              <span className="font-semibold text-[var(--foreground)]">
+                                {item.guest_count} {item.guest_count > 1 ? 'pessoas' : 'pessoa'}
+                              </span>
+                              {item.companion_names && (
+                                <p className="text-xs text-gray-500 mt-0.5 max-w-xs">
+                                  {item.companion_names}
+                                </p>
+                              )}
+                            </div>
+                          ) : (
+                            <span className="text-gray-400">-</span>
+                          )}
+                        </td>
+                        <td className="p-4 text-xs font-sans text-gray-700 dark:text-gray-300 space-y-1">
+                          {item.phone ? (
+                            <a
+                              href={`https://wa.me/55${item.phone.replace(/\D/g, '')}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="font-mono flex items-center gap-1.5 hover:underline text-emerald-600 dark:text-emerald-400 font-semibold"
+                            >
+                              <Phone size={12} className="shrink-0" />
+                              {item.phone}
+                            </a>
+                          ) : (
+                            <span className="text-gray-400 block text-[11px]">Tel: Não informado</span>
+                          )}
+                          {item.email ? (
+                            <a
+                              href={`mailto:${item.email}`}
+                              className="flex items-center gap-1.5 text-gray-500 hover:text-[var(--foreground)] hover:underline truncate max-w-[200px]"
+                              title={item.email}
+                            >
+                              <Mail size={12} className="shrink-0 text-gray-400" />
+                              <span className="truncate">{item.email}</span>
+                            </a>
+                          ) : null}
+                        </td>
+                        <td className="p-4 font-sans text-xs text-gray-600 dark:text-gray-300 max-w-xs">
+                          {item.notes ? item.notes : <span className="text-gray-400 italic">Sem observações</span>}
+                        </td>
+                        <td className="p-4 text-right">
+                          <button
+                            onClick={() => handleDeleteRsvp(item.id)}
+                            className="p-2 text-gray-400 hover:text-red-600 transition-colors rounded-lg hover:bg-red-50 dark:hover:bg-red-950/30 cursor-pointer"
+                            title="Excluir confirmação"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+
+                  {rsvpList.length === 0 && (
+                    <tr>
+                      <td colSpan={6} className="p-8 text-center text-sm text-gray-400 font-sans">
+                        Nenhuma confirmação de presença registrada ainda.
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>

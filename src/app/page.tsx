@@ -8,6 +8,7 @@ import WeddingDetails from "./components/WeddingDetails";
 import GuestbookSection from "./components/GuestbookSection";
 import GiftList from "./components/GiftList";
 import GallerySection from "./components/GallerySection";
+import RsvpSection from "./components/RsvpSection";
 
 export default function Home() {
   return (
@@ -82,6 +83,9 @@ export default function Home() {
       {/* 5. Local da Cerimônia e Recepção */}
       <WeddingDetails />
 
+      {/* 5.1 Confirmação de Presença (RSVP) */}
+      <RsvpSection />
+
       {/* 6. Seção Dedicada aos Padrinhos e Madrinhas */}
       <section id="cortejo" className="py-20 bg-gray-50 dark:bg-zinc-900/60 border-t border-gray-200 dark:border-zinc-800">
         <div className="max-w-4xl mx-auto px-4 text-center">
@@ -137,6 +141,7 @@ export default function Home() {
           <Link href="#os-noivos" className="hover:text-white transition-colors">Os Noivos</Link>
           <Link href="#historia" className="hover:text-white transition-colors">Nossa História</Link>
           <Link href="#o-grande-dia" className="hover:text-white transition-colors">Local</Link>
+          <Link href="#confirmar-presenca" className="hover:text-white transition-colors">Confirmar Presença</Link>
           <Link href="#mensagens-noivos" className="hover:text-white transition-colors">Mensagens</Link>
           <Link href="#lista-presentes" className="hover:text-white transition-colors">Lista de Presentes</Link>
           <Link href="#galeria" className="hover:text-white transition-colors">Galeria de Fotos</Link>
