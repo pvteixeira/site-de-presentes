@@ -37,7 +37,7 @@ export async function sendRsvpConfirmationEmail({
   const isConfirmed = status === 'confirmed';
 
   const googleCalendarUrl = 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
-    '&text=' + encodeURIComponent('Casamento Aline & Klécio 💍') +
+    '&text=' + encodeURIComponent('Casamento Aline e Klécio 💍') +
     '&dates=20270109T220000Z/20270110T070000Z' +
     '&details=' + encodeURIComponent('Cerimônia Religiosa às 19h na Igreja do Bom Jesus do Bonfim (Olinda - PE) e Recepção às 21h no Dayse Nogueira Recepções.\n\nSite: https://casamento-aline-klecio.vercel.app') +
     '&location=' + encodeURIComponent('Igreja do Bom Jesus do Bonfim, Olinda - PE');
@@ -53,7 +53,7 @@ export async function sendRsvpConfirmationEmail({
     'DTSTAMP:20260914T200000Z',
     'DTSTART:20270109T220000Z',
     'DTEND:20270110T070000Z',
-    'SUMMARY:Casamento Aline & Klécio 💍',
+    'SUMMARY:Casamento Aline e Klécio 💍',
     'DESCRIPTION:Cerimônia Religiosa às 19h na Igreja do Bom Jesus do Bonfim e Recepção às 21h no Dayse Nogueira Recepções.',
     'LOCATION:Igreja do Bom Jesus do Bonfim, Olinda - PE',
     'STATUS:CONFIRMED',
@@ -62,8 +62,8 @@ export async function sendRsvpConfirmationEmail({
   ].join('\r\n');
 
   const guestSubject = isConfirmed
-    ? `Presença Confirmada! Casamento Aline & Klécio ✨`
-    : `Agradecemos por nos responder! Casamento Aline & Klécio ✨`;
+    ? `Presença Confirmada! Casamento Aline e Klécio ✨`
+    : `Agradecemos por nos responder! Casamento Aline e Klécio ✨`;
 
   const coupleNotificationSubject = isConfirmed
     ? `🎉 Nova Presença Confirmada: ${name} (${guestCount} ${guestCount > 1 ? 'pessoas' : 'pessoa'})`
@@ -87,12 +87,12 @@ export async function sendRsvpConfirmationEmail({
           
           <!-- Top Silver Header -->
           <tr>
-            <td style="background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #1e293b 100%); padding: 36px 24px; text-align: center;">
-              <p style="margin: 0 0 6px 0; font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: #cbd5e1; font-weight: 500;">
+            <td style="background-color: #e2e8f0; background: linear-gradient(135deg, #d1d5db 0%, #f3f4f6 40%, #e5e7eb 70%, #cbd5e1 100%); padding: 36px 24px; text-align: center; border-bottom: 1px solid #cbd5e1;">
+              <p style="margin: 0 0 6px 0; font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: #475569; font-weight: 600;">
                 09 de Janeiro de 2027 • Olinda - PE
               </p>
-              <h1 style="margin: 0; font-size: 32px; font-weight: 300; letter-spacing: 1px; color: #ffffff; font-family: 'Times New Roman', Georgia, serif;">
-                Aline &amp; Klécio
+              <h1 style="margin: 0; font-size: 32px; font-weight: 400; letter-spacing: 1px; color: #0f172a; font-family: 'Times New Roman', Georgia, serif;">
+                Aline e Klécio
               </h1>
               <div style="margin: 12px auto 0; width: 60px; height: 1px; background: linear-gradient(90deg, transparent, #94a3b8, transparent);"></div>
             </td>
@@ -153,10 +153,7 @@ export async function sendRsvpConfirmationEmail({
 
               ${isConfirmed ? `
               <!-- Event Timeline & Locations -->
-              <div style="border-top: 1px solid #f1f5f9; padding-top: 24px; margin-bottom: 24px;">
-                <p style="margin: 0 0 16px 0; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #475569; text-align: center;">
-                  Informações do Grande Dia
-                </p>
+              <div style="border-top: 1px solid #f1f5f9; padding-top: 20px; margin-bottom: 24px;">
 
                 <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 12px;">
                   <tr>
@@ -210,7 +207,7 @@ export async function sendRsvpConfirmationEmail({
           <tr>
             <td style="background-color: #f8fafc; padding: 20px 24px; text-align: center; border-top: 1px solid #e2e8f0;">
               <p style="margin: 0; font-size: 12px; color: #94a3b8; font-family: 'Times New Roman', Georgia, serif;">
-                Com amor e carinho, Aline &amp; Klécio ❤️
+                Com amor e carinho, Aline e Klécio ❤️
               </p>
             </td>
           </tr>
@@ -274,11 +271,11 @@ export async function sendRsvpConfirmationEmail({
 
       if (email && email.includes('@')) {
         const info = await transporter.sendMail({
-          from: `"Aline & Klécio" <${gmailUser}>`,
+          from: `"Aline e Klécio" <${gmailUser}>`,
           to: email,
           subject: guestSubject,
           html: guestHtml,
-          text: `Olá, ${firstName}!\n\nRecebemos a sua resposta para o Casamento de Aline & Klécio.\nStatus: ${isConfirmed ? 'Presença Confirmada' : 'Não comparecerá'}\nTotal de pessoas: ${guestCount}\n\nCerimônia: Igreja do Bom Jesus do Bonfim às 19h\nRecepção: Dayse Nogueira Recepções às 21h\n\nAdicionar ao Google Agenda: ${googleCalendarUrl}\n\nCom carinho,\nAline & Klécio`,
+          text: `Olá, ${firstName}!\n\nRecebemos a sua resposta para o Casamento de Aline e Klécio.\nStatus: ${isConfirmed ? 'Presença Confirmada' : 'Não comparecerá'}\nTotal de pessoas: ${guestCount}\n\nCerimônia: Igreja do Bom Jesus do Bonfim às 19h\nRecepção: Dayse Nogueira Recepções às 21h\n\nAdicionar ao Google Agenda: ${googleCalendarUrl}\n\nCom carinho,\nAline e Klécio`,
           icalEvent: isConfirmed ? {
             filename: 'convite-casamento.ics',
             method: 'REQUEST',
@@ -311,7 +308,7 @@ export async function sendRsvpConfirmationEmail({
   // PRIORIDADE 2: Resend API
   if (resendApiKey) {
     try {
-      const fromAddress = process.env.RESEND_FROM || 'Aline & Klécio <onboarding@resend.dev>';
+      const fromAddress = process.env.RESEND_FROM || 'Aline e Klécio <onboarding@resend.dev>';
 
       // Tenta enviar para o convidado
       if (email && email.includes('@')) {
@@ -327,7 +324,7 @@ export async function sendRsvpConfirmationEmail({
             reply_to: coupleEmail,
             subject: guestSubject,
             html: guestHtml,
-            text: `Olá, ${firstName}!\n\nRecebemos a sua resposta para o Casamento de Aline & Klécio.\nStatus: ${isConfirmed ? 'Presença Confirmada' : 'Não comparecerá'}\nTotal de pessoas: ${guestCount}\n\nCerimônia: Igreja do Bom Jesus do Bonfim às 19h\nRecepção: Dayse Nogueira Recepções às 21h\n\nCom carinho,\nAline & Klécio`,
+            text: `Olá, ${firstName}!\n\nRecebemos a sua resposta para o Casamento de Aline e Klécio.\nStatus: ${isConfirmed ? 'Presença Confirmada' : 'Não comparecerá'}\nTotal de pessoas: ${guestCount}\n\nCerimônia: Igreja do Bom Jesus do Bonfim às 19h\nRecepção: Dayse Nogueira Recepções às 21h\n\nCom carinho,\nAline e Klécio`,
           }),
         });
 
