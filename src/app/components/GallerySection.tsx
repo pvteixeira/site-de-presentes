@@ -151,42 +151,24 @@ const CATEGORIES = [
   { id: 'infancia', label: 'Nossa Infância', icon: Sparkles },
 ] as const;
 
-const slideVariants = {
-  enter: (direction: number) => ({
-    x: direction > 0 ? 250 : -250,
-    opacity: 0,
-    scale: 0.95
-  }),
-  center: {
-    x: 0,
-    opacity: 1,
-    scale: 1,
-    transition: {
-      x: { type: 'spring' as const, stiffness: 320, damping: 30 },
-      opacity: { duration: 0.2 }
-    }
-  },
-  exit: (direction: number) => ({
-    x: direction > 0 ? -250 : 250,
-    opacity: 0,
-    scale: 0.95,
-    transition: {
-      x: { type: 'spring' as const, stiffness: 320, damping: 30 },
-      opacity: { duration: 0.15 }
-    }
-  })
-};
-
 export default function GallerySection() {
   const [activeCategory, setActiveCategory] = useState<'todas' | 'casal' | 'infancia'>('todas');
   const [visibleCount, setVisibleCount] = useState<number>(6);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [lightboxDirection, setLightboxDirection] = useState<number>(1);
+  const [currentLightboxIndex, setCurrentLightboxIndex] = useState<number>(0);
   const [activeMobileIndex, setActiveMobileIndex] = useState<number>(0);
 
   const carouselRef = useRef<HTMLDivElement>(null);
-  const touchStartX = useRef<number | null>(null);
-  const touchStartY = useRef<number | null>(null);
+  const lightboxScrollRef = useRef<HTMLDivElement>(null);
+
+  // Pré-carrega TODAS as imagens da galeria no cache de imagem do navegador logo ao montar
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    GALLERY_IMAGES.forEach((img) => {
+      const imageLoader = new window.Image();
+      imageLoader.src = img.src;
+    });
+  }, []);
 
   const filteredImages = activeCategory === 'todas'
     ? GALLERY_IMAGES
@@ -195,26 +177,75 @@ export default function GallerySection() {
   const displayedImages = filteredImages.slice(0, visibleCount);
   const hasMore = visibleCount < filteredImages.length;
 
-  const handlePrev = () => {
-    if (selectedIndex === null || filteredImages.length === 0) return;
-    setLightboxDirection(-1);
-    setSelectedIndex((selectedIndex - 1 + filteredImages.length) % filteredImages.length);
+  const openLightbox = (index: number) => {
+    setSelectedIndex(index);
+    setCurrentLightboxIndex(index);
   };
 
-  const handleNext = () => {
-    if (selectedIndex === null || filteredImages.length === 0) return;
-    setLightboxDirection(1);
-    setSelectedIndex((selectedIndex + 1) % filteredImages.length);
-  };
-
-  // Keyboard navigation for Lightbox modal
+  // Trava a rolagem da página quando o lightbox abre e salta diretamente para a foto clicada
   useEffect(() => {
+    if (selectedIndex !== null) {
+      document.body.style.overflow = 'hidden';
+      const timer = setTimeout(() => {
+        if (lightboxScrollRef.current) {
+          const container = lightboxScrollRef.current;
+          container.scrollTo({
+            left: selectedIndex * container.clientWidth,
+            behavior: 'instant' as ScrollBehavior,
+          });
+        }
+      }, 0);
+      return () => {
+        clearTimeout(timer);
+        document.body.style.overflow = '';
+      };
+    } else {
+      document.body.style.overflow = '';
+    }
+  }, [selectedIndex]);
+
+  // Acompanha a foto visível durante o deslizar do dedo com 0ms de atraso
+  const handleLightboxScroll = () => {
+    if (!lightboxScrollRef.current) return;
+    const container = lightboxScrollRef.current;
+    if (container.clientWidth > 0) {
+      const idx = Math.round(container.scrollLeft / container.clientWidth);
+      if (idx >= 0 && idx < filteredImages.length && idx !== currentLightboxIndex) {
+        setCurrentLightboxIndex(idx);
+      }
+    }
+  };
+
+  const handleLightboxPrev = () => {
+    if (!lightboxScrollRef.current) return;
+    const container = lightboxScrollRef.current;
+    const newIdx = Math.max(0, currentLightboxIndex - 1);
+    container.scrollTo({
+      left: newIdx * container.clientWidth,
+      behavior: 'smooth'
+    });
+    setCurrentLightboxIndex(newIdx);
+  };
+
+  const handleLightboxNext = () => {
+    if (!lightboxScrollRef.current) return;
+    const container = lightboxScrollRef.current;
+    const newIdx = Math.min(filteredImages.length - 1, currentLightboxIndex + 1);
+    container.scrollTo({
+      left: newIdx * container.clientWidth,
+      behavior: 'smooth'
+    });
+    setCurrentLightboxIndex(newIdx);
+  };
+
+  // Navegação por teclado no Lightbox
+  useEffect(() => {
+    if (selectedIndex === null) return;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (selectedIndex === null) return;
       if (e.key === 'ArrowLeft') {
-        handlePrev();
+        handleLightboxPrev();
       } else if (e.key === 'ArrowRight') {
-        handleNext();
+        handleLightboxNext();
       } else if (e.key === 'Escape') {
         setSelectedIndex(null);
       }
@@ -222,7 +253,7 @@ export default function GallerySection() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedIndex, filteredImages.length]);
+  }, [selectedIndex, currentLightboxIndex, filteredImages.length]);
 
   // Reset mobile carousel to beginning when category changes
   const handleCategoryChange = (cat: 'todas' | 'casal' | 'infancia') => {
@@ -256,31 +287,6 @@ export default function GallerySection() {
       items[clampedIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
       setActiveMobileIndex(clampedIndex);
     }
-  };
-
-  // Mobile modal touch gesture handlers
-  const handleModalTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-    touchStartY.current = e.touches[0].clientY;
-  };
-
-  const handleModalTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current === null || touchStartY.current === null) return;
-    const currentEndX = e.changedTouches[0].clientX;
-    const currentEndY = e.changedTouches[0].clientY;
-    const diffX = touchStartX.current - currentEndX;
-    const diffY = touchStartY.current - currentEndY;
-
-    // Primarily horizontal swipe with minimum threshold of 35px
-    if (Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY)) {
-      if (diffX > 0) {
-        handleNext(); // Arrasta para a esquerda -> avança para a próxima foto
-      } else {
-        handlePrev(); // Arrasta para a direita -> volta para a foto anterior
-      }
-    }
-    touchStartX.current = null;
-    touchStartY.current = null;
   };
 
   return (
@@ -368,10 +374,7 @@ export default function GallerySection() {
               <div
                 key={img.id}
                 data-carousel-item
-                onClick={() => {
-                  setSelectedIndex(index);
-                  setLightboxDirection(1);
-                }}
+                onClick={() => openLightbox(index)}
                 className="w-[82vw] max-w-[320px] snap-center shrink-0 group relative h-[360px] rounded-2xl overflow-hidden cursor-pointer border border-gray-200 dark:border-zinc-800 shadow-md bg-zinc-900 active:scale-[0.98] transition-transform"
               >
                 <Image
@@ -431,8 +434,7 @@ export default function GallerySection() {
                   transition={{ duration: 0.3 }}
                   onClick={() => {
                     const realIndex = filteredImages.findIndex(f => f.id === img.id);
-                    setSelectedIndex(realIndex !== -1 ? realIndex : index);
-                    setLightboxDirection(1);
+                    openLightbox(realIndex !== -1 ? realIndex : index);
                   }}
                   className="group relative h-[380px] md:h-[420px] rounded-2xl overflow-hidden cursor-pointer border border-gray-200 dark:border-zinc-800 shadow-md bg-zinc-900"
                 >
@@ -482,80 +484,73 @@ export default function GallerySection() {
 
       </div>
 
-      {/* 3. LIGHTBOX FULLSCREEN: Com suporte a deslizar com o dedo (touch swipe) no celular */}
+      {/* 3. LIGHTBOX FULLSCREEN: Trilho nativo com passar de dedo instantâneo no celular */}
       <AnimatePresence>
-        {selectedIndex !== null && filteredImages[selectedIndex] && (
+        {selectedIndex !== null && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onTouchStart={handleModalTouchStart}
-            onTouchEnd={handleModalTouchEnd}
-            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 select-none touch-pan-y"
+            transition={{ duration: 0.15 }}
+            className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col justify-between p-2 sm:p-4 select-none touch-pan-x"
           >
-            {/* Botão Fechar */}
-            <button
-              onClick={() => setSelectedIndex(null)}
-              className="absolute top-4 right-4 sm:top-6 sm:right-6 text-white/80 hover:text-white p-2 sm:p-2.5 rounded-full bg-white/10 backdrop-blur-md cursor-pointer z-30"
-              aria-label="Fechar"
-            >
-              <X size={20} className="sm:w-6 sm:h-6" />
-            </button>
-
-            {/* Setas de navegação */}
-            <button
-              onClick={handlePrev}
-              className="absolute left-2 sm:left-4 md:left-6 text-white/80 hover:text-white p-2 sm:p-3 rounded-full bg-white/10 backdrop-blur-md cursor-pointer z-30"
-              aria-label="Foto anterior"
-            >
-              <ChevronLeft size={22} className="sm:w-7 sm:h-7" />
-            </button>
-
-            {/* Container da Imagem com Animação Direcional e Arrastar com Dedo */}
-            <div className="w-full max-w-4xl flex flex-col items-center text-center px-8 sm:px-12 my-auto">
-              <AnimatePresence initial={false} custom={lightboxDirection} mode="wait">
-                <motion.div
-                  key={selectedIndex}
-                  custom={lightboxDirection}
-                  variants={slideVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  drag="x"
-                  dragConstraints={{ left: 0, right: 0 }}
-                  dragElastic={0.4}
-                  onDragEnd={(_, info) => {
-                    if (info.offset.x < -40 || info.velocity.x < -300) {
-                      handleNext();
-                    } else if (info.offset.x > 40 || info.velocity.x > 300) {
-                      handlePrev();
-                    }
-                  }}
-                  className="relative w-full h-[65vh] sm:h-[75vh] md:h-[80vh] flex items-center justify-center cursor-grab active:cursor-grabbing touch-pan-y"
-                >
-                  <Image
-                    src={filteredImages[selectedIndex].src}
-                    alt={`Foto ${filteredImages[selectedIndex].id}`}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 1200px"
-                    quality={90}
-                    priority
-                    className="object-contain rounded-xl shadow-2xl pointer-events-none select-none"
-                  />
-                </motion.div>
-              </AnimatePresence>
-              <p className="text-gray-400 font-mono text-xs mt-3">
-                {selectedIndex + 1} de {filteredImages.length}
-              </p>
+            {/* Top Bar: Contador e Fechar */}
+            <div className="w-full flex items-center justify-between px-3 py-2 z-30">
+              <span className="text-white/90 font-mono text-xs sm:text-sm bg-white/10 px-3 py-1.5 rounded-full backdrop-blur-md">
+                {currentLightboxIndex + 1} de {filteredImages.length}
+              </span>
+              <button
+                onClick={() => setSelectedIndex(null)}
+                className="text-white/80 hover:text-white p-2.5 rounded-full bg-white/10 backdrop-blur-md cursor-pointer active:scale-95 transition-transform"
+                aria-label="Fechar"
+              >
+                <X size={22} />
+              </button>
             </div>
 
-            <button
-              onClick={handleNext}
-              className="absolute right-2 sm:right-4 md:right-6 text-white/80 hover:text-white p-2 sm:p-3 rounded-full bg-white/10 backdrop-blur-md cursor-pointer z-30"
-              aria-label="Próxima foto"
+            {/* Setas de navegação desktop */}
+            {currentLightboxIndex > 0 && (
+              <button
+                onClick={handleLightboxPrev}
+                className="hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white p-3 rounded-full bg-white/10 backdrop-blur-md cursor-pointer z-30 active:scale-95 transition-transform"
+                aria-label="Foto anterior"
+              >
+                <ChevronLeft size={26} />
+              </button>
+            )}
+
+            {currentLightboxIndex < filteredImages.length - 1 && (
+              <button
+                onClick={handleLightboxNext}
+                className="hidden sm:flex absolute right-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white p-3 rounded-full bg-white/10 backdrop-blur-md cursor-pointer z-30 active:scale-95 transition-transform"
+                aria-label="Próxima foto"
+              >
+                <ChevronRight size={26} />
+              </button>
+            )}
+
+            {/* Trilho Deslizável Nativo: 100% Fluido a 120 FPS no Celular */}
+            <div
+              ref={lightboxScrollRef}
+              onScroll={handleLightboxScroll}
+              className="w-full h-[84vh] sm:h-[86vh] flex overflow-x-auto snap-x snap-mandatory hide-scrollbar touch-pan-x my-auto"
+              style={{ scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }}
             >
-              <ChevronRight size={22} className="sm:w-7 sm:h-7" />
-            </button>
+              {filteredImages.map((img) => (
+                <div
+                  key={img.id}
+                  className="w-full h-full shrink-0 snap-center flex items-center justify-center p-2 sm:p-4 select-none"
+                >
+                  <img
+                    src={img.src}
+                    alt={`Foto ${img.id}`}
+                    className="max-w-full max-h-full w-auto h-auto object-contain rounded-2xl shadow-2xl pointer-events-none select-none"
+                    loading="eager"
+                    decoding="async"
+                  />
+                </div>
+              ))}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

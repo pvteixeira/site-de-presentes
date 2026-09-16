@@ -3,19 +3,15 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  CheckCircle2, 
-  XCircle, 
   User, 
   Phone, 
-  Users, 
-  Heart, 
-  Sparkles, 
   Calendar, 
   Send, 
   Check, 
-  MessageSquare,
   AlertCircle,
-  Mail
+  Mail,
+  CheckCircle2,
+  XCircle
 } from 'lucide-react';
 
 export default function RsvpSection() {
@@ -23,15 +19,9 @@ export default function RsvpSection() {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [status, setStatus] = useState<'confirmed' | 'declined'>('confirmed');
-  const [companionCount, setCompanionCount] = useState<0 | 1 | 2>(0);
-  const [companion1, setCompanion1] = useState('');
-  const [companion2, setCompanion2] = useState('');
-  const [notes, setNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-
-  const guestCount = companionCount + 1;
 
   // Format Brazilian phone mask on the fly
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,29 +55,19 @@ export default function RsvpSection() {
     const cleanEmail = email.trim().toLowerCase();
     const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail);
 
-    // Regras obrigatórias para quem vai para a festa (status === 'confirmed')
     if (status === 'confirmed') {
-      if (!rawPhone) {
-        setErrorMessage('Para confirmar presença na festa, informe o seu número de WhatsApp / Telefone.');
-        return;
-      }
-      if (rawPhone.length < 10 || rawPhone.length > 11) {
-        setErrorMessage('Telefone inválido. Informe o DDD e o número com 10 ou 11 dígitos (ex: (81) 98888-7777).');
+      if (!rawPhone || rawPhone.length < 10 || rawPhone.length > 11) {
+        setErrorMessage('Por favor, informe seu WhatsApp / Telefone com DDD (10 ou 11 dígitos).');
         return;
       }
 
-      if (!cleanEmail) {
-        setErrorMessage('Para confirmar presença na festa, informe o seu e-mail para receber a confirmação.');
-        return;
-      }
-      if (cleanEmail.length < 6 || cleanEmail.length > 80 || !isValidEmail) {
+      if (!cleanEmail || cleanEmail.length < 6 || cleanEmail.length > 80 || !isValidEmail) {
         setErrorMessage('Por favor, informe um e-mail válido para receber a confirmação (ex: nome@email.com).');
         return;
       }
     } else {
-      // Se não for à festa, mas informou telefone ou e-mail, valida os formatos
       if (rawPhone && (rawPhone.length < 10 || rawPhone.length > 11)) {
-        setErrorMessage('Telefone inválido. Informe o DDD e o número com 10 ou 11 dígitos.');
+        setErrorMessage('Telefone inválido (deve conter 10 ou 11 dígitos com DDD).');
         return;
       }
       if (cleanEmail && (!isValidEmail || cleanEmail.length < 6 || cleanEmail.length > 80)) {
@@ -96,34 +76,8 @@ export default function RsvpSection() {
       }
     }
 
-    if (status === 'confirmed') {
-      if (companionCount === 1 && !companion1.trim()) {
-        setErrorMessage('Por favor, informe o nome completo do seu acompanhante.');
-        return;
-      }
-      if (companionCount === 2) {
-        if (!companion1.trim()) {
-          setErrorMessage('Por favor, informe o nome completo do 1º acompanhante.');
-          return;
-        }
-        if (!companion2.trim()) {
-          setErrorMessage('Por favor, informe o nome completo do 2º acompanhante.');
-          return;
-        }
-      }
-    }
-
     setErrorMessage('');
     setIsSubmitting(true);
-
-    const finalCompanionNames =
-      status === 'confirmed'
-        ? companionCount === 1
-          ? companion1.trim()
-          : companionCount === 2
-          ? `${companion1.trim()} e ${companion2.trim()}`
-          : ''
-        : '';
 
     try {
       const payload = {
@@ -131,9 +85,9 @@ export default function RsvpSection() {
         email: cleanEmail,
         phone: rawPhone ? phone.trim() : '',
         status,
-        guestCount: status === 'confirmed' ? guestCount : 0,
-        companionNames: finalCompanionNames,
-        notes: notes.trim(),
+        guestCount: status === 'confirmed' ? 1 : 0,
+        companionNames: '',
+        notes: '',
       };
 
       const res = await fetch('/api/rsvp', {
@@ -153,9 +107,9 @@ export default function RsvpSection() {
           email: cleanEmail,
           phone: rawPhone ? phone.trim() : '',
           status,
-          guest_count: status === 'confirmed' ? guestCount : 0,
-          companion_names: finalCompanionNames,
-          notes: notes.trim(),
+          guest_count: status === 'confirmed' ? 1 : 0,
+          companion_names: '',
+          notes: '',
           date: new Date().toLocaleDateString('pt-BR'),
           created_at: new Date().toISOString(),
           ...(data?.data || {}),
@@ -176,9 +130,9 @@ export default function RsvpSection() {
         name,
         phone,
         status,
-        guest_count: status === 'confirmed' ? guestCount : 0,
-        companion_names: finalCompanionNames,
-        notes,
+        guest_count: status === 'confirmed' ? 1 : 0,
+        companion_names: '',
+        notes: '',
         date: new Date().toLocaleDateString('pt-BR'),
       });
       localStorage.setItem('rsvp_local_backup', JSON.stringify(localList));
@@ -193,10 +147,6 @@ export default function RsvpSection() {
     setEmail('');
     setPhone('');
     setStatus('confirmed');
-    setCompanionCount(0);
-    setCompanion1('');
-    setCompanion2('');
-    setNotes('');
     setSubmitted(false);
     setErrorMessage('');
   };
@@ -207,27 +157,13 @@ export default function RsvpSection() {
       {/* Decorative background silver glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-slate-300/20 dark:bg-slate-500/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
 
-      <div className="max-w-4xl mx-auto px-4 text-center space-y-10">
+      <div className="max-w-4xl mx-auto px-4 text-center space-y-8">
         
         {/* Section Header */}
         <div className="space-y-4">
-          <span className="font-signature text-3xl md:text-4xl text-gray-500 dark:text-gray-400 block font-normal">
-            Esperamos por você
-          </span>
-
           <h2 className="text-3xl md:text-5xl font-serif text-[var(--foreground)] font-medium tracking-tight">
             Confirmação de Presença
           </h2>
-
-          <div className="flex items-center justify-center gap-3 py-1">
-            <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
-            <Calendar className="w-5 h-5 text-gray-400 dark:text-zinc-500" />
-            <div className="w-16 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
-          </div>
-
-          <p className="text-base md:text-lg text-[var(--foreground)]/80 font-sans max-w-xl mx-auto leading-relaxed text-justified-elegant text-center">
-            Sua presença tornará o nosso grande dia ainda mais inesquecível! Por favor, confirme a sua presença até <strong>09 de dezembro de 2026</strong> para que possamos organizar tudo com muito carinho.
-          </p>
         </div>
 
         {/* Form Container */}
@@ -245,67 +181,57 @@ export default function RsvpSection() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onSubmit={handleSubmit}
-                className="space-y-6"
+                className="space-y-5"
               >
-                {/* 1. Escolha de Status (Presença confirmada vs Ausência) */}
+                {/* 1. Escolha de Status: Sim ou Não */}
                 <div className="space-y-2">
                   <label className="block text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 font-semibold font-sans">
                     Você comparecerá ao casamento? <span className="text-red-500">*</span>
                   </label>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-2 gap-3">
                     {/* Botão: Sim */}
                     <button
                       type="button"
                       onClick={() => setStatus('confirmed')}
-                      className={`p-4 rounded-2xl border transition-all text-left flex items-start gap-3 cursor-pointer ${
+                      className={`p-3.5 rounded-2xl border transition-all text-left flex items-center gap-3 cursor-pointer ${
                         status === 'confirmed'
                           ? 'border-slate-400 dark:border-zinc-500 bg-slate-200/90 hover:bg-slate-300/80 dark:bg-zinc-800 text-slate-900 dark:text-slate-100 ring-1 ring-slate-400 dark:ring-zinc-500 shadow-sm'
                           : 'border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-800/40 text-gray-600 dark:text-gray-300 hover:border-gray-300 dark:hover:border-zinc-600'
                       }`}
                     >
-                      <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 mt-0.5 ${
+                      <div className={`w-7 h-7 rounded-xl flex items-center justify-center shrink-0 ${
                         status === 'confirmed'
                           ? 'bg-slate-300 dark:bg-zinc-700 text-slate-900 dark:text-slate-100 border border-slate-400/50 shadow-xs'
                           : 'bg-gray-200 dark:bg-zinc-700 text-gray-500 dark:text-gray-400'
                       }`}>
-                        <CheckCircle2 size={18} />
+                        <CheckCircle2 size={16} />
                       </div>
-                      <div>
-                        <span className="font-serif font-semibold text-base block leading-snug">
-                          Sim, com certeza!
-                        </span>
-                        <span className="text-xs text-slate-600 dark:text-slate-400 block mt-0.5 font-sans">
-                          Estarei presente para celebrar
-                        </span>
-                      </div>
+                      <span className="font-serif font-semibold text-base">
+                        Sim
+                      </span>
                     </button>
 
-                    {/* Botão: Não poderei */}
+                    {/* Botão: Não */}
                     <button
                       type="button"
                       onClick={() => setStatus('declined')}
-                      className={`p-4 rounded-2xl border transition-all text-left flex items-start gap-3 cursor-pointer ${
+                      className={`p-3.5 rounded-2xl border transition-all text-left flex items-center gap-3 cursor-pointer ${
                         status === 'declined'
                           ? 'border-slate-400 dark:border-zinc-500 bg-slate-200/90 hover:bg-slate-300/80 dark:bg-zinc-800 text-slate-900 dark:text-slate-100 ring-1 ring-slate-400 dark:ring-zinc-500 shadow-sm'
                           : 'border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-800/40 text-gray-600 dark:text-gray-300 hover:border-gray-300 dark:hover:border-zinc-600'
                       }`}
                     >
-                      <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 mt-0.5 ${
+                      <div className={`w-7 h-7 rounded-xl flex items-center justify-center shrink-0 ${
                         status === 'declined'
                           ? 'bg-slate-300 dark:bg-zinc-700 text-slate-900 dark:text-slate-100 border border-slate-400/50 shadow-xs'
                           : 'bg-gray-200 dark:bg-zinc-700 text-gray-500 dark:text-gray-400'
                       }`}>
-                        <XCircle size={18} />
+                        <XCircle size={16} />
                       </div>
-                      <div>
-                        <span className="font-serif font-semibold text-base block leading-snug">
-                          Não poderei ir
-                        </span>
-                        <span className="text-xs text-slate-600 dark:text-slate-400 block mt-0.5 font-sans">
-                          Infelizmente não poderei comparecer
-                        </span>
-                      </div>
+                      <span className="font-serif font-semibold text-base">
+                        Não
+                      </span>
                     </button>
                   </div>
                 </div>
@@ -338,6 +264,7 @@ export default function RsvpSection() {
                     <Phone size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input
                       type="tel"
+                      required={status === 'confirmed'}
                       maxLength={15}
                       value={phone}
                       onChange={handlePhoneChange}
@@ -356,168 +283,12 @@ export default function RsvpSection() {
                     <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input
                       type="email"
+                      required={status === 'confirmed'}
                       maxLength={80}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="seunome@gmail.com"
                       className="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-800/40 text-[var(--foreground)] text-sm focus:outline-none focus:border-black dark:focus:border-white focus:bg-white dark:focus:bg-zinc-850 transition-all font-sans"
-                    />
-                  </div>
-                </div>
-
-                {/* Se Confirmado: Pergunta direta de Acompanhantes */}
-                {status === 'confirmed' && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="space-y-5 pt-1"
-                  >
-                    {/* Pergunta clara */}
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <label className="block text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 font-semibold font-sans">
-                          Você levará acompanhante?
-                        </label>
-                        <span className="text-xs text-slate-500 dark:text-zinc-400 font-sans">
-                          Máx. 2 acompanhantes
-                        </span>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                        {/* Opção: Não (apenas eu) */}
-                        <button
-                          type="button"
-                          onClick={() => setCompanionCount(0)}
-                          className={`p-3.5 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5 ${
-                            companionCount === 0
-                              ? 'bg-slate-200 hover:bg-slate-300 dark:bg-zinc-700 text-slate-900 dark:text-white border-slate-400 dark:border-zinc-500 shadow-sm ring-1 ring-slate-400/60 font-semibold'
-                              : 'bg-slate-50/80 hover:bg-slate-100 dark:bg-zinc-800/60 border-slate-200 dark:border-zinc-750 text-slate-600 dark:text-slate-400'
-                          }`}
-                        >
-                          <span className="text-sm font-semibold">Não (apenas eu)</span>
-                          <span className="text-[11px] text-slate-500 dark:text-slate-400 font-normal">Vou sozinho(a)</span>
-                        </button>
-
-                        {/* Opção: 1 acompanhante */}
-                        <button
-                          type="button"
-                          onClick={() => setCompanionCount(1)}
-                          className={`p-3.5 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5 ${
-                            companionCount === 1
-                              ? 'bg-slate-200 hover:bg-slate-300 dark:bg-zinc-700 text-slate-900 dark:text-white border-slate-400 dark:border-zinc-500 shadow-sm ring-1 ring-slate-400/60 font-semibold'
-                              : 'bg-slate-50/80 hover:bg-slate-100 dark:bg-zinc-800/60 border-slate-200 dark:border-zinc-750 text-slate-600 dark:text-slate-400'
-                          }`}
-                        >
-                          <span className="text-sm font-semibold">Sim, 1 pessoa</span>
-                          <span className="text-[11px] text-slate-500 dark:text-slate-400 font-normal">Você + 1 acompanhante</span>
-                        </button>
-
-                        {/* Opção: 2 acompanhantes */}
-                        <button
-                          type="button"
-                          onClick={() => setCompanionCount(2)}
-                          className={`p-3.5 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5 ${
-                            companionCount === 2
-                              ? 'bg-slate-200 hover:bg-slate-300 dark:bg-zinc-700 text-slate-900 dark:text-white border-slate-400 dark:border-zinc-500 shadow-sm ring-1 ring-slate-400/60 font-semibold'
-                              : 'bg-slate-50/80 hover:bg-slate-100 dark:bg-zinc-800/60 border-slate-200 dark:border-zinc-750 text-slate-600 dark:text-slate-400'
-                          }`}
-                        >
-                          <span className="text-sm font-semibold">Sim, 2 pessoas</span>
-                          <span className="text-[11px] text-slate-500 dark:text-slate-400 font-normal">Você + 2 acompanhantes</span>
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Campo quando 1 acompanhante */}
-                    {companionCount === 1 && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -5 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="space-y-1.5"
-                      >
-                        <label className="block text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 font-semibold font-sans">
-                          Nome Completo do Acompanhante <span className="text-red-500">*</span>
-                        </label>
-                        <div className="relative">
-                          <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-                          <input
-                            type="text"
-                            required
-                            maxLength={80}
-                            value={companion1}
-                            onChange={(e) => setCompanion1(e.target.value)}
-                            placeholder="Ex: Maria da Silva"
-                            className="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-800/40 text-[var(--foreground)] text-sm focus:outline-none focus:border-slate-400 dark:focus:border-zinc-400 focus:bg-white dark:focus:bg-zinc-850 transition-all font-sans"
-                          />
-                        </div>
-                      </motion.div>
-                    )}
-
-                    {companionCount === 2 && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -5 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="space-y-3"
-                      >
-                        <div className="space-y-1.5">
-                          <label className="block text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 font-semibold font-sans">
-                            Nome do 1º Acompanhante <span className="text-red-500">*</span>
-                          </label>
-                          <div className="relative">
-                            <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-                            <input
-                              type="text"
-                              required
-                              maxLength={80}
-                              value={companion1}
-                              onChange={(e) => setCompanion1(e.target.value)}
-                              placeholder="Ex: Maria da Silva"
-                              className="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-800/40 text-[var(--foreground)] text-sm focus:outline-none focus:border-slate-400 dark:focus:border-zinc-400 focus:bg-white dark:focus:bg-zinc-850 transition-all font-sans"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="space-y-1.5">
-                          <label className="block text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 font-semibold font-sans">
-                            Nome do 2º Acompanhante <span className="text-red-500">*</span>
-                          </label>
-                          <div className="relative">
-                            <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-                            <input
-                              type="text"
-                              required
-                              maxLength={80}
-                              value={companion2}
-                              onChange={(e) => setCompanion2(e.target.value)}
-                              placeholder="Ex: João da Silva"
-                              className="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-800/40 text-[var(--foreground)] text-sm focus:outline-none focus:border-slate-400 dark:focus:border-zinc-400 focus:bg-white dark:focus:bg-zinc-850 transition-all font-sans"
-                            />
-                          </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </motion.div>
-                )}
-
-                {/* 4. Observações ou Recado */}
-                <div className="space-y-1.5">
-                  <label className="block text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 font-semibold font-sans">
-                    {status === 'confirmed' ? 'Observações ou Restrições Alimentares (Opcional)' : 'Deixe uma mensagem para os noivos (Opcional)'}
-                  </label>
-                  <div className="relative">
-                    <MessageSquare size={18} className="absolute left-4 top-3.5 text-gray-400" />
-                    <textarea
-                      rows={3}
-                      maxLength={500}
-                      value={notes}
-                      onChange={(e) => setNotes(e.target.value)}
-                      placeholder={
-                        status === 'confirmed'
-                          ? 'Ex: Sou vegetariano(a), tenho alergia a frutos do mar, ou deixe uma mensagem de carinho...'
-                          : 'Deixe um recado com seus votos de felicidade para o casal...'
-                      }
-                      className="w-full pl-11 pr-4 py-3 rounded-2xl border border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-800/40 text-[var(--foreground)] text-sm focus:outline-none focus:border-black dark:focus:border-white focus:bg-white dark:focus:bg-zinc-850 transition-all font-sans resize-none"
                     />
                   </div>
                 </div>
@@ -539,7 +310,7 @@ export default function RsvpSection() {
                   {isSubmitting ? (
                     <>
                       <div className="w-5 h-5 border-2 border-slate-700 dark:border-slate-300 border-t-transparent rounded-full animate-spin"></div>
-                      <span>Enviando confirmação...</span>
+                      <span>Enviando...</span>
                     </>
                   ) : (
                     <>
@@ -572,7 +343,7 @@ export default function RsvpSection() {
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-gray-300 font-sans leading-relaxed">
                     {status === 'confirmed'
-                      ? `Sua confirmação para ${guestCount} ${guestCount > 1 ? 'pessoas' : 'pessoa'} foi registrada com sucesso. Mal podemos esperar para celebrar esse momento com você!`
+                      ? 'Sua presença foi confirmada com sucesso. Mal podemos esperar para celebrar esse momento inesquecível com você!'
                       : 'Sentiremos sua falta no grande dia, mas agradecemos de coração pelo carinho e pela resposta!'}
                   </p>
                   {email && (
@@ -600,7 +371,7 @@ export default function RsvpSection() {
                     onClick={handleReset}
                     className="w-full sm:w-auto px-5 py-3 rounded-xl border border-slate-300 dark:border-zinc-700 bg-white hover:bg-slate-100 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-700 dark:text-slate-200 text-xs font-sans font-medium transition-colors cursor-pointer"
                   >
-                    Enviar Outra Resposta
+                    {status === 'confirmed' ? 'Enviar Outra Confirmação' : 'Enviar Outra Resposta'}
                   </button>
                 </div>
               </motion.div>

@@ -16,9 +16,9 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Os Noivos', href: '#os-noivos' },
   { label: 'História', href: '#historia' },
   { label: 'Local', href: '#o-grande-dia' },
-  { label: 'Confirmar Presença', href: '#confirmar-presenca' },
   { label: 'Mensagens', href: '#mensagens-noivos' },
   { label: 'Lista de Presentes', href: '#lista-presentes' },
+  { label: 'Confirmar Presença', href: '#confirmar-presenca' },
   { label: 'Galeria', href: '#galeria' },
 ];
 
