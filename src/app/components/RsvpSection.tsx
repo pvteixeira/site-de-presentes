@@ -341,11 +341,11 @@ export default function RsvpSection() {
                       ? `Muito obrigado, ${name.split(' ')[0]}!`
                       : `Agradecemos por nos avisar, ${name.split(' ')[0]}!`}
                   </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 font-sans leading-relaxed">
-                    {status === 'confirmed'
-                      ? 'Sua presença foi confirmada com sucesso. Mal podemos esperar para celebrar esse momento inesquecível com você!'
-                      : 'Sentiremos sua falta no grande dia, mas agradecemos de coração pelo carinho e pela resposta!'}
-                  </p>
+                  {status !== 'confirmed' && (
+                    <p className="text-sm text-gray-600 dark:text-gray-300 font-sans leading-relaxed">
+                      Sentiremos sua falta no grande dia, mas agradecemos de coração pelo carinho e pela resposta!
+                    </p>
+                  )}
                   {email && (
                     <p className="text-xs text-gray-500 dark:text-gray-400 font-sans inline-flex items-center gap-1.5 justify-center pt-1">
                       <Mail size={13} className="shrink-0 text-slate-400" />
