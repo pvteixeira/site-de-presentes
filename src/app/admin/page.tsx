@@ -210,7 +210,8 @@ export default function AdminPage() {
   // Supabase Realtime para atualizar comprovantes e presentes em tempo real na tela do ADM
   useEffect(() => {
     if (supabase && isAuthenticated) {
-      const channel = supabase
+      const client = supabase;
+      const channel = client
         .channel('realtime_pix_admin_channel')
         .on(
           'postgres_changes',
@@ -222,7 +223,7 @@ export default function AdminPage() {
         .subscribe();
 
       return () => {
-        supabase.removeChannel(channel);
+        client.removeChannel(channel);
       };
     }
   }, [isAuthenticated]);
