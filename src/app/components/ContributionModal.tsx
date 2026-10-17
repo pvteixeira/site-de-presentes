@@ -24,6 +24,7 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
   // Form state
   const [guestName, setGuestName] = useState('');
   const [receiptFile, setReceiptFile] = useState<File | null>(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
   if (!gift) return null;
 
@@ -59,62 +60,81 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
   };
 
   const handleGoToForm = () => {
+    setErrorMessage('');
     setStep('form');
   };
 
   const handleSubmitForm = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!guestName.trim() || isSending) return;
+    if (isSending) return;
 
+    const cleanName = guestName.trim();
+    if (!cleanName || cleanName.length < 2) {
+      setErrorMessage('Por favor, informe seu nome completo.');
+      return;
+    }
+
+    if (!receiptFile) {
+      setErrorMessage('Por favor, anexe a foto ou print do seu comprovante PIX.');
+      return;
+    }
+
+    setErrorMessage('');
     setIsSending(true);
 
     try {
-      let receiptDataUrl = '';
-      if (receiptFile) {
-        // Comprime a imagem de forma inteligente para ~120KB mantendo texto 100% nítido
-        receiptDataUrl = await compressReceiptImage(receiptFile, 1200, 0.75);
-      }
+      // Comprime a imagem de forma inteligente para ~35KB-60KB mantendo texto 100% legível
+      const receiptDataUrl = await compressReceiptImage(receiptFile, 900, 0.65);
 
       const newContrib = {
         id: Date.now().toString(),
         giftId: gift.id,
         giftName: gift.name,
-        guestName: guestName.trim(),
+        guestName: cleanName,
         amount: gift.totalAmount,
         date: new Date().toLocaleString('pt-BR'),
         receiptUrl: receiptDataUrl,
-        receiptName: receiptFile?.name || 'Comprovante_PIX.png'
+        receiptName: receiptFile.name || 'Comprovante_PIX.png'
       };
 
-      // 1. Gravar localmente como fallback
+      // 1. Gravar localmente como backup
       try {
         const stored = JSON.parse(localStorage.getItem('pix_contributions') || '[]');
         localStorage.setItem('pix_contributions', JSON.stringify([newContrib, ...stored]));
       } catch (err) {
-        console.error(err);
+        console.warn('Backup local não pôde ser salvo:', err);
       }
 
       // 2. Gravar no servidor / Supabase
+      const res = await fetch('/api/pix', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          giftId: gift.id,
+          giftName: gift.name,
+          guestName: cleanName,
+          amount: gift.totalAmount,
+          receiptUrl: receiptDataUrl,
+          receiptName: receiptFile.name || 'Comprovante_PIX.png'
+        })
+      });
+
+      let resData: any = null;
       try {
-        await fetch('/api/pix', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            giftId: gift.id,
-            giftName: gift.name,
-            guestName: guestName.trim(),
-            amount: gift.totalAmount,
-            receiptUrl: receiptDataUrl,
-            receiptName: receiptFile?.name || 'Comprovante_PIX.png'
-          })
-        });
-      } catch (err) {
-        console.error('Erro ao enviar comprovante para o servidor:', err);
+        resData = await res.json();
+      } catch (_) {}
+
+      if (!res.ok || !resData?.success) {
+        throw new Error(
+          resData?.message || 
+          'O servidor não conseguiu salvar seu comprovante. Verifique o arquivo (dê preferência a uma captura de tela) e tente novamente.'
+        );
       }
 
       setStep('success');
-    } catch (error) {
-      console.error('Erro ao processar formulário:', error);
+    } catch (error: any) {
+      console.error('Erro ao processar comprovante:', error);
+      setErrorMessage(error?.message || 'Ocorreu um erro ao enviar seu comprovante. Por favor, tente novamente.');
     } finally {
       setIsSending(false);
     }
@@ -297,21 +317,32 @@ export default function ContributionModal({ gift, onClose, onSuccess }: Contribu
                       type="file" 
                       className="hidden" 
                       accept="image/*,.pdf"
-                      required
-                      onChange={(e) => setReceiptFile(e.target.files?.[0] || null)}
+                      onChange={(e) => {
+                        setErrorMessage('');
+                        setReceiptFile(e.target.files?.[0] || null);
+                      }}
                     />
                   </label>
                   {receiptFile && (
-                    <p className="mt-2 text-xs text-green-600 dark:text-green-400 font-medium truncate">
-                      ✓ Selecionado: {receiptFile.name}
-                    </p>
+                    <div className="mt-2 flex items-center justify-between text-xs text-green-600 dark:text-green-400 font-medium">
+                      <span className="truncate">✓ {receiptFile.name}</span>
+                      <span className="font-mono text-[11px] text-gray-500 shrink-0 ml-2">
+                        ({(receiptFile.size / 1024).toFixed(0)} KB)
+                      </span>
+                    </div>
                   )}
                 </div>
+
+                {errorMessage && (
+                  <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/50 rounded-xl text-red-600 dark:text-red-400 text-xs font-sans leading-relaxed">
+                    ⚠️ {errorMessage}
+                  </div>
+                )}
 
                 <button
                   type="submit"
                   disabled={isSending}
-                  className="w-full py-3.5 mt-4 bg-black dark:bg-white text-white dark:text-black rounded-xl font-semibold uppercase tracking-wider text-xs hover:opacity-90 disabled:opacity-50 transition-colors border border-gray-800 dark:border-gray-200 cursor-pointer flex items-center justify-center gap-2"
+                  className="w-full py-3.5 mt-2 bg-black dark:bg-white text-white dark:text-black rounded-xl font-semibold uppercase tracking-wider text-xs hover:opacity-90 disabled:opacity-50 transition-colors border border-gray-800 dark:border-gray-200 cursor-pointer flex items-center justify-center gap-2"
                 >
                   {isSending ? (
                     <>

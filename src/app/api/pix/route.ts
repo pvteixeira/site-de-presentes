@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSupabase } from '@/lib/supabase';
+import { sendPixNotificationEmail } from '@/lib/email';
 
 export async function GET() {
   try {
@@ -39,10 +40,13 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { giftId, giftName, guestName, amount, receiptUrl, receiptName } = body;
+    const { giftId, giftName, guestName, amount, receiptUrl, receiptName, isManual } = body;
 
-    if (!giftId || !guestName || !amount) {
-      return NextResponse.json({ success: false, message: 'Dados incompletos para envio de PIX.' }, { status: 400 });
+    const cleanGuestName = String(guestName || '').trim();
+    const numAmount = Number(amount);
+
+    if (!giftId || !cleanGuestName || isNaN(numAmount) || numAmount <= 0) {
+      return NextResponse.json({ success: false, message: 'Dados incompletos para envio de PIX (informe o presente, seu nome e valor).' }, { status: 400 });
     }
 
     const supabase = getSupabase();
@@ -50,15 +54,24 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, message: 'Banco de dados não configurado.' }, { status: 503 });
     }
 
+    const currentDateStr = new Date().toLocaleString('pt-BR', {
+      timeZone: 'America/Sao_Paulo',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+
     const newContrib = {
-      id: Date.now().toString(),
+      id: 'pix-' + Date.now().toString() + '-' + Math.random().toString(36).substring(2, 6),
       gift_id: String(giftId),
       gift_name: String(giftName || 'Presente Especial'),
-      guest_name: String(guestName).trim(),
-      amount: Number(amount),
-      date: new Date().toLocaleString('pt-BR'),
+      guest_name: cleanGuestName,
+      amount: numAmount,
+      date: currentDateStr,
       receipt_url: receiptUrl || null,
-      receipt_name: receiptName || 'Comprovante_PIX.png',
+      receipt_name: receiptName || (isManual ? 'Registro Manual' : 'Comprovante_PIX.png'),
       created_at: new Date().toISOString()
     };
 
@@ -70,7 +83,7 @@ export async function POST(req: NextRequest) {
       .single();
 
     if (contribError) {
-      console.error('Erro ao registrar comprovante:', contribError);
+      console.error('Erro ao registrar comprovante no Supabase:', contribError);
       return NextResponse.json({ success: false, message: contribError.message }, { status: 500 });
     }
 
@@ -82,11 +95,27 @@ export async function POST(req: NextRequest) {
       .single();
 
     if (giftData) {
-      const updatedAmount = Number(giftData.current_amount || 0) + Number(amount);
+      const updatedAmount = Number(giftData.current_amount || 0) + numAmount;
       await supabase
         .from('gifts')
         .update({ current_amount: updatedAmount })
         .eq('id', String(giftId));
+    }
+
+    // 3. Disparar notificação por e-mail para os noivos (sem travar a resposta)
+    if (!isManual) {
+      try {
+        sendPixNotificationEmail({
+          guestName: cleanGuestName,
+          giftName: String(giftName || 'Presente Especial'),
+          amount: numAmount,
+          date: currentDateStr,
+          receiptName: receiptName || 'Comprovante_PIX.png',
+          receiptUrl: receiptUrl || null
+        }).catch((err) => console.error('[EMAIL] Erro no envio assíncrono do aviso de PIX:', err));
+      } catch (emailErr) {
+        console.error('[EMAIL] Erro não impeditivo ao disparar aviso aos noivos:', emailErr);
+      }
     }
 
     return NextResponse.json({

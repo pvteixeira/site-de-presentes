@@ -374,3 +374,93 @@ export async function sendRsvpConfirmationEmail({
 
   return { success: false, message: 'Nenhum serviço de envio configurado com sucesso.' };
 }
+
+export interface SendPixEmailParams {
+  guestName: string;
+  giftName: string;
+  amount: number;
+  date: string;
+  receiptName?: string;
+  receiptUrl?: string | null;
+}
+
+export async function sendPixNotificationEmail({
+  guestName,
+  giftName,
+  amount,
+  date,
+  receiptName = 'comprovante_pix.png',
+  receiptUrl = null
+}: SendPixEmailParams) {
+  const formattedAmount = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(amount);
+  const gmailUser = (process.env.GMAIL_USER || GMAIL_USER_DEFAULT).trim();
+  const gmailPass = (process.env.GMAIL_APP_PASSWORD || GMAIL_APP_PASSWORD_DEFAULT).replace(/\s+/g, '');
+  const coupleEmail = gmailUser || 'alineeklecio@gmail.com';
+
+  const subject = `🎁 Novo Presente Recebido via PIX! ${guestName} - ${giftName} (${formattedAmount})`;
+
+  const html = `
+<!DOCTYPE html>
+<html lang="pt-BR">
+<body style="font-family: sans-serif; background-color: #f8fafc; padding: 20px; color: #0f172a;">
+  <div style="max-width: 520px; margin: 0 auto; background: #ffffff; border-radius: 16px; padding: 24px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+    <div style="text-align: center; margin-bottom: 20px;">
+      <h2 style="color: #059669; margin: 0; font-size: 22px;">🎉 Novo Presente Recebido!</h2>
+      <p style="font-size: 13px; color: #64748b; margin-top: 4px;">Um convidado enviou um presente via PIX pelo site</p>
+    </div>
+
+    <div style="background: #f1f5f9; border-radius: 12px; padding: 18px; margin: 16px 0; font-size: 14px; line-height: 1.6;">
+      <p style="margin: 0 0 8px 0;"><strong>👤 Convidado:</strong> ${guestName}</p>
+      <p style="margin: 0 0 8px 0;"><strong>🎁 Presente:</strong> ${giftName}</p>
+      <p style="margin: 0 0 8px 0;"><strong>💰 Valor Pago:</strong> <span style="color: #059669; font-weight: bold; font-size: 16px;">${formattedAmount}</span></p>
+      <p style="margin: 0 0 8px 0;"><strong>📅 Data / Hora:</strong> ${date}</p>
+      <p style="margin: 0;"><strong>📎 Comprovante:</strong> ${receiptName}</p>
+    </div>
+
+    <p style="font-size: 13px; color: #475569; text-align: center; margin: 20px 0 0 0;">
+      Acesse o painel administrativo para visualizar o comprovante completo e gerenciar os presentes.
+    </p>
+  </div>
+</body>
+</html>
+  `;
+
+  if (gmailUser && gmailPass) {
+    try {
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: gmailUser,
+          pass: gmailPass,
+        },
+      });
+
+      const mailOptions: any = {
+        from: `"Site Casamento - Presentes" <${gmailUser}>`,
+        to: coupleEmail,
+        subject: subject,
+        html: html,
+        text: `Novo presente recebido via PIX!\nConvidado: ${guestName}\nPresente: ${giftName}\nValor: ${formattedAmount}\nData: ${date}\nComprovante: ${receiptName}`,
+      };
+
+      if (receiptUrl && receiptUrl.startsWith('data:')) {
+        mailOptions.attachments = [
+          {
+            filename: receiptName,
+            path: receiptUrl
+          }
+        ];
+      }
+
+      await transporter.sendMail(mailOptions);
+      console.log('[GMAIL] E-mail de aviso de PIX enviado com sucesso para:', coupleEmail);
+      return { success: true };
+    } catch (err) {
+      console.error('[GMAIL] Erro ao enviar aviso de PIX:', err);
+      return { success: false, error: err };
+    }
+  }
+
+  return { success: false };
+}
+

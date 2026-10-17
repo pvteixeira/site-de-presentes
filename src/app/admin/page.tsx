@@ -23,9 +23,11 @@ import {
   CheckCircle2,
   FileText,
   Phone,
-  Mail
+  Mail,
+  RefreshCw
 } from 'lucide-react';
 import Link from 'next/link';
+import { supabase } from '@/lib/supabase';
 
 import { GIFTS_DATA } from '../utils/giftsData';
 import { PadrinhoAccount } from '../data/padrinhosData';
@@ -89,6 +91,14 @@ export default function AdminPage() {
   const [rsvpList, setRsvpList] = useState<RsvpItem[]>([]);
   const [rsvpFilter, setRsvpFilter] = useState<'all' | 'confirmed' | 'declined'>('all');
   const [rsvpSearch, setRsvpSearch] = useState('');
+
+  // Manual PIX & Refresh states
+  const [isRefreshingPix, setIsRefreshingPix] = useState(false);
+  const [isAddingManualPix, setIsAddingManualPix] = useState(false);
+  const [manualPixGiftId, setManualPixGiftId] = useState('');
+  const [manualPixGuestName, setManualPixGuestName] = useState('');
+  const [manualPixAmount, setManualPixAmount] = useState('');
+  const [isSubmittingManualPix, setIsSubmittingManualPix] = useState(false);
 
   const loadAllAdminData = async () => {
     // 1. Load Gifts
@@ -197,6 +207,26 @@ export default function AdminPage() {
     loadAllAdminData();
   }, [router]);
 
+  // Supabase Realtime para atualizar comprovantes e presentes em tempo real na tela do ADM
+  useEffect(() => {
+    if (supabase && isAuthenticated) {
+      const channel = supabase
+        .channel('realtime_pix_admin_channel')
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'pix_contributions' },
+          () => {
+            loadAllAdminData();
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
+    }
+  }, [isAuthenticated]);
+
   const totalArrecadado = gifts.reduce((acc, gift) => acc + gift.currentAmount, 0);
   const totalMeta = gifts.reduce((acc, gift) => acc + gift.totalAmount, 0);
   const totalPixValor = pixContributions.reduce((acc, item) => acc + (item.amount || 0), 0);
@@ -290,6 +320,59 @@ export default function AdminPage() {
       } catch (err) {
         console.error('Erro ao limpar comprovantes:', err);
       }
+    }
+  };
+
+  const refreshPixContributions = async () => {
+    setIsRefreshingPix(true);
+    try {
+      const res = await fetch('/api/pix');
+      const data = await res.json();
+      if (data.success && Array.isArray(data.contributions)) {
+        setPixContributions(data.contributions);
+        localStorage.setItem('pix_contributions', JSON.stringify(data.contributions));
+      }
+    } catch (e) {
+      console.error('Erro ao atualizar comprovantes PIX:', e);
+    } finally {
+      setIsRefreshingPix(false);
+    }
+  };
+
+  const handleAddManualPix = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!manualPixGiftId || !manualPixGuestName.trim() || !manualPixAmount || isSubmittingManualPix) return;
+
+    setIsSubmittingManualPix(true);
+    try {
+      const selectedGift = gifts.find(g => String(g.id) === String(manualPixGiftId));
+      const res = await fetch('/api/pix', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          giftId: manualPixGiftId,
+          giftName: selectedGift?.name || 'Presente Especial',
+          guestName: manualPixGuestName.trim(),
+          amount: Number(manualPixAmount),
+          receiptName: 'Lançamento Manual pelo Administrador',
+          isManual: true
+        })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setIsAddingManualPix(false);
+        setManualPixGuestName('');
+        setManualPixGiftId('');
+        setManualPixAmount('');
+        await loadAllAdminData();
+      } else {
+        alert(data.message || 'Erro ao registrar pagamento manual.');
+      }
+    } catch (err: any) {
+      alert('Erro ao registrar: ' + err.message);
+    } finally {
+      setIsSubmittingManualPix(false);
     }
   };
 
@@ -638,14 +721,34 @@ export default function AdminPage() {
                 </p>
               </div>
 
-              {pixContributions.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2">
                 <button
-                  onClick={handleDeleteAllPixContributions}
-                  className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider hover:bg-red-700 transition-colors cursor-pointer shadow-sm"
+                  onClick={refreshPixContributions}
+                  disabled={isRefreshingPix}
+                  className="flex items-center gap-2 bg-slate-100 dark:bg-zinc-800 text-[var(--foreground)] border border-gray-300 dark:border-zinc-700 px-3.5 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider hover:bg-slate-200 dark:hover:bg-zinc-700 transition-colors cursor-pointer shadow-sm disabled:opacity-50"
+                  title="Recarregar comprovantes do banco de dados"
                 >
-                  <Trash2 size={16} /> Limpar Histórico de PIX
+                  <RefreshCw size={14} className={isRefreshingPix ? 'animate-spin' : ''} />
+                  {isRefreshingPix ? 'Atualizando...' : 'Atualizar'}
                 </button>
-              )}
+
+                <button
+                  onClick={() => setIsAddingManualPix(true)}
+                  className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer shadow-sm"
+                  title="Cadastrar pagamento de quem já enviou o PIX"
+                >
+                  <Plus size={16} /> Lançar PIX Manual
+                </button>
+
+                {pixContributions.length > 0 && (
+                  <button
+                    onClick={handleDeleteAllPixContributions}
+                    className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-3.5 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer shadow-sm"
+                  >
+                    <Trash2 size={14} /> Limpar Histórico
+                  </button>
+                )}
+              </div>
             </div>
 
             {pixContributions.length === 0 ? (
@@ -1142,13 +1245,42 @@ export default function AdminPage() {
             </div>
 
             {selectedReceipt.receiptUrl ? (
-              <div className="bg-zinc-950 p-3 rounded-xl border border-zinc-800 flex items-center justify-center min-h-[300px]">
-                <img
-                  src={selectedReceipt.receiptUrl}
-                  alt={`Comprovante PIX de ${selectedReceipt.guestName}`}
-                  className="max-w-full max-h-[60vh] object-contain rounded-lg shadow-lg"
-                />
-              </div>
+              selectedReceipt.receiptUrl.startsWith('data:application/pdf') || selectedReceipt.receiptName?.toLowerCase().endsWith('.pdf') ? (
+                <div className="bg-zinc-950 p-8 rounded-xl border border-zinc-800 text-center space-y-4">
+                  <div className="w-16 h-16 mx-auto bg-red-500/10 border border-red-500/30 rounded-2xl flex items-center justify-center text-red-500">
+                    <FileText size={32} />
+                  </div>
+                  <div>
+                    <p className="text-white font-medium text-base font-serif">Comprovante em formato PDF</p>
+                    <p className="text-xs text-gray-400 font-mono mt-1">{selectedReceipt.receiptName || 'comprovante.pdf'}</p>
+                  </div>
+                  <div className="flex flex-wrap justify-center gap-3 pt-2">
+                    <a
+                      href={selectedReceipt.receiptUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold uppercase tracking-wider transition-colors shadow-sm cursor-pointer"
+                    >
+                      <Eye size={16} /> Abrir PDF
+                    </a>
+                    <a
+                      href={selectedReceipt.receiptUrl}
+                      download={selectedReceipt.receiptName || `comprovante_${selectedReceipt.guestName}.pdf`}
+                      className="inline-flex items-center gap-2 px-5 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl text-xs font-semibold uppercase tracking-wider transition-colors shadow-sm cursor-pointer"
+                    >
+                      <Download size={16} /> Baixar PDF
+                    </a>
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-zinc-950 p-3 rounded-xl border border-zinc-800 flex items-center justify-center min-h-[300px]">
+                  <img
+                    src={selectedReceipt.receiptUrl}
+                    alt={`Comprovante PIX de ${selectedReceipt.guestName}`}
+                    className="max-w-full max-h-[60vh] object-contain rounded-lg shadow-lg"
+                  />
+                </div>
+              )
             ) : (
               <div className="bg-gray-50 dark:bg-zinc-800/50 p-12 rounded-xl text-center text-gray-400 font-sans border border-gray-200 dark:border-zinc-700">
                 <FileText className="w-12 h-12 mx-auto mb-2 text-gray-400" />
@@ -1174,6 +1306,102 @@ export default function AdminPage() {
                 Fechar
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Lançamento Manual de PIX */}
+      {isAddingManualPix && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+          <div className="bg-white dark:bg-zinc-900 w-full max-w-md rounded-2xl p-6 shadow-2xl relative border border-gray-200 dark:border-zinc-800">
+            <button
+              onClick={() => setIsAddingManualPix(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-white p-2 rounded-full bg-gray-100 dark:bg-zinc-800 transition-colors cursor-pointer"
+            >
+              <X size={18} />
+            </button>
+
+            <h3 className="text-xl font-serif text-[var(--foreground)] font-medium mb-1 flex items-center gap-2">
+              <CreditCard size={20} className="text-green-600 dark:text-green-400" />
+              Lançar Pagamento PIX Manual
+            </h3>
+            <p className="text-xs text-gray-500 font-sans mb-5">
+              Utilize para registrar presentes de convidados que pagaram via PIX ou enviaram o comprovante pelo WhatsApp.
+            </p>
+
+            <form onSubmit={handleAddManualPix} className="space-y-4">
+              <div>
+                <label className="block text-xs uppercase tracking-wider text-gray-500 font-semibold mb-1">
+                  Presente Escolhido
+                </label>
+                <select
+                  required
+                  value={manualPixGiftId}
+                  onChange={(e) => {
+                    const id = e.target.value;
+                    setManualPixGiftId(id);
+                    const selected = gifts.find(g => String(g.id) === String(id));
+                    if (selected) {
+                      setManualPixAmount(String(selected.totalAmount));
+                    }
+                  }}
+                  className="w-full p-3 rounded-xl border border-gray-200 dark:border-zinc-700 bg-transparent text-sm focus:outline-none focus:border-black dark:focus:border-white font-sans"
+                >
+                  <option value="" className="dark:bg-zinc-900">Selecione o presente...</option>
+                  {gifts.map(g => (
+                    <option key={g.id} value={g.id} className="dark:bg-zinc-900">
+                      {g.name} - {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(g.totalAmount)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs uppercase tracking-wider text-gray-500 font-semibold mb-1">
+                  Nome do Convidado
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Nome de quem pagou o presente"
+                  value={manualPixGuestName}
+                  onChange={(e) => setManualPixGuestName(e.target.value)}
+                  className="w-full p-3 rounded-xl border border-gray-200 dark:border-zinc-700 bg-transparent text-sm focus:outline-none focus:border-black dark:focus:border-white font-sans"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs uppercase tracking-wider text-gray-500 font-semibold mb-1">
+                  Valor Pago (R$)
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  required
+                  placeholder="Ex: 250.00"
+                  value={manualPixAmount}
+                  onChange={(e) => setManualPixAmount(e.target.value)}
+                  className="w-full p-3 rounded-xl border border-gray-200 dark:border-zinc-700 bg-transparent text-sm focus:outline-none focus:border-black dark:focus:border-white font-sans"
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-3">
+                <button
+                  type="button"
+                  onClick={() => setIsAddingManualPix(false)}
+                  className="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-zinc-700 text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmittingManualPix}
+                  className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold uppercase tracking-wider transition-colors shadow-sm cursor-pointer disabled:opacity-50"
+                >
+                  {isSubmittingManualPix ? 'Salvando...' : 'Salvar Pagamento'}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
