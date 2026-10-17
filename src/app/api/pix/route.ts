@@ -143,19 +143,44 @@ export async function DELETE(req: NextRequest) {
     if (all) {
       const { error } = await supabase.from('pix_contributions').delete().neq('id', '0');
       if (error) return NextResponse.json({ success: false, message: error.message }, { status: 500 });
-      return NextResponse.json({ success: true, message: 'Todos os comprovantes foram apagados.' });
+      // Zera o arrecadado de todos os presentes no banco
+      await supabase.from('gifts').update({ current_amount: 0 }).neq('id', '0');
+      return NextResponse.json({ success: true, message: 'Todos os comprovantes foram apagados e metas zeradas.' });
     }
 
     if (!id) {
       return NextResponse.json({ success: false, message: 'ID não fornecido.' }, { status: 400 });
     }
 
+    // Busca os dados da contribuição para subtrair do presente correspondente
+    const { data: contrib } = await supabase
+      .from('pix_contributions')
+      .select('gift_id, amount')
+      .eq('id', id)
+      .single();
+
     const { error } = await supabase.from('pix_contributions').delete().eq('id', id);
     if (error) {
       return NextResponse.json({ success: false, message: error.message }, { status: 500 });
     }
 
-    return NextResponse.json({ success: true, message: 'Registro excluído.' });
+    if (contrib && contrib.gift_id && contrib.amount) {
+      const { data: giftData } = await supabase
+        .from('gifts')
+        .select('current_amount')
+        .eq('id', String(contrib.gift_id))
+        .single();
+
+      if (giftData) {
+        const newAmount = Math.max(0, Number(giftData.current_amount || 0) - Number(contrib.amount));
+        await supabase
+          .from('gifts')
+          .update({ current_amount: newAmount })
+          .eq('id', String(contrib.gift_id));
+      }
+    }
+
+    return NextResponse.json({ success: true, message: 'Registro excluído e valor do presente ajustado.' });
   } catch (err: any) {
     return NextResponse.json({ success: false, message: err.message }, { status: 500 });
   }
