@@ -14,12 +14,15 @@ interface MessageItem {
 }
 
 const INITIAL_GUESTBOOK: MessageItem[] = [];
-const INITIAL_VISIBLE_MESSAGES = 5;
-const MESSAGES_PER_LOAD = 5;
+const DESKTOP_INITIAL_COUNT = 5;
+const DESKTOP_LOAD_STEP = 5;
+const MOBILE_INITIAL_COUNT = 3;
+const MOBILE_LOAD_STEP = 3;
 
 export default function GuestbookSection() {
   const [messages, setMessages] = useState<MessageItem[]>(INITIAL_GUESTBOOK);
-  const [visibleCount, setVisibleCount] = useState<number>(INITIAL_VISIBLE_MESSAGES);
+  const [isMobile, setIsMobile] = useState(false);
+  const [visibleCount, setVisibleCount] = useState<number>(MOBILE_INITIAL_COUNT);
   const [author, setAuthor] = useState('');
   const [relation, setRelation] = useState('');
   const [text, setText] = useState('');
@@ -59,6 +62,26 @@ export default function GuestbookSection() {
   useEffect(() => {
     setIsAdmin(localStorage.getItem('admin_logged_in') === 'true');
 
+    // Detect mobile viewport and adapt initial visible count
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 640;
+      setIsMobile(mobile);
+      return mobile;
+    };
+
+    const initialIsMobile = checkMobile();
+    if (!initialIsMobile) {
+      setVisibleCount(DESKTOP_INITIAL_COUNT);
+    } else {
+      setVisibleCount(MOBILE_INITIAL_COUNT);
+    }
+
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+
+    window.addEventListener('resize', handleResize);
+
     // 1. Carregamento instantâneo (0ms) a partir do cache local
     const cached = localStorage.getItem('guestbook_messages');
     if (cached) {
@@ -76,9 +99,9 @@ export default function GuestbookSection() {
     fetchMessages();
 
     // 3. Inscrição em tempo real com Supabase
+    let channel: any = null;
     if (supabase) {
-      const client = supabase;
-      const channel = client
+      channel = supabase
         .channel('realtime_guestbook')
         .on(
           'postgres_changes',
@@ -88,11 +111,14 @@ export default function GuestbookSection() {
           }
         )
         .subscribe();
-
-      return () => {
-        client.removeChannel(channel);
-      };
     }
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      if (supabase && channel) {
+        supabase.removeChannel(channel);
+      }
+    };
   }, [fetchMessages]);
 
   const handleDeleteMessage = async (id: string) => {
@@ -149,6 +175,17 @@ export default function GuestbookSection() {
       setSuccess(true);
       setTimeout(() => setSuccess(false), 4000);
     }
+  };
+
+  const currentStep = isMobile ? MOBILE_LOAD_STEP : DESKTOP_LOAD_STEP;
+  const currentInitial = isMobile ? MOBILE_INITIAL_COUNT : DESKTOP_INITIAL_COUNT;
+
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => prev + currentStep);
+  };
+
+  const handleShowLess = () => {
+    setVisibleCount(currentInitial);
   };
 
   return (
@@ -235,16 +272,16 @@ export default function GuestbookSection() {
           </div>
 
           {/* Messages Feed */}
-          <div className="lg:col-span-7 space-y-4 max-h-[600px] overflow-y-auto pr-1 sm:pr-2 hide-scrollbar">
-            {messages.length === 0 ? (
-              <div className="text-center py-12 px-6 rounded-2xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800">
-                <p className="text-sm text-gray-500 dark:text-gray-400 font-sans">
-                  Seja o primeiro a deixar uma mensagem de carinho para os noivos!
-                </p>
-              </div>
-            ) : (
-              <>
-                {messages.slice(0, visibleCount).map((item) => (
+          <div className="lg:col-span-7 flex flex-col space-y-4">
+            <div className="space-y-4 max-h-[460px] sm:max-h-[600px] overflow-y-auto pr-2 sm:pr-3 custom-scrollbar">
+              {messages.length === 0 ? (
+                <div className="text-center py-12 px-6 rounded-2xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800">
+                  <p className="text-sm text-gray-500 dark:text-gray-400 font-sans">
+                    Seja o primeiro a deixar uma mensagem de carinho para os noivos!
+                  </p>
+                </div>
+              ) : (
+                messages.slice(0, visibleCount).map((item) => (
                   <motion.div
                     key={item.id}
                     initial={{ opacity: 0, y: 15 }}
@@ -272,20 +309,34 @@ export default function GuestbookSection() {
                       "{item.text}"
                     </p>
                   </motion.div>
-                ))}
+                ))
+              )}
+            </div>
 
+            {/* Pagination / Load More Controls */}
+            {messages.length > 0 && (visibleCount < messages.length || visibleCount > currentInitial) && (
+              <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
                 {visibleCount < messages.length && (
-                  <div className="pt-2 text-center">
-                    <button
-                      onClick={() => setVisibleCount((prev) => prev + MESSAGES_PER_LOAD)}
-                      className="inline-flex items-center justify-center gap-2 px-5 sm:px-8 py-3 rounded-xl font-sans text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 text-[var(--foreground)] border border-gray-200 dark:border-zinc-700 shadow-sm hover:scale-102 cursor-pointer max-w-full"
-                    >
-                      <span className="truncate">Ver mais mensagens ({messages.length - visibleCount} restantes)</span>
-                      <ChevronDown size={15} className="shrink-0" />
-                    </button>
-                  </div>
+                  <button
+                    onClick={handleLoadMore}
+                    className="inline-flex items-center justify-center gap-2 px-5 sm:px-8 py-2.5 sm:py-3 rounded-xl font-sans text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 text-[var(--foreground)] border border-gray-200 dark:border-zinc-700 shadow-sm hover:scale-102 cursor-pointer max-w-full"
+                  >
+                    <span className="truncate">
+                      Ver mais mensagens ({messages.length - visibleCount} restantes)
+                    </span>
+                    <ChevronDown size={15} className="shrink-0" />
+                  </button>
                 )}
-              </>
+
+                {visibleCount > currentInitial && (
+                  <button
+                    onClick={handleShowLess}
+                    className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl font-sans text-xs font-medium text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-all cursor-pointer"
+                  >
+                    <span>Mostrar menos</span>
+                  </button>
+                )}
+              </div>
             )}
           </div>
 

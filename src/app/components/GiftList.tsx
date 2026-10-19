@@ -10,8 +10,8 @@ import { GIFTS_DATA } from '../utils/giftsData';
 import { supabase } from '@/lib/supabase';
 
 const CATEGORIES = ['Todas', 'Cozinha', 'Cama e Banho', 'Eletrodomésticos', 'Experiências', 'Outros'];
-const INITIAL_ITEMS_COUNT = 12;
-const ITEMS_PER_LOAD = 12;
+const DESKTOP_ROW_ITEMS = 9; // 3 colunas x 3 linhas = 9 itens
+const MOBILE_ROW_ITEMS = 6;  // 2 colunas x 3 linhas = 6 itens
 
 export default function GiftList() {
   const [gifts, setGifts] = useState<Gift[]>(GIFTS_DATA);
@@ -19,7 +19,11 @@ export default function GiftList() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | 'default'>('default');
   const [selectedGift, setSelectedGift] = useState<Gift | null>(null);
-  const [visibleCount, setVisibleCount] = useState<number>(INITIAL_ITEMS_COUNT);
+  const [isMobile, setIsMobile] = useState(false);
+  const [visibleCount, setVisibleCount] = useState<number>(MOBILE_ROW_ITEMS);
+
+  const initialCount = isMobile ? MOBILE_ROW_ITEMS : DESKTOP_ROW_ITEMS;
+  const itemsPerLoad = isMobile ? MOBILE_ROW_ITEMS : DESKTOP_ROW_ITEMS;
 
   const fetchGifts = useCallback(async () => {
     try {
@@ -34,6 +38,21 @@ export default function GiftList() {
   }, []);
 
   useEffect(() => {
+    // Detect mobile viewport and adapt initial visible count (3 lines)
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 640;
+      setIsMobile(mobile);
+      return mobile;
+    };
+
+    const initialIsMobile = checkMobile();
+    setVisibleCount(initialIsMobile ? MOBILE_ROW_ITEMS : DESKTOP_ROW_ITEMS);
+
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+
+    window.addEventListener('resize', handleResize);
     fetchGifts();
 
     // Supabase Realtime para sincronizar presentes em tempo real
@@ -51,15 +70,20 @@ export default function GiftList() {
         .subscribe();
 
       return () => {
+        window.removeEventListener('resize', handleResize);
         client.removeChannel(channel);
       };
     }
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, [fetchGifts]);
 
-  // Reset pagination when filters or sort change
+  // Reset pagination to 3 lines when filters or sort change
   useEffect(() => {
-    setVisibleCount(INITIAL_ITEMS_COUNT);
-  }, [selectedCategory, searchQuery, sortOrder]);
+    setVisibleCount(isMobile ? MOBILE_ROW_ITEMS : DESKTOP_ROW_ITEMS);
+  }, [selectedCategory, searchQuery, sortOrder, isMobile]);
 
   let filteredGifts = gifts.filter(gift => {
     const matchesCategory = selectedCategory === 'Todas' || gift.category === selectedCategory;
@@ -78,7 +102,11 @@ export default function GiftList() {
   const hasMore = visibleCount < filteredGifts.length;
 
   const handleLoadMore = () => {
-    setVisibleCount(prev => prev + ITEMS_PER_LOAD);
+    setVisibleCount(prev => prev + itemsPerLoad);
+  };
+
+  const handleShowLess = () => {
+    setVisibleCount(initialCount);
   };
 
   const handleContribute = (gift: Gift) => {
@@ -100,7 +128,7 @@ export default function GiftList() {
 
   return (
     <section id="lista-presentes" className="py-16 sm:py-24 bg-[var(--background)]">
-      <div className="container mx-auto px-4 max-w-6xl">
+      <div className="container mx-auto px-3 sm:px-4 max-w-6xl">
         <div className="text-center mb-8 sm:mb-12">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-[var(--foreground)] mb-4 font-medium">
             Lista de Presentes
@@ -156,7 +184,7 @@ export default function GiftList() {
         </div>
 
         {/* Gift Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 lg:gap-8">
           {visibleGifts.map((gift) => (
             <GiftCard
               key={gift.id}
@@ -167,15 +195,26 @@ export default function GiftList() {
         </div>
 
         {/* Load More Button */}
-        {hasMore && (
-          <div className="mt-12 text-center">
-            <button
-              onClick={handleLoadMore}
-              className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-sans text-xs font-semibold uppercase tracking-wider transition-all duration-300 ease-in-out transform bg-gradient-to-r from-slate-300 via-gray-100 to-slate-300 hover:from-slate-400 hover:via-gray-200 hover:to-slate-400 dark:from-zinc-700 dark:via-zinc-600 dark:to-zinc-700 dark:hover:from-zinc-600 dark:hover:to-zinc-600 text-slate-900 dark:text-slate-100 border border-slate-400/80 dark:border-zinc-500 shadow-md hover:shadow-lg hover:scale-105 cursor-pointer"
-            >
-              <span>Ver mais presentes</span>
-              <ChevronDown size={16} className="text-slate-700 dark:text-slate-200" />
-            </button>
+        {(hasMore || visibleCount > initialCount) && (
+          <div className="mt-10 sm:mt-12 flex flex-wrap items-center justify-center gap-3">
+            {hasMore && (
+              <button
+                onClick={handleLoadMore}
+                className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl font-sans text-xs font-semibold uppercase tracking-wider transition-all duration-300 ease-in-out transform bg-gradient-to-r from-slate-300 via-gray-100 to-slate-300 hover:from-slate-400 hover:via-gray-200 hover:to-slate-400 dark:from-zinc-700 dark:via-zinc-600 dark:to-zinc-700 dark:hover:from-zinc-600 dark:hover:to-zinc-600 text-slate-900 dark:text-slate-100 border border-slate-400/80 dark:border-zinc-500 shadow-md hover:shadow-lg hover:scale-105 cursor-pointer"
+              >
+                <span>Ver mais presentes</span>
+                <ChevronDown size={16} className="text-slate-700 dark:text-slate-200" />
+              </button>
+            )}
+
+            {visibleCount > initialCount && (
+              <button
+                onClick={handleShowLess}
+                className="inline-flex items-center justify-center gap-1.5 px-4 sm:px-5 py-2.5 sm:py-3.5 rounded-xl font-sans text-xs font-medium text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-all cursor-pointer"
+              >
+                <span>Mostrar menos</span>
+              </button>
+            )}
           </div>
         )}
 
