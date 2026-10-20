@@ -34,6 +34,9 @@ export const metadata: Metadata = {
     shortcut: "/img/LOGO_MARCA.png",
     apple: "/img/LOGO_MARCA.png",
   },
+  other: {
+    'color-scheme': 'light',
+  },
 };
 
 export default function RootLayout({
@@ -44,9 +47,12 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className={`${inter.variable} ${cormorant.variable} ${alexBrush.variable} ${windSong.variable} h-full antialiased`}
+      style={{ colorScheme: 'light' }}
+      className={`${inter.variable} ${cormorant.variable} ${alexBrush.variable} ${windSong.variable} h-full antialiased light`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col bg-white text-[#09090B]" style={{ colorScheme: 'light' }}>
+        {children}
+      </body>
     </html>
   );
 }
