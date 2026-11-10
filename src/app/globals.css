@@ -73,7 +73,8 @@ body {
 .text-justified-elegant {
   text-align: justify;
   text-justify: inter-word;
-  hyphens: none;
+  hyphens: auto;
+  -webkit-hyphens: auto;
 }
 
 /* Glassmorphic elements with subtle silver borders */

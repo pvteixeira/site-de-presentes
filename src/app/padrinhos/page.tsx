@@ -29,6 +29,8 @@ import {
   Heart,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
   Info,
   Plus,
   Edit2,
@@ -84,6 +86,19 @@ export default function PadrinhosPortal() {
   const [activeTab, setActiveTab] = useState<'padrinhos' | 'mensagens' | 'cronograma'>('padrinhos');
   const [selectedDemoisellePhotoIndex, setSelectedDemoisellePhotoIndex] = useState<number | null>(null);
   const [selectedPaisPhotoIndex, setSelectedPaisPhotoIndex] = useState<number | null>(null);
+  const [isLetterExpanded, setIsLetterExpanded] = useState(false);
+  const welcomeCardRef = useRef<HTMLDivElement>(null);
+
+  const handleCollapseLetter = () => {
+    if (welcomeCardRef.current) {
+      const headerOffset = 75;
+      const targetTop = welcomeCardRef.current.getBoundingClientRect().top + window.scrollY - headerOffset;
+      window.scrollTo(0, Math.max(0, targetTop));
+    } else {
+      window.scrollTo(0, 0);
+    }
+    setIsLetterExpanded(false);
+  };
 
   // Messages & Announcements state
   const [announcements, setAnnouncements] = useState<PadrinhoMessage[]>(INITIAL_ANNOUNCEMENTS);
@@ -178,7 +193,9 @@ export default function PadrinhosPortal() {
       try {
         const parsed: PadrinhoAccount = JSON.parse(savedUser);
         if (parsed && parsed.id && parsed.name) {
-          setLoggedUser(parsed);
+          const freshAccount = PADRINHOS_ACCOUNTS.find((acc) => acc.id === parsed.id);
+          const userToSet = freshAccount ? { ...parsed, customMessage: freshAccount.customMessage } : parsed;
+          setLoggedUser(userToSet);
           if (parsed.role === 'noivos') {
             setIsAdmin(true);
             localStorage.setItem('admin_logged_in', 'true');
@@ -715,6 +732,7 @@ export default function PadrinhosPortal() {
 
         {/* Welcome Banner Card */}
         <motion.div
+          ref={welcomeCardRef}
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           className="relative rounded-3xl p-6 md:p-10 overflow-hidden bg-gradient-to-br from-slate-50 via-white to-gray-100 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-850 text-[var(--foreground)] shadow-md border border-gray-200 dark:border-zinc-800"
@@ -734,16 +752,108 @@ export default function PadrinhosPortal() {
                   <Sparkles size={13} /> Demoiselle de Honra
                 </span>
               )}
-              {loggedUser.role === 'pais' && (
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-sans font-semibold bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-500/30">
-                  <Heart size={13} /> Pais da Noiva
-                </span>
-              )}
             </div>
 
-            <div className="text-gray-700 dark:text-gray-300 text-base md:text-lg font-sans leading-relaxed whitespace-pre-line text-justified-elegant space-y-3">
-              {loggedUser.customMessage || 'Vocês são essenciais em nossas vidas e é um presente ter vocês ao nosso lado neste momento inesquecível!'}
-            </div>
+            {loggedUser.role === 'pais' ? (
+              <div className="space-y-4 pt-1">
+                {/* Conteúdo da carta */}
+                <div className="relative">
+                  <div className="space-y-4 text-gray-700 dark:text-gray-300 text-sm sm:text-base font-sans leading-relaxed md:leading-[1.9]">
+                    {(() => {
+                      const allParagraphs = (loggedUser.customMessage || '').split('\n\n').filter(Boolean);
+                      const displayParagraphs = isLetterExpanded ? allParagraphs : allParagraphs.slice(0, 2);
+
+                      return displayParagraphs.map((paragraph, idx) => {
+                        // Saudação inicial
+                        if (idx === 0 && paragraph.startsWith('Oi, Painho!')) {
+                          return (
+                            <p key={idx} className="font-serif font-semibold text-lg sm:text-xl text-purple-900 dark:text-purple-300 italic tracking-wide">
+                              {paragraph}
+                            </p>
+                          );
+                        }
+
+                        // Versículo bíblico final
+                        if (paragraph.includes('Êxodo 20:12') || paragraph.includes('Honra a teu pai')) {
+                          const lines = paragraph.split('\n');
+                          return (
+                            <div key={idx} className="mt-6 p-4 sm:p-5 rounded-2xl bg-purple-50/80 dark:bg-purple-950/30 border-l-4 border-purple-400 dark:border-purple-600 shadow-xs">
+                              <p className="font-serif italic text-sm sm:text-base text-purple-950 dark:text-purple-200 text-justify text-justified-elegant leading-relaxed">
+                                {lines[0]}
+                              </p>
+                              {lines[1] && (
+                                <span className="block mt-2 font-sans font-semibold text-xs sm:text-sm text-purple-700 dark:text-purple-400 not-italic">
+                                  — {lines[1]}
+                                </span>
+                              )}
+                            </div>
+                          );
+                        }
+
+                        // Assinatura "AMO VOCÊS PARA SEMPRE! ❤️"
+                        if (paragraph.includes('AMO VOCÊS PARA SEMPRE!')) {
+                          return (
+                            <div key={idx} className="pt-2 text-center sm:text-left">
+                              <p className="font-serif font-bold text-base sm:text-lg text-purple-900 dark:text-purple-300 tracking-wide">
+                                {paragraph}
+                              </p>
+                            </div>
+                          );
+                        }
+
+                        // Parágrafos normais do corpo da carta
+                        return (
+                          <p key={idx} className="text-justify text-justified-elegant indent-4 sm:indent-6">
+                            {paragraph}
+                          </p>
+                        );
+                      });
+                    })()}
+                  </div>
+
+                  {/* Gradient Fade & Botão quando recolhido */}
+                  {!isLetterExpanded && (
+                    <div className="pt-6 text-center">
+                      <div className="absolute inset-x-0 bottom-12 h-20 bg-gradient-to-t from-slate-50 via-white/80 to-transparent dark:from-zinc-900 dark:via-zinc-900/80 pointer-events-none" />
+                      <button
+                        type="button"
+                        onClick={() => setIsLetterExpanded(true)}
+                        className="relative z-10 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-sans font-semibold bg-purple-600 hover:bg-purple-700 text-white shadow-md hover:shadow-lg transition-all cursor-pointer hover:scale-[1.02]"
+                      >
+                        <Heart size={14} className="fill-current text-purple-200" />
+                        <span>Ler carta completa da noiva (Continuar lendo...)</span>
+                        <ChevronDown size={15} />
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Botão de recolher no final quando expandido */}
+                  {isLetterExpanded && (
+                    <div className="pt-4 text-center border-t border-purple-100 dark:border-zinc-800 mt-6">
+                      <button
+                        type="button"
+                        onClick={handleCollapseLetter}
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-sans font-medium bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
+                      >
+                        <ChevronUp size={14} />
+                        <span>Recolher carta para ver orientações</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-3 text-gray-700 dark:text-gray-300 text-base md:text-lg font-sans leading-relaxed">
+                {(loggedUser.customMessage || 'Vocês são essenciais em nossas vidas e é um presente ter vocês ao nosso lado neste momento inesquecível!')
+                  .split('\n\n')
+                  .filter(Boolean)
+                  .map((paragraph, idx) => (
+                    <p key={idx} className="text-justify text-justified-elegant">
+                      {paragraph}
+                    </p>
+                  ))}
+              </div>
+            )}
           </div>
         </motion.div>
 
