@@ -224,19 +224,53 @@ Aline e Klécio`
     members: ['Ana Paula', 'Abdias Silva'],
     customMessage: `Oi, Painho! Oi, Mainha!
 
-Inicio esta mensagem com os olhos cheios de lágrimas e o coração transbordando de gratidão. É uma alegria incomensurável ter vocês na minha vida. ❤️ Deus foi misericordioso e bondoso comigo quando me escolheu para ser filha amada de vocês. E que privilégio! Para mim, vocês são sinônimos de orgulho, resistência, dedicação, amor, força e fé. Falar de vocês é uma tarefa difícil, porque me faltam palavras para descrever seres humanos tão extraordinários.
+Inicio esta mensagem com os olhos cheios de lágrimas e o coração transbordando de gratidão. É uma alegria incomensurável ter vocês na minha vida. ❤️
 
-Ao longo dos meus 28 anos de vida, recebi e continuo recebendo o melhor que vocês podem me oferecer, sempre com muito amor, cuidado e carinho. As melhores escolas, os melhores professores, os melhores cursos, os melhores passeios, as melhores viagens, o melhor conforto… Tudo TOP! Mainha sempre fala: “ESSA MENINA TEM ESPÍRITO DE RICA!” E, afinal, eu sou rica mesmo! Sou rica de amor, de cuidado, de oportunidades, de experiências e, principalmente, por ter vocês como meus pais.
+Deus foi misericordioso e bondoso comigo quando me escolheu para ser filha amada de vocês. E que privilégio!!!
 
-Sei que ainda não tenho condições de proporcionar a vocês tudo aquilo que merecem. Mas quero que saibam que estarei sempre aqui, para o que precisarem. E, se Deus permitir, ainda vou fazer esse jogo virar! 🙏🏼 Guardo comigo as lembranças de cada aniversário, de cada formatura, do catecismo, das lições de física, química e matemática, da construção de cada TCC e de tantas outras etapas da minha vida que vocês fizeram questão de acompanhar e tornar ainda mais especiais.
+Para mim, vocês são sinônimos de orgulho, resistência, dedicação, amor, força e fé. Falar de vocês é uma tarefa difícil, porque me faltam palavras para descrever seres humanos tão extraordinários.
 
-Hoje, acredito que estou chegando a uma das etapas mais desafiadoras da minha vida. Agora o negócio ficou sério! 🆘 Chegou o momento do tão sonhado CASAMENTO! Sinto uma alegria e uma felicidade nesse momento de organização e preparação, tudo sendo construído com muita dedicação e afeto. E, ainda assim, mesmo com toda essa preparação, confesso que meu coração está apertado. Sinto aquele frio na barriga ao imaginar como será viver essa nova fase, construir uma nova rotina e descobrir tudo aquilo que ainda está por vir. É uma mistura de felicidade, ansiedade, saudade antecipada e um pouquinho de medo do desconhecido — e coloque medo nisso kkkk!
+Ao longo dos meus 28 anos de vida, recebi e continuo recebendo o melhor que vocês podem me oferecer, sempre com muito amor, cuidado e carinho.
 
-Mais uma vez, sou grata a vocês por me proporcionarem uma festa tão especial. Acredito que será um momento mágico, cercado de amigos e familiares queridos, muitos dos quais acompanharam minha trajetória e torceram para que chegássemos até aqui. No meio de tantas emoções, quero pedir só uma coisinha: nunca me deixem sozinha! Estejam sempre por perto! Porque viver experiências ao lado de vocês sempre foi uma das maiores felicidades da minha vida.
+As melhores escolas, os melhores professores, os melhores cursos, os melhores passeios, as melhores viagens, o melhor conforto… Tudo TOP!
 
-Lembram do nosso passeio no Beto Carrero World? FOI MÁGICO! Que sonho realizado! Me senti vivendo meus 15 anos na própria Disney. Me diverti muito e ainda vi de perto a coragem de vocês nos brinquedos. 😂 Quero dizer também que a nossa grande família está ficando pequena a cada dia, com a partida de tantos entes queridos (Vovó Ubirajara (4010), Vovó Regina, Vovó Terezinha, Vovô Abdias, Tio Carlos Lacerda, Tio Neném, Tia Deda e Tio Carlinhos) 🥲. Reitero meu amor e admiração para aqueles que já não estão fisicamente entre nós. Continuarão sempre presentes na minha memória e no meu coração.
+Mainha sempre fala: “ESSA MENINA TEM ESPÍRITO DE RICA!”
 
-A vocês, quero agradecer por tudo que vivemos até aqui. Falta pouco! Vivam esse momento comigo! Dancem, sorriam, aproveitem, se emocionem e se permitam viver cada segundo desse momento tão especial para mim e Klécio. Porque essa festa também é de vocês e para vocês! Tudo aquilo que sou carrega um pouco de vocês e tudo aquilo que ainda vou construir levará comigo todos os ensinamentos.
+E, afinal, eu sou rica mesmo! Sou rica de amor, de cuidado, de oportunidades, de experiências e, principalmente, por ter vocês como meus pais.
+
+Sei que ainda não tenho condições de proporcionar a vocês tudo aquilo que merecem. Mas quero que saibam que estarei sempre aqui, para o que precisarem. E, se Deus permitir, ainda vou fazer esse jogo virar! 🙏🏼
+
+Guardo comigo as lembranças de cada aniversário, de cada formatura, do catecismo, das lições de física, química e matemática, da construção de cada TCC e de tantas outras etapas da minha vida que vocês fizeram questão de acompanhar e tornar ainda mais especiais.
+
+Hoje, acredito que estou chegando a uma das etapas mais desafiadoras da minha vida. Agora o negócio ficou sério! 🆘
+
+Chegou o momento do tão sonhado CASAMENTO!
+
+Sinto uma alegria e uma felicidade nesse momento de organização e preparação. Tudo sendo construído com muita dedicação e afeto.
+
+E, ainda assim, mesmo com toda essa preparação, confesso que meu coração está apertado. Sinto aquele frio na barriga ao imaginar como será viver essa nova fase, construir uma nova rotina e descobrir tudo aquilo que ainda está por vir.
+
+É uma mistura de felicidade, ansiedade, saudade antecipada e um pouquinho de medo do desconhecido.
+
+Mais uma vez, sou grata a vocês por me proporcionarem uma festa tão especial. Acredito que será um momento mágico, cercado de amigos/familiares queridos, muitos dos quais acompanharam minha trajetória e torceram para que chegássemos até aqui.
+
+No meio de tantas emoções, quero pedir só uma coisinha: Nunca me deixem sozinha!
+
+Estejam sempre por perto! Porque viver experiências ao lado de vocês sempre foi uma das maiores felicidades da minha vida.
+
+Lembram do Passeio em Beto Carrero World? FOI MÁGICO! Que sonho realizado! Me senti vivendo meus 15 anos na própria Disney. Me diverti muito e ainda vi de perto a coragem de vocês nos brinquedos. 😂
+
+Quero dizer também que a nossa grande família está ficando pequena a cada dia, com a partida de tantos entes queridos (Vovó Ubirajara (4010), Vovó Regina, Vovó Terezinha, Vovô Abdias, Tio Carlos Lacerda, Tio Neném, Tia Deda e Tio Carlinhos) 🥲 Reitero meu amor e admiração para aqueles que já não estão fisicamente entre nós. Continuarão presentes na minha memória e no meu coração.
+
+A vocês quero agradecer por tudo que vivemos até aqui.
+
+Falta pouco! Vivam esse momento comigo!
+
+Dancem, sorriam, aproveitem, se emocionem e se permitam viver cada segundo desse momento tão especial para mim e Klécio.
+
+Porque essa festa também é de vocês e para vocês!
+
+Tudo aquilo que sou carrega um pouco de vocês e tudo aquilo que ainda vou construir levará comigo todos os ensinamentos.
 
 AMO VOCÊS PARA SEMPRE! ❤️
 
