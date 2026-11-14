@@ -238,7 +238,7 @@ Mainha sempre fala: “ESSA MENINA TEM ESPÍRITO DE RICA!”
 
 E, afinal, eu sou rica mesmo! Sou rica de amor, de cuidado, de oportunidades, de experiências e, principalmente, por ter vocês como meus pais.
 
-Sei que ainda não tenho condições de proporcionar a vocês tudo aquilo que merecem. Mas quero que saibam que estarei sempre aqui, para o que precisarem. E, se Deus permitir, ainda vou fazer esse jogo virar! 🙏🏼
+Sei que ainda não tenho condições de proporcionar a vocês tudo aquilo que merecem. Mas quero que saibam que estarei sempre aqui, para o que precisarem. E, se Deus permitir, ainda vou fazer esse jogo virar!
 
 Guardo comigo as lembranças de cada aniversário, de cada formatura, do catecismo, das lições de física, química e matemática, da construção de cada TCC e de tantas outras etapas da minha vida que vocês fizeram questão de acompanhar e tornar ainda mais especiais.
 

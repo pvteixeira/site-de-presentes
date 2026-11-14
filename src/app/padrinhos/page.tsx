@@ -82,7 +82,13 @@ const PAIS_PHOTOS = [
   { src: '/img/Pais/10.jpg', alt: 'Foto da família' },
   { src: '/img/Pais/11.jpg', alt: 'Foto da família' },
   { src: '/img/Pais/12.jpg', alt: 'Foto da família' },
-  { src: '/img/Pais/13.jpg', alt: 'Foto da família' }
+  { src: '/img/Pais/13.jpg', alt: 'Foto da família' },
+  { src: '/img/Pais/14.jpg', alt: 'Foto da família' },
+  { src: '/img/Pais/15.jpg', alt: 'Foto da família' },
+  { src: '/img/Pais/16.jpg', alt: 'Foto da família' },
+  { src: '/img/Pais/17.jpg', alt: 'Foto da família' },
+  { src: '/img/Pais/18.jpg', alt: 'Foto da família' },
+  { src: '/img/Pais/19.jpg', alt: 'Foto da família' }
 ];
 
 export default function PadrinhosPortal() {
@@ -94,91 +100,8 @@ export default function PadrinhosPortal() {
   const [activeTab, setActiveTab] = useState<'padrinhos' | 'mensagens' | 'cronograma'>('padrinhos');
   const [selectedDemoisellePhotoIndex, setSelectedDemoisellePhotoIndex] = useState<number | null>(null);
   const [selectedPaisPhotoIndex, setSelectedPaisPhotoIndex] = useState<number | null>(null);
-  const [activePaisIndex, setActivePaisIndex] = useState<number>(0);
-  const paisCarouselRef = useRef<HTMLDivElement>(null);
-  const scrollAnimRef = useRef<number | null>(null);
   const [isLetterExpanded, setIsLetterExpanded] = useState(false);
   const welcomeCardRef = useRef<HTMLDivElement>(null);
-
-  const handlePaisCarouselScroll = () => {
-    if (!paisCarouselRef.current) return;
-    const container = paisCarouselRef.current;
-    const items = container.querySelectorAll<HTMLElement>('[data-pais-carousel-item]');
-    if (!items.length) return;
-
-    const containerRect = container.getBoundingClientRect();
-    const containerCenter = containerRect.left + containerRect.width / 2;
-
-    let closestIndex = 0;
-    let minDistance = Infinity;
-
-    items.forEach((item, idx) => {
-      const itemRect = item.getBoundingClientRect();
-      const itemCenter = itemRect.left + itemRect.width / 2;
-      const distance = Math.abs(containerCenter - itemCenter);
-      if (distance < minDistance) {
-        minDistance = distance;
-        closestIndex = idx;
-      }
-    });
-
-    if (closestIndex !== activePaisIndex) {
-      setActivePaisIndex(closestIndex);
-    }
-  };
-
-  const scrollToPaisIndex = (index: number) => {
-    if (!paisCarouselRef.current) return;
-    const clampedIndex = Math.max(0, Math.min(index, PAIS_PHOTOS.length - 1));
-    const container = paisCarouselRef.current;
-    const items = container.querySelectorAll<HTMLElement>('[data-pais-carousel-item]');
-    const targetItem = items[clampedIndex];
-    if (!targetItem) return;
-
-    if (scrollAnimRef.current) {
-      cancelAnimationFrame(scrollAnimRef.current);
-    }
-
-    setActivePaisIndex(clampedIndex);
-
-    const currentContainerRect = container.getBoundingClientRect();
-    const currentItemRect = targetItem.getBoundingClientRect();
-    const currentDiff = (currentItemRect.left + currentItemRect.width / 2) - (currentContainerRect.left + currentContainerRect.width / 2);
-    const targetScrollLeft = Math.max(0, container.scrollLeft + currentDiff);
-
-    // Desativa temporariamente o snap durante a animação para transição super rápida e ágil
-    container.style.scrollSnapType = 'none';
-
-    const startLeft = container.scrollLeft;
-    const distance = targetScrollLeft - startLeft;
-    const duration = 200; // 200ms para passada ágil e veloz
-    const startTime = performance.now();
-
-    const animateScroll = (currentTime: number) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      // Easing cúbico rápido
-      const ease = 1 - Math.pow(1 - progress, 3);
-      container.scrollLeft = startLeft + distance * ease;
-
-      if (progress < 1) {
-        scrollAnimRef.current = requestAnimationFrame(animateScroll);
-      } else {
-        container.scrollLeft = targetScrollLeft;
-        container.style.scrollSnapType = '';
-        scrollAnimRef.current = null;
-      }
-    };
-
-    scrollAnimRef.current = requestAnimationFrame(animateScroll);
-  };
-
-  const closePaisLightbox = () => {
-    if (selectedPaisPhotoIndex !== null) {
-      scrollToPaisIndex(selectedPaisPhotoIndex);
-    }
-    setSelectedPaisPhotoIndex(null);
-  };
 
   const handleCollapseLetter = () => {
     if (welcomeCardRef.current) {
@@ -323,19 +246,15 @@ export default function PadrinhosPortal() {
 
       if (selectedPaisPhotoIndex !== null) {
         if (e.key === 'ArrowLeft') {
-          setSelectedPaisPhotoIndex((prev) => {
-            const nextIdx = prev !== null ? (prev - 1 + PAIS_PHOTOS.length) % PAIS_PHOTOS.length : 0;
-            scrollToPaisIndex(nextIdx);
-            return nextIdx;
-          });
+          setSelectedPaisPhotoIndex((prev) =>
+            prev !== null ? (prev - 1 + PAIS_PHOTOS.length) % PAIS_PHOTOS.length : 0
+          );
         } else if (e.key === 'ArrowRight') {
-          setSelectedPaisPhotoIndex((prev) => {
-            const nextIdx = prev !== null ? (prev + 1) % PAIS_PHOTOS.length : 0;
-            scrollToPaisIndex(nextIdx);
-            return nextIdx;
-          });
+          setSelectedPaisPhotoIndex((prev) =>
+            prev !== null ? (prev + 1) % PAIS_PHOTOS.length : 0
+          );
         } else if (e.key === 'Escape') {
-          closePaisLightbox();
+          setSelectedPaisPhotoIndex(null);
         }
       }
     };
@@ -360,20 +279,16 @@ export default function PadrinhosPortal() {
 
   const handlePrevPaisPhoto = (e?: React.MouseEvent) => {
     e?.stopPropagation();
-    setSelectedPaisPhotoIndex((prev) => {
-      const nextIdx = prev !== null ? (prev - 1 + PAIS_PHOTOS.length) % PAIS_PHOTOS.length : 0;
-      scrollToPaisIndex(nextIdx);
-      return nextIdx;
-    });
+    setSelectedPaisPhotoIndex((prev) =>
+      prev !== null ? (prev - 1 + PAIS_PHOTOS.length) % PAIS_PHOTOS.length : 0
+    );
   };
 
   const handleNextPaisPhoto = (e?: React.MouseEvent) => {
     e?.stopPropagation();
-    setSelectedPaisPhotoIndex((prev) => {
-      const nextIdx = prev !== null ? (prev + 1) % PAIS_PHOTOS.length : 0;
-      scrollToPaisIndex(nextIdx);
-      return nextIdx;
-    });
+    setSelectedPaisPhotoIndex((prev) =>
+      prev !== null ? (prev + 1) % PAIS_PHOTOS.length : 0
+    );
   };
 
   const padrinhosTouchStartX = useRef<number | null>(null);
@@ -1199,93 +1114,25 @@ export default function PadrinhosPortal() {
                   </div>
                 </div>
               ) : loggedUser.role === 'pais' ? (
-                /* Dedicated Pais da Noiva Section (Álbum de Fotos em Carrossel / Slider) */
+                /* Dedicated Pais da Noiva Section (Mural de Fotos no Desktop e no Celular) */
                 <div className="max-w-4xl mx-auto">
-                  <div className="bg-white dark:bg-zinc-900 rounded-3xl p-4 sm:p-7 md:p-8 shadow-sm border border-gray-200 dark:border-zinc-800 space-y-5">
-                    {/* Carrossel onde o usuário vai passando as fotos */}
-                    <div className="relative group/carousel">
-                      {/* Botão Seta Esquerda */}
-                      {activePaisIndex > 0 && (
-                        <button
-                          type="button"
-                          onClick={() => scrollToPaisIndex(activePaisIndex - 1)}
-                          className="absolute left-2 sm:left-3 md:left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-b from-white via-slate-100 to-slate-200 dark:from-zinc-800 dark:via-zinc-850 dark:to-zinc-900 text-slate-800 dark:text-slate-100 flex items-center justify-center shadow-xl border border-slate-300/90 dark:border-zinc-600/90 backdrop-blur-md cursor-pointer hover:scale-110 active:scale-95 hover:border-slate-400 transition-all"
-                          aria-label="Foto anterior"
+                  <div className="bg-white dark:bg-zinc-900 rounded-3xl p-4 sm:p-6 md:p-9 shadow-sm border border-gray-200 dark:border-zinc-800">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+                      {PAIS_PHOTOS.map((photo, index) => (
+                        <div
+                          key={index}
+                          onClick={() => setSelectedPaisPhotoIndex(index)}
+                          className="group relative rounded-2xl overflow-hidden aspect-[4/5] bg-gray-100 dark:bg-zinc-800 cursor-pointer border border-gray-200/80 dark:border-zinc-700/80 shadow-xs hover:shadow-md transition-all duration-300 hover:scale-[1.02]"
                         >
-                          <ChevronLeft size={24} />
-                        </button>
-                      )}
-
-                      {/* Botão Seta Direita */}
-                      {activePaisIndex < PAIS_PHOTOS.length - 1 && (
-                        <button
-                          type="button"
-                          onClick={() => scrollToPaisIndex(activePaisIndex + 1)}
-                          className="absolute right-2 sm:right-3 md:right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-b from-white via-slate-100 to-slate-200 dark:from-zinc-800 dark:via-zinc-850 dark:to-zinc-900 text-slate-800 dark:text-slate-100 flex items-center justify-center shadow-xl border border-slate-300/90 dark:border-zinc-600/90 backdrop-blur-md cursor-pointer hover:scale-110 active:scale-95 hover:border-slate-400 transition-all"
-                          aria-label="Próxima foto"
-                        >
-                          <ChevronRight size={24} />
-                        </button>
-                      )}
-
-                      {/* Trilho Deslizável das Fotos */}
-                      <div
-                        ref={paisCarouselRef}
-                        onScroll={handlePaisCarouselScroll}
-                        className="flex gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-none py-2 px-3 sm:px-6 items-center"
-                      >
-                        {PAIS_PHOTOS.map((photo, index) => (
-                          <div
-                            key={index}
-                            data-pais-carousel-item
-                            onClick={() => setSelectedPaisPhotoIndex(index)}
-                            className="w-[82vw] max-w-[320px] sm:w-[380px] sm:max-w-[420px] md:w-[440px] md:max-w-[480px] snap-center shrink-0 group/card relative rounded-2xl md:rounded-3xl overflow-hidden aspect-[4/5] bg-gray-100 dark:bg-zinc-800 cursor-pointer border border-gray-200/80 dark:border-zinc-700/80 shadow-md hover:shadow-2xl transition-all duration-300 hover:scale-[1.01]"
-                          >
-                            <img
-                              src={photo.src}
-                              alt={photo.alt}
-                              className="w-full h-full object-cover object-center group-hover/card:scale-105 transition-transform duration-500"
-                              loading={index < 3 ? 'eager' : 'lazy'}
-                            />
-                            {/* Overlay sutil ao passar o mouse */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex items-end justify-center p-4">
-                              <span className="text-white text-xs font-sans font-medium px-3.5 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/20 shadow-lg">
-                                🔍 Clique para ampliar
-                              </span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Indicador de Navegação, Contador e Bolinhas de Paginação */}
-                    <div className="flex flex-col items-center gap-2.5 pt-1">
-                      <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 font-sans">
-                        <span className="hidden sm:inline">Use as setas ou deslize para passar as fotos</span>
-                        <span className="sm:hidden">👉 Deslize com o dedo para passar as fotos</span>
-                        <span className="px-2.5 py-0.5 rounded-full bg-gradient-to-r from-slate-100 via-gray-100 to-slate-200 dark:from-zinc-800 dark:via-zinc-850 dark:to-zinc-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-zinc-700 text-[11px] font-mono font-semibold shadow-2xs">
-                          {activePaisIndex + 1} de {PAIS_PHOTOS.length}
-                        </span>
-                      </div>
-
-                      {/* Linha de Bolinhas (Dots) */}
-                      <div className="flex items-center justify-center gap-1.5 max-w-full overflow-x-auto py-1 px-3 scrollbar-none">
-                        {PAIS_PHOTOS.map((_, dotIdx) => (
-                          <button
-                            key={dotIdx}
-                            type="button"
-                            onClick={() => scrollToPaisIndex(dotIdx)}
-                            className={`transition-all duration-300 rounded-full cursor-pointer ${
-                              dotIdx === activePaisIndex
-                                ? 'w-7 h-2.5 bg-gradient-to-r from-slate-500 via-slate-600 to-slate-700 dark:from-slate-200 dark:via-gray-100 dark:to-slate-300 shadow-xs'
-                                : 'w-2.5 h-2.5 bg-slate-300 dark:bg-zinc-700 hover:bg-slate-400 dark:hover:bg-zinc-600'
-                            }`}
-                            aria-label={`Ir para foto ${dotIdx + 1}`}
+                          <img
+                            src={photo.src}
+                            alt={photo.alt}
+                            className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                            loading="lazy"
                           />
-                        ))}
-                      </div>
+                        </div>
+                      ))}
                     </div>
-
                   </div>
                 </div>
               ) : (
@@ -1977,14 +1824,14 @@ export default function PadrinhosPortal() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={closePaisLightbox}
+              onClick={() => setSelectedPaisPhotoIndex(null)}
               onTouchStart={handlePaisTouchStart}
               onTouchEnd={handlePaisTouchEnd}
               className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md cursor-pointer select-none touch-pan-y"
             >
               {/* Botão Fechar */}
               <button
-                onClick={closePaisLightbox}
+                onClick={() => setSelectedPaisPhotoIndex(null)}
                 className="absolute top-4 right-4 z-30 p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all shadow-md cursor-pointer backdrop-blur-md"
                 title="Fechar (Esc)"
               >
